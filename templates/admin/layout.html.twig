@@ -14,6 +14,11 @@
 
 {% block header_navigation_links %}
     <li>
+        <a href="{{ path('admin_garden_index') }}">
+            <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'menu.garden_list'|trans }}
+        </a>
+    </li>
+    <li>
         <a href="{{ path('admin_post_index') }}">
             <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'menu.post_list'|trans }}
         </a>

@@ -1,0 +1,23 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_garden_index' %}
+
+{% block main %}
+    <h1>{{ 'title.garden_list'|trans }}</h1>
+
+        {% for garden in gardens %}
+            {{ garden.title }}
+        {% else %}
+            {{ 'garden.no_gardens_found'|trans }}
+        {% endfor %}
+{% endblock %}
+
+{% block sidebar %}
+    <div class="section actions">
+        <a href="{{ path('admin_garden_new') }}" class="btn btn-lg btn-block btn-success">
+            <i class="fa fa-plus" aria-hidden="true"></i> {{ 'action.create_garden'|trans }}
+        </a>
+    </div>
+
+    {{ parent() }}
+{% endblock %}
