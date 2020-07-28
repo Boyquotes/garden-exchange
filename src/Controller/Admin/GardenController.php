@@ -1,9 +1,8 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Nicolas Villa <nicolas@ge.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -28,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  *
  * @Route("/admin/garden")
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_CAMPER")
  *
  * @author Boyquotes
  */
@@ -91,26 +90,23 @@ class GardenController extends AbstractController
             $this->addFlash('success', 'garden.created_successfully');
             
             $email = (new Email())
-                ->from('hello@example.com')
+                ->from('share@ge.org')
                 ->to('nicolas@montpellibre.fr')
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
-                ->subject('Time for Symfony Mailer!')
-                ->text('Sending emails is fun again!')
+                ->subject('Nouveau jardin')
+                ->text('Nouveau jardin : ')
                 ->html('<p>See Twig integration for better HTML integration!</p>');
-dump($email);
-dump($mailer);
+
             try {
                 $mailer->send($email);
             } catch (TransportExceptionInterface $e) {
                 // some error prevented the email sending; display an
                 // error message or try to resend the message
-                dump('ici');
             }
 
-exit;
             if ($form->get('saveAndCreateNew')->isClicked()) {
                 return $this->redirectToRoute('admin_garden_new');
             }

@@ -50,7 +50,6 @@ class BlogController extends AbstractController
      *     could move this annotation to any other controller while maintaining
      *     the route name and therefore, without breaking any existing link.
      *
-     * @Route("/", methods="GET", name="admin_index")
      * @Route("/", methods="GET", name="admin_post_index")
      */
     public function index(PostRepository $posts): Response

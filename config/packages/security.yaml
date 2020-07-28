@@ -54,7 +54,9 @@ security:
     access_control:
         # this is a catch-all for the admin area
         # additional security lives in the controllers
-        - { path: '^/(%app_locales%)/admin', roles: ROLE_ADMIN }
+        - { path: '^/(%app_locales%)/admin', roles: ROLE_CAMPER }
 
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
+        ROLE_CAMPER:      [ROLE_USER]
+        ROLE_ADMIN:       [ROLE_USER, ROLE_CAMPER]
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
