@@ -25,39 +25,41 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
-            $user->setRoles(['ROLE_CAMPER']);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            if (true === $form['agreeTerms']->getData()) {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('password')->getData()
+                    )
+                );
+                $user->setRoles(['ROLE_CAMPER']);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-            $this->get('security.token_storage')->setToken($token);
+                $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                $this->get('security.token_storage')->setToken($token);
 
-            $email = (new Email())
-                ->from('share@ge.org')
-                ->to('nicolas@montpellibre.fr')
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                //->priority(Email::PRIORITY_HIGH)
-                ->subject('Nouvelle inscription')
-                ->text('Nouveau membre :) : ')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
+                $email = (new Email())
+                    ->from('share@ge.org')
+                    ->to('nicolas@montpellibre.fr')
+                    //->cc('cc@example.com')
+                    //->bcc('bcc@example.com')
+                    //->replyTo('fabien@example.com')
+                    //->priority(Email::PRIORITY_HIGH)
+                    ->subject('Nouvelle inscription')
+                    ->text('Nouveau membre :) : ')
+                    ->html('<p>See Twig integration for better HTML integration!</p>');
 
-            try {
-                $mailer->send($email);
-            } catch (TransportExceptionInterface $e) {
-                // some error prevented the email sending; display an
-                // error message or try to resend the message
+                try {
+                    $mailer->send($email);
+                } catch (TransportExceptionInterface $e) {
+                    // some error prevented the email sending; display an
+                    // error message or try to resend the message
+                }
+
+                return $this->redirectToRoute('homepage');
             }
-
-            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('registration/register.html.twig', [

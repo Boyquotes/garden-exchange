@@ -450,6 +450,10 @@
                 <source>menu.login</source>
                 <target>Sign in</target>
             </trans-unit>
+            <trans-unit id="user.password_changed_successfully">
+                <source>user.password_changed_successfully</source>
+                <target>User password updated successfully! You need to sign in</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -57,9 +58,10 @@ class UserController extends AbstractController
     /**
      * @Route("/change-password", methods="GET|POST", name="user_change_password")
      */
-    public function changePassword(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function changePassword(Request $request, UserPasswordEncoderInterface $encoder, TokenStorageInterface $securityToken): Response
     {
         $user = $this->getUser();
+        $this->securityToken = $securityToken;
 
         $form = $this->createForm(ChangePasswordType::class);
         $form->handleRequest($request);
@@ -68,8 +70,13 @@ class UserController extends AbstractController
             $user->setPassword($encoder->encodePassword($user, $form->get('newPassword')->getData()));
 
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('security_logout');
+            $this->addFlash('success', 'user.password_changed_successfully');
+            
+            $this->securityToken->setToken(null);
+            $request->getSession()->invalidate(1);
+            $request->getSession()->clear();
+            
+            return $this->redirectToRoute('user_edit');
         }
 
         return $this->render('user/change_password.html.twig', [

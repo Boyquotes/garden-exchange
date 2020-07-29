@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     itemOperations={"get"}
  * )
  * @ORM\Entity(repositoryClass=GardenRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Garden
 {
@@ -56,6 +57,42 @@ class Garden
      * @ORM\Column(type="float")
      */
     private $lng;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var datetime $updated
+     * 
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    protected $updated;
+
+    /**
+     * @var datetime $publishedAt
+     * 
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    protected $publishedAt;
+
+    /**
+     * @ORM\Column(type="boolean", nullable = true)
+     */
+    private $enabled;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable = true)
+     */
+    private $expired;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable = true)
+     */
+    private $locked;
 
     public function getId(): ?int
     {
@@ -145,4 +182,83 @@ class Garden
 
         return $this;
     }
+    
+    public function getPublishedAt(): \DateTime
+    {
+        return $this->publishedAt;
+    }
+
+    public function setPublishedAt(\DateTime $publishedAt): void
+    {
+        $this->publishedAt = $publishedAt;
+    }
+    
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    public function getUpdated(): \DateTime
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTime $updated): void
+    {
+        $this->updated = $updated;
+    }
+    
+    public function getEnabled(): ?boolean
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(boolean $enabled): self
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+    
+    public function getExpired(): ?boolean
+    {
+        return $this->expired;
+    }
+
+    public function setExpired(boolean $expired): self
+    {
+        $this->expired = $expired;
+        return $this;
+    }
+    
+    public function getLocked(): ?boolean
+    {
+        return $this->locked;
+    }
+
+    public function setLocked(boolean $locked): self
+    {
+        $this->locked = $locked;
+        return $this;
+    }
+    
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
+    }
+    
 }
