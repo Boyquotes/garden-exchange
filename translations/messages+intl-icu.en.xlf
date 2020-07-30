@@ -454,6 +454,14 @@
                 <source>user.password_changed_successfully</source>
                 <target>User password updated successfully! You need to sign in</target>
             </trans-unit>
+            <trans-unit id="user.forgot_password">
+                <source>user.forgot_password</source>
+                <target>Reset password</target>
+            </trans-unit>
+            <trans-unit id="user.register">
+                <source>user.register</source>
+                <target>No account yet? Sign up</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

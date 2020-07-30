@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -40,7 +40,7 @@ class RegistrationController extends AbstractController
                 $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
                 $this->get('security.token_storage')->setToken($token);
 
-                $email = (new Email())
+                $email = (new TemplatedEmail())
                     ->from('share@ge.org')
                     ->to('nicolas@montpellibre.fr')
                     //->cc('cc@example.com')
@@ -48,8 +48,14 @@ class RegistrationController extends AbstractController
                     //->replyTo('fabien@example.com')
                     //->priority(Email::PRIORITY_HIGH)
                     ->subject('Nouvelle inscription')
-                    ->text('Nouveau membre :) : ')
-                    ->html('<p>See Twig integration for better HTML integration!</p>');
+                    // path of the Twig template to render
+                    ->htmlTemplate('emails/signup.html.twig')
+
+                    // pass variables (name => value) to the template
+                    ->context([
+                        'expiration_date' => new \DateTime('+7 days'),
+                        'username' => $user->getUsername(),
+                    ]);
 
                 try {
                     $mailer->send($email);
