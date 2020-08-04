@@ -4,7 +4,10 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\GardenRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -93,6 +96,21 @@ class Garden
      * @ORM\Column(type="boolean", nullable = true)
      */
     private $locked;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Equipment::class, inversedBy="gardens", cascade={"persist"})
+     */
+    private $equipments;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="gardens")
+     */
+    private $user;
+
+    public function __construct()
+    {
+        $this->equipments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -183,7 +201,7 @@ class Garden
         return $this;
     }
     
-    public function getPublishedAt(): \DateTime
+    public function getPublishedAt()
     {
         return $this->publishedAt;
     }
@@ -259,6 +277,44 @@ class Garden
     public function onPreUpdate()
     {
         $this->updated = new \DateTime("now");
+    }
+
+    /**
+     * @return Collection|Equipments[]
+     */
+    public function getEquipments(): Collection
+    {
+        return $this->equipments;
+    }
+
+    public function addEquipment(Equipment $equipment): self
+    {
+        if (!$this->equipments->contains($equipment)) {
+            $this->equipments[] = $equipment;
+        }
+
+        return $this;
+    }
+
+    public function removeEquipment(Equipment $equipment): self
+    {
+        if ($this->equipments->contains($equipment)) {
+            $this->equipments->removeElement($equipment);
+        }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
     
 }

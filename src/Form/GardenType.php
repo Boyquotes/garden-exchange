@@ -12,9 +12,16 @@
 namespace App\Form;
 
 use App\Entity\Garden;
+use App\Entity\Equipment;
 use App\Form\Type\DateTimePickerType;
 use App\Form\Type\TagsInputType;
+//~ use App\Form\Type\EquipmentsGardenType;
+use App\Form\EquipmentType;
+
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -22,13 +29,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-/**
- * Defines the form used to create and manipulate blog posts.
- *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- * @author Yonel Ceruto <yonelceruto@gmail.com>
- */
 class GardenType extends AbstractType
 {
     private $slugger;
@@ -83,12 +83,72 @@ class GardenType extends AbstractType
                 'attr' => [],
                 'label' => 'label.lng',
             ])
+            
+    
+            
+            //~ ->add('equipments', CollectionType::class, [
+                //~ 'entry_type' => EquipmentType::class,
+                //~ 'entry_options' => ['label' => false],
+            //~ ])
+            
+            //~ ->add('equipments', EquipmentType::class, [
+                //~ 'label' => 'label.name',
+                //~ 'required' => false,
+            //~ ])
+            
+            ->add('equipments', EntityType::class, [
+                'class' => Equipment::class,
+                //~ 'query_builder' => function(EntityRepository $er) {
+                    //~ return $er->createQueryBuilder('e')
+                    //~ ->orderBy('e.name', 'ASC');},
+                'choice_label' => 'name',
+                'multiple' => true,
+                'required' => false,
+            ])
+            //~ ->add('equipments', ChoiceType::class, [
+                //~ 'label' => false,
+                //~ 'expanded' => true,
+                //~ 'multiple' => true,
+                //~ 'required' => true,
+                //~ // 'choices' => $options['equipments'],
+                //~ 'choices' => [
+                    //~ 'Main Statuses' => [
+                        //~ 'Yes' => 'stock_yes',
+                        //~ 'No' => 'stock_no',
+                    //~ ],
+                    //~ 'Out of Stock Statuses' => [
+                        //~ 'Backordered' => 'stock_backordered',
+                        //~ 'Backordered' => 'stock_backordered',
+                        //~ 'Discontinued' => 'stock_discontinued',
+                    //~ ],
+                //~ ],
+                //~ 'choice_label'=> function($equipment) {
+                    //~ return $equipment->getName();
+                //~ },
+            //~ ])
+            
+            
+            //~ ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                //~ $form = $event->getForm();
+
+                //~ $formOptions = [
+                    //~ 'class' => Equipment::class,
+                    //~ 'choice_label' => 'name',
+                    //~ 'query_builder' => function (EquipmentRepository $EquipmentRepository) {
+                        //~ $EquipmentRepository->findTous();
+                    //~ },
+                //~ ];
+
+                //~ // create the field, this is similar the $builder->add()
+                //~ // field name, field type, field options
+                //~ $form->add('equipmentsGarden', EntityType::class, $formOptions);
+            //~ })
             // form events let you modify information or fields at different steps
             // of the form handling process.
             // See https://symfony.com/doc/current/form/events.html
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 /** @var Garden */
-                $post = $event->getData();
+                $garden = $event->getData();
             })
         ;
     }
@@ -100,6 +160,7 @@ class GardenType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Garden::class,
+            //~ 'equipments' => []
         ]);
     }
 }

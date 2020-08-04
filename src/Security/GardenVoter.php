@@ -56,6 +56,6 @@ class GardenVoter extends Voter
         // the logic of this voter is pretty simple: if the logged user is the
         // author of the given blog garden, grant permission; otherwise, deny it.
         // (the supports() method guarantees that $garden is a Garden object)
-        return $user === $garden->getAuthor();
+        return $user === $garden->getUser();
     }
 }

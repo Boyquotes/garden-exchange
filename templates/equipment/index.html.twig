@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Equipment index{% endblock %}
+
+{% block body %}
+    <h1>Equipment index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Information</th>
+                <th>Picto</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for equipment in equipment %}
+            <tr>
+                <td>{{ equipment.id }}</td>
+                <td>{{ equipment.name }}</td>
+                <td>{{ equipment.information }}</td>
+                <td>{{ equipment.picto }}</td>
+                <td>
+                    <a href="{{ path('equipment_show', {'id': equipment.id}) }}">show</a>
+                    <a href="{{ path('equipment_edit', {'id': equipment.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('equipment_new') }}">Create new</a>
+{% endblock %}

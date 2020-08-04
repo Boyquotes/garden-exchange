@@ -10,6 +10,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Equipment;
 use App\Entity\Garden;
 use App\Form\GardenType;
 use App\Repository\GardenRepository;
@@ -66,10 +67,16 @@ class GardenController extends AbstractController
     public function new(Request $request, MailerInterface $mailer): Response
     {
         $garden = new Garden();
+        //~ $equipments = $garden->getEquipments();
+        //~ $equipments = $this->entityManager->getRepository('AppBundle:Equipment')->findAll();
+        //~ $equipments= $this->getDoctrine()->getRepository(Equipment::class)->findAll();
+        //~ dump($equipments);
         //~ $garden->setAuthor($this->getUser());
 
         // See https://symfony.com/doc/current/form/multiple_buttons.html
+        //~ $form = $this->createForm(GardenType::class, $garden, array('equipments' => $equipments))
         $form = $this->createForm(GardenType::class, $garden)
+        //~ $form = $this->createForm(GardenType::class, $garden)
             ->add('saveAndCreateNew', SubmitType::class);
 
         $form->handleRequest($request);
@@ -79,6 +86,7 @@ class GardenController extends AbstractController
         // However, we explicitly add it to improve code readability.
         // See https://symfony.com/doc/current/forms.html#processing-forms
         if ($form->isSubmitted() && $form->isValid()) {
+            $garden->setUser($this->getUser());
             $em = $this->getDoctrine()->getManager();
             $em->persist($garden);
             $em->flush();
@@ -131,7 +139,7 @@ class GardenController extends AbstractController
         // using an annotation: @IsGranted("show", subject="garden", message="Gardens can only be shown to their authors.")
         $this->denyAccessUnlessGranted(GardenVoter::SHOW, $garden, 'Gardens can only be shown to their authors.');
 
-        return $this->render('admin/blog/show.html.twig', [
+        return $this->render('admin/garden/show.html.twig', [
             'garden' => $garden,
         ]);
     }
@@ -155,7 +163,7 @@ class GardenController extends AbstractController
             return $this->redirectToRoute('admin_garden_edit', ['id' => $garden->getId()]);
         }
 
-        return $this->render('admin/blog/edit.html.twig', [
+        return $this->render('admin/garden/edit.html.twig', [
             'garden' => $garden,
             'form' => $form->createView(),
         ]);

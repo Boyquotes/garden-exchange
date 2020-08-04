@@ -14,6 +14,23 @@
         {{ form_row(form.lat) }}
         {{ form_row(form.lng) }}
 
+        {{ form_row(form.equipments) }}
+
+{#
+     
+     
+        {% for equipment in form.equipments %}
+            <li>{{ form_row(equipment.name) }}</li>
+        {% endfor %}
+        
+{{ form_row(form.equipments) }}
+        <h3>Equipment</h3>
+        <ul class="equipment">
+            {% for equipment in form.equipments %}
+                <li>{{ form_row(equipment.name) }}</li>
+            {% endfor %}
+        </ul>
+#}
         <button type="submit" class="btn btn-primary">
             <i class="fa fa-save" aria-hidden="true"></i> {{ 'label.create_garden'|trans }}
         </button>
