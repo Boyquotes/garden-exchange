@@ -5,8 +5,9 @@
 {% block main %}
     <h1>{{ 'title.edit_garden'|trans({'%id%': garden.id}) }}</h1>
 
-    {{ include('admin/blog/_form.html.twig', {
+    {{ include('admin/garden/_form.html.twig', {
         form: form,
+        garden: garden,
         button_label: 'action.save'|trans,
         include_back_to_home_link: true,
     }, with_context = false) }}

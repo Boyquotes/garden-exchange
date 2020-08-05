@@ -15,13 +15,21 @@
         {{ form_row(form.lng) }}
 
         {{ form_row(form.equipments) }}
+        {{ form_row(form.gardenImages) }}
+        
 
 {#
      
-     
+        {{ dump(form.gardenImages) }}
+        {% for gardenImage in form.gardenImages %}
+            <li>{{ form_row(gardenImage.name) }}</li>
+        {% endfor %}
+        
         {% for equipment in form.equipments %}
             <li>{{ form_row(equipment.name) }}</li>
         {% endfor %}
+       
+
         
 {{ form_row(form.equipments) }}
         <h3>Equipment</h3>

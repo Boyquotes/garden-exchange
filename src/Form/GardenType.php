@@ -12,16 +12,18 @@
 namespace App\Form;
 
 use App\Entity\Garden;
+use App\Entity\GardenImage;
 use App\Entity\Equipment;
 use App\Form\Type\DateTimePickerType;
 use App\Form\Type\TagsInputType;
-//~ use App\Form\Type\EquipmentsGardenType;
 use App\Form\EquipmentType;
+use App\Form\GardenImageType;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -127,6 +129,25 @@ class GardenType extends AbstractType
                 //~ },
             //~ ])
             
+            ->add('gardenImages', FileType::class,[
+                'label' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false
+            ])
+            //~ ->add('gardenImages' , CollectionType::class, [
+                    //~ 'entry_type' => GardenImageType::class,
+                    //~ 'entry_options' => ['label' => false],
+                    //~ 'allow_add' => true,
+                    //~ 'allow_delete' => true,
+            //~ ])
+            //~ ->add('gardenImages', EntityType::class, [
+                //~ 'class' => GardenImage::class,
+                //~ 'choice_label' => 'name',
+                //~ 'multiple' => true,
+                //~ 'required' => false,
+            //~ ])
+
             
             //~ ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                 //~ $form = $event->getForm();

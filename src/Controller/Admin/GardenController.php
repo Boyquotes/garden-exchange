@@ -12,6 +12,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Equipment;
 use App\Entity\Garden;
+use App\Entity\GardenImage;
 use App\Form\GardenType;
 use App\Repository\GardenRepository;
 use App\Security\GardenVoter;
@@ -87,6 +88,28 @@ class GardenController extends AbstractController
         // See https://symfony.com/doc/current/forms.html#processing-forms
         if ($form->isSubmitted() && $form->isValid()) {
             $garden->setUser($this->getUser());
+
+            // On récupère les images transmises
+            $images = $form->get('gardenImages')->getData();
+            
+            // On boucle sur les images
+            foreach($images as $image){
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()).'.'.$image->guessExtension();
+                
+                // On copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('garden_images_directory'),
+                    $fichier
+                );
+                
+                // On crée l'image dans la base de données
+                $img = new GardenImage();
+                $img->setName($fichier);
+                $img->setCreatedAt(new \DateTime("now"));
+                $garden->addGardenImage($img);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($garden);
             $em->flush();
@@ -156,11 +179,33 @@ class GardenController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // On récupère les images transmises
+            $images = $form->get('gardenImages')->getData();
+            
+            // On boucle sur les images
+            foreach($images as $image){
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()).'.'.$image->guessExtension();
+                
+                // On copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('garden_images_directory'),
+                    $fichier
+                );
+                
+                // On crée l'image dans la base de données
+                $img = new GardenImage();
+                $img->setName($fichier);
+                $img->setCreatedAt(new \DateTime("now"));
+                $garden->addGardenImage($img);
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'garden.updated_successfully');
 
-            return $this->redirectToRoute('admin_garden_edit', ['id' => $garden->getId()]);
+            return $this->redirectToRoute('admin_garden_edit', ['id' => $garden->getId(), 'garden' => $garden]);
         }
 
         return $this->render('admin/garden/edit.html.twig', [

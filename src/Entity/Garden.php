@@ -107,9 +107,15 @@ class Garden
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity=GardenImage::class, mappedBy="garden", orphanRemoval=true, cascade={"persist"}, fetch="EAGER")
+     */
+    private $gardenImages;
+
     public function __construct()
     {
         $this->equipments = new ArrayCollection();
+        $this->gardenImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -261,7 +267,6 @@ class Garden
     
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function onPrePersist()
@@ -271,7 +276,6 @@ class Garden
 
     /**
      * Gets triggered every time on update
-
      * @ORM\PreUpdate
      */
     public function onPreUpdate()
@@ -313,6 +317,37 @@ class Garden
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|GardenImage[]
+     */
+    public function getGardenImages(): Collection
+    {
+        return $this->gardenImages;
+    }
+
+    public function addGardenImage(GardenImage $gardenImage): self
+    {
+        if (!$this->gardenImages->contains($gardenImage)) {
+            $this->gardenImages[] = $gardenImage;
+            $gardenImage->setGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGardenImage(GardenImage $gardenImage): self
+    {
+        if ($this->gardenImages->contains($gardenImage)) {
+            $this->gardenImages->removeElement($gardenImage);
+            // set the owning side to null (unless already changed)
+            if ($gardenImage->getGarden() === $this) {
+                $gardenImage->setGarden(null);
+            }
+        }
 
         return $this;
     }
