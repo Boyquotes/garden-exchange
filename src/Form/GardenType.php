@@ -130,6 +130,7 @@ class GardenType extends AbstractType
             //~ ])
             
             ->add('gardenImages', FileType::class,[
+                'attr' => ['class' => 'inputfile', 'placeholder' => 'Add photos'],
                 'label' => false,
                 'multiple' => true,
                 'mapped' => false,

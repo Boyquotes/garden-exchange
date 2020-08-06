@@ -2,6 +2,10 @@
 @import "~eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
 @import "bootstrap-tagsinput.scss";
 
+html {
+    font-size: 1em;
+}
+
 /* Page: 'Backend post index'
    ------------------------------------------------------------------------- */
 body#admin_post_index .item-actions {

@@ -20,6 +20,9 @@ $lato-font-path: '~lato-font/fonts';
 @include lato-include-font('bold');
 
 /* Basic styles
+html {
+    font-size: 1em;
+}
    ------------------------------------------------------------------------- */
 p, ul, ol {
   font-size: 19px;
@@ -61,7 +64,8 @@ i {
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh
+  min-height: 100vh;
+  font-size: 1em;
 }
 
 header {
@@ -112,7 +116,7 @@ header .locales a:hover small {
 }
 
 #sidebar p {
-  font-size: 15px
+  font-size: 1em
 }
 
 #sidebar p + p {
@@ -185,7 +189,7 @@ footer #footer-resources i {
 .form-group.has-error .help-block {
   background-color: #e74c3c;
   color: #fff;
-  font-size: 15px;
+  font-size: 2em;
   padding: 1em
 }
 
@@ -227,7 +231,7 @@ body#homepage {
 /* Page: 'Login'
    ------------------------------------------------------------------------- */
 body#login #login-users-help p {
-  font-size: 15px;
+  font-size: 2em;
   line-height: 1.42857
 }
 
@@ -357,4 +361,55 @@ body#blog_search article.post {
 body#blog_search .post-metadata {
   font-size: 16px;
   margin-bottom: 8px;
+}
+
+/* Button: Input File
+   ------------------------------------------------------------------------- */
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.inputfile + label {
+    color: #f1e5e6;
+    background-color: #d3394c;
+    max-width: 80%;
+    font-size: 1.25rem;
+    /* 20px */
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    /* 10px 20px */
+}
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+    cursor: pointer; /* "hand" cursor */
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+    background-color: #722040;
+}
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+.inputfile + label * {
+    /* pointer-events: none; */
+    /* in case of FastClick lib use */
+}
+.inputfile + label svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    /* 4px */
+    margin-right: 0.25em;
+    /* 4px */
 }
