@@ -62,3 +62,31 @@ $(document).on('submit', 'form[data-confirmation]', function (event) {
             .modal('show');
     }
 });
+
+$(document).ready( function(){
+    $('#main').find('[data-delete]').each( function(){
+        $(this).click( function(){
+            var urlDeleteGardenImage = $(this).attr('data-action')
+            var gardenImageId = $(this).attr('data-id')
+            var tokenDeleteGardenImage = $(this).attr('data-token')
+            console.log(urlDeleteGardenImage);
+            console.log('delete');
+            $.ajax({
+              url: urlDeleteGardenImage,
+              method: 'DELETE',
+              data: { _token: tokenDeleteGardenImage }
+            })
+            .done(function( data ) {
+                console.log('image'+gardenImageId);
+                  $('.image'+gardenImageId).hide();
+            });
+        });
+    });
+    
+
+    $('#garden_gardenImages').change(function (event) {
+        console.log("hola");
+        console.log(event);
+    });
+    
+});

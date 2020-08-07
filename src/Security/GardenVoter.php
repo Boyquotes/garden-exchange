@@ -15,6 +15,7 @@ use App\Entity\Garden;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * It grants or denies permissions for actions related to blog gardens (such as
@@ -32,6 +33,13 @@ class GardenVoter extends Voter
     public const EDIT = 'edit';
     public const SHOW = 'show';
 
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -47,6 +55,10 @@ class GardenVoter extends Voter
     protected function voteOnAttribute($attribute, $garden, TokenInterface $token): bool
     {
         $user = $token->getUser();
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
 
         // the user must be logged in; if not, deny permission
         if (!$user instanceof User) {

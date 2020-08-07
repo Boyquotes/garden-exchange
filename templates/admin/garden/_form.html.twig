@@ -23,8 +23,9 @@
     {% if app.request.attributes.get('_route') == 'admin_garden_edit' %}
         <h2>Images</h2>
         {% for image in garden.gardenImages %}
-            <div>
-                <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="image.name" width="150">
+            <div class="image{{image.id}}">
+                <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
+                <a href="javascript:void(0);" data-id="{{ image.id }}" data-action={{ path('garden_delete_image', {gardenImageId: image.id})}} data-delete data-token="{{ csrf_token('delete' ~ image.id )}}">Supprimer</a>
             </div>
         {% endfor %}
     {% endif %}

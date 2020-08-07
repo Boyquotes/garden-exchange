@@ -232,34 +232,34 @@ class Garden
         $this->updated = $updated;
     }
     
-    public function getEnabled(): ?boolean
+    public function getEnabled(): ?bool
     {
         return $this->enabled;
     }
 
-    public function setEnabled(boolean $enabled): self
+    public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
         return $this;
     }
     
-    public function getExpired(): ?boolean
+    public function getExpired(): ?bool
     {
         return $this->expired;
     }
 
-    public function setExpired(boolean $expired): self
+    public function setExpired(bool $expired): self
     {
         $this->expired = $expired;
         return $this;
     }
     
-    public function getLocked(): ?boolean
+    public function getLocked(): ?bool
     {
         return $this->locked;
     }
 
-    public function setLocked(boolean $locked): self
+    public function setLocked(bool $locked): self
     {
         $this->locked = $locked;
         return $this;
