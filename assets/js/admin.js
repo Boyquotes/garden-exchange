@@ -86,7 +86,118 @@ $(document).ready( function(){
 
     $('#garden_gardenImages').change(function (event) {
         console.log("hola");
-        console.log(event);
+        
+     //Get count of selected files
+     var countFiles = $(this)[0].files.length;
+
+     var imgPath = $(this)[0].value;
+     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+     var image_holder = $("#upload_garden_image_result");
+     image_holder.empty();
+
+     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+         if (typeof (FileReader) != "undefined") {
+
+             //loop for each file selected for uploaded.
+             for (var i = 0; i < countFiles; i++) {
+
+                 var reader = new FileReader();
+                 reader.onload = function (e) {
+                     $("<img />", {
+                         "src": e.target.result,
+                             "class": "thumb-image"
+                     }).appendTo(image_holder);
+                 }
+
+                 image_holder.show();
+                 reader.readAsDataURL($(this)[0].files[i]);
+             }
+
+         } else {
+             alert("This browser does not support FileReader.");
+         }
+     } else {
+         alert("Pls select only images");
+     }
+        
+        //~ console.log(event);
+        var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+        //~ console.log(filename);
+        var fi = $('#garden_gardenImages')[0]; // GET THE FILE INPUT AS VARIABLE.
+//~ console.log(fi);
+        var totalFileSize = 0;
+
+        // VALIDATE OR CHECK IF ANY FILE IS SELECTED.
+        if (fi.files.length > 0)
+        {
+            // RUN A LOOP TO CHECK EACH SELECTED FILE.
+            for (var i = 0; i <= fi.files.length - 1; i++)
+            {
+                //ACCESS THE SIZE PROPERTY OF THE ITEM OBJECT IN FILES COLLECTION. IN THIS WAY ALSO GET OTHER PROPERTIES LIKE FILENAME AND FILETYPE
+                var fsize = fi.files.item(i).size;
+                //~ console.log(fi.files.item(i));
+                //~ console.log(fsize);
+                totalFileSize = totalFileSize + fsize;
+                //~ document.getElementById('fp').innerHTML =
+                //~ document.getElementById('fp').innerHTML
+                +
+                '<br /> ' + 'File Name is <b>' + fi.files.item(i).name
+                +
+                '</b> and Size is <b>' + Math.round((fsize / 1024)) //DEFAULT SIZE IS IN BYTES SO WE DIVIDING BY 1024 TO CONVERT IT IN KB
+                +
+                '</b> KB and File Type is <b>' + fi.files.item(i).type + "</b>.";
+            }
+        }
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+        // VALIDATE OR CHECK IF ANY FILE IS SELECTED.
+            if (fi.files.length > 0)
+            {
+                // RUN A LOOP TO CHECK EACH SELECTED FILE.
+                for (var i = 0; i <= fi.files.length - 1; i++)
+                {
+                //~ console.log(e.target.result);
+                // get loaded data and render thumbnail.
+                //~ $("#image").attr('src', e.target.result);
+                $('.upload_garden_image_result').append("<img src='" + e.target.result + "' />");
+                }
+            }
+        };
+
+        // read the image file as a data URL.
+        reader.readAsDataURL(fi.files[0]);
+        
+                if(typeof FileReader == "undefined") return true;
+
+        var elem = $(this);
+        var files = event.target.files;
+
+        for (var i = 0, f; f = files[i]; i++) {
+            if (f.type.match('image.*')) {
+                var reader = new FileReader();
+                reader.onload = (function(theFile) {
+                    return function(e) {
+                        var image = e.target.result;
+                        console.log(image);
+                        var previewDiv = $('.upload_garden_image_result', elem.parent());
+                        var bg_width = previewDiv.width() * 2;
+                        previewDiv.css({
+                            "background-size":bg_width + "px, auto",
+                            "background-position":"50%, 50%",
+                            "background-image":"url("+image+")",
+                        });
+                    };
+                })(f);
+                reader.readAsDataURL(f);
+            }
+        }
+        
+        //~ $('.upload_garden_image_result').append("Total File(s) Size is <b>" + Math.round(totalFileSize / 1024) + "</b> KB");
+        //~ $('.upload_garden_image_result').append("<img src='" + e.target.result + "' />");
+        //~ var img = 
+        //~ $('.upload_garden_image_result').append("<img src='"+e.target.result+"'>);
+        
     });
     
 });

@@ -27,3 +27,8 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+### ge
+/public/uploads/
+
+###
