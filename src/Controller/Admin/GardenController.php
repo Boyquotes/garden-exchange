@@ -77,10 +77,8 @@ class GardenController extends AbstractController
         //~ $garden->setAuthor($this->getUser());
 
         // See https://symfony.com/doc/current/form/multiple_buttons.html
-        //~ $form = $this->createForm(GardenType::class, $garden, array('equipments' => $equipments))
         $form = $this->createForm(GardenType::class, $garden);
-        //~ $form = $this->createForm(GardenType::class, $garden)
-            //~ ->add('saveAndCreateNew', SubmitType::class);
+
 
         $form->handleRequest($request);
 
@@ -209,10 +207,6 @@ class GardenController extends AbstractController
             } catch (TransportExceptionInterface $e) {
                 // some error prevented the email sending; display an
                 // error message or try to resend the message
-            }
-
-            if ($form->get('saveAndCreateNew')->isClicked()) {
-                return $this->redirectToRoute('admin_garden_new');
             }
 
             return $this->redirectToRoute('admin_garden_index');
