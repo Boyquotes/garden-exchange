@@ -10,7 +10,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Equipment;
 use App\Entity\Garden;
 use App\Entity\GardenImage;
 use App\Form\GardenType;
@@ -55,7 +54,7 @@ class GardenController extends AbstractController
     {
         $authorGardens = $gardens->findAll();
 
-        return $this->render('admin/garden/index.html.twig', ['gardens' => $authorGardens]);
+        return $this->render('admin/garden/listing_garden_admin.html.twig', ['gardens' => $authorGardens]);
     }
 
     /**
@@ -70,6 +69,7 @@ class GardenController extends AbstractController
     public function new(Request $request, MailerInterface $mailer): Response
     {
         $garden = new Garden();
+        $gps = false;
         //~ $equipments = $garden->getEquipments();
         //~ $equipments = $this->entityManager->getRepository('AppBundle:Equipment')->findAll();
         //~ $equipments= $this->getDoctrine()->getRepository(Equipment::class)->findAll();
@@ -78,9 +78,9 @@ class GardenController extends AbstractController
 
         // See https://symfony.com/doc/current/form/multiple_buttons.html
         //~ $form = $this->createForm(GardenType::class, $garden, array('equipments' => $equipments))
-        $form = $this->createForm(GardenType::class, $garden)
+        $form = $this->createForm(GardenType::class, $garden);
         //~ $form = $this->createForm(GardenType::class, $garden)
-            ->add('saveAndCreateNew', SubmitType::class);
+            //~ ->add('saveAndCreateNew', SubmitType::class);
 
         $form->handleRequest($request);
 
@@ -90,6 +90,77 @@ class GardenController extends AbstractController
         // See https://symfony.com/doc/current/forms.html#processing-forms
         if ($form->isSubmitted() && $form->isValid()) {
             $garden->setUser($this->getUser());
+
+            //~ Geocode de l'adresse
+            $street = $form->get('street')->getData();
+            $postcode = $form->get('postcode')->getData();
+            $city = $form->get('city')->getData();
+            $country = $form->get('country')->getData();
+            //~ dump($street);
+            //~ dump($postcode);
+            //~ dump($city);
+            //~ dump($country);
+            //~ $data = array(
+              //~ 'street'     => '26 rue des kermes',
+              //~ 'postalcode' => $postcode,
+              //~ 'city'       => $city,
+              //~ 'country'    => $country,
+              //~ 'format'     => 'json',
+            //~ );
+            
+            $data = array(
+              'street'     => '',
+              'postalcode' => $postcode,
+              'city'       => $city,
+              'country'    => $country,
+              'format'     => 'json',
+            );
+            $url = 'https://nominatim.openstreetmap.org/?' . http_build_query($data);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mettre ici un user-agent adéquat');
+            $geopos = curl_exec($ch);
+            curl_close($ch);
+
+            $json_data = json_decode($geopos, true);
+            dump($json_data);
+            if(count($json_data) != 0){
+                $latCity = $json_data[0]['lat'];
+                $lngCity = $json_data[0]['lon'];
+                dump($latCity);
+                dump($lngCity);
+                $garden->setLatCity($latCity);
+                $garden->setLngCity($lngCity);
+                $gps = true;
+            }
+            $data = array(
+              'street'     => $street,
+              'postalcode' => $postcode,
+              'city'       => $city,
+              'country'    => $country,
+              'format'     => 'json',
+            );
+            $url = 'https://nominatim.openstreetmap.org/?' . http_build_query($data);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mettre ici un user-agent adéquat');
+            $geopos = curl_exec($ch);
+            curl_close($ch);
+
+            $json_data = json_decode($geopos, true);
+            if(count($json_data) != 0){
+                $lat = $json_data[0]['lat'];
+                $lng = $json_data[0]['lon'];
+                dump($lat);
+                dump($lng);
+                $garden->setLat($lat);
+                $garden->setLng($lng);
+                $gps = true;
+            }
+
+            if(!$gps){
+                $garden->setEnabled(0);
+            }
 
             // On récupère les images transmises
             $images = $form->get('gardenImages')->getData();
@@ -162,7 +233,7 @@ class GardenController extends AbstractController
     {
         // This security check can also be performed
         // using an annotation: @IsGranted("show", subject="garden", message="Gardens can only be shown to their authors.")
-        $this->denyAccessUnlessGranted(GardenVoter::SHOW, $garden, 'Gardens can only be shown to their authors.');
+        $this->denyAccessUnlessGranted(GardenVoter::VIEW, $garden, 'Gardens can only be shown to their authors.');
 
         return $this->render('admin/garden/show.html.twig', [
             'garden' => $garden,
@@ -179,9 +250,8 @@ class GardenController extends AbstractController
     {
         $form = $this->createForm(GardenType::class, $garden);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-
             // On récupère les images transmises
             $images = $form->get('gardenImages')->getData();
             

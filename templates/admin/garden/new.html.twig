@@ -2,55 +2,20 @@
 
 {% block body_id 'admin_garden_new' %}
 
+{% block class_body %}col-sm-4 col-md-offset-4{% endblock %}
+
 {% block main %}
     <h1>{{ 'title.garden_new'|trans }}</h1>
-
-    {{ form_start(form) }}
-        {{ form_row(form.title) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.address) }}
-        {{ form_row(form.postcode) }}
-        {{ form_row(form.town) }}
-        {{ form_row(form.lat) }}
-        {{ form_row(form.lng) }}
-
-        {{ form_row(form.equipments) }}
-        {{ form_row(form.gardenImages) }}
-        
-
-{#
-     
-        {{ dump(form.gardenImages) }}
-        {% for gardenImage in form.gardenImages %}
-            <li>{{ form_row(gardenImage.name) }}</li>
-        {% endfor %}
-        
-        {% for equipment in form.equipments %}
-            <li>{{ form_row(equipment.name) }}</li>
-        {% endfor %}
-       
-
-        
-{{ form_row(form.equipments) }}
-        <h3>Equipment</h3>
-        <ul class="equipment">
-            {% for equipment in form.equipments %}
-                <li>{{ form_row(equipment.name) }}</li>
-            {% endfor %}
-        </ul>
-#}
-        <button type="submit" class="btn btn-primary">
-            <i class="fa fa-save" aria-hidden="true"></i> {{ 'label.create_garden'|trans }}
-        </button>
-        {{ form_widget(form.saveAndCreateNew, {label: 'label.save_and_create_new', attr: {class: 'btn btn-primary'}}) }}
-        <a href="{{ path('admin_garden_index') }}" class="btn btn-link">
-            <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'action.back_to_list'|trans }}
-        </a>
-    {{ form_end(form) }}
+    
+    {{ include('admin/garden/_form.html.twig', {
+        form: form,
+        garden: garden,
+        button_label: 'action.add.garden'|trans,
+        include_back_to_home_link: true,
+    }, with_context = false) }}
+    
 {% endblock %}
 
 {% block sidebar %}
     {{ parent() }}
-
-    {{ show_source_code(_self) }}
 {% endblock %}

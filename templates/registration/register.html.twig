@@ -1,21 +1,31 @@
 {% extends 'base.html.twig' %}
 
+{% block body_id 'register' %}
+
 {% block title %}Register{% endblock %}
 
-{% block body %}
+{% block class_body %}col-sm-12{% endblock %}
+
+{% block main %}
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
+    <div class="formulaire-registration">
+        <div class="well">
+            {{ form_start(registrationForm) }}
+                <legend><i class="fa fa-user" aria-hidden="true"></i>{{ 'user.register'|trans }}</legend>
+                {{ form_row(registrationForm.lastname) }}
+                {{ form_row(registrationForm.firstname) }}
+                {{ form_row(registrationForm.email) }}
+                {{ form_row(registrationForm.password) }}
+                {{ form_row(registrationForm.agreeTerms) }}
 
-    <h1>Register</h1>
+                <button type="submit" class="{{ button_css|default("btn btn-primary") }}">{{ 'user.register'|trans }}</button>
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+{% endblock %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.fullname) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.password) }}
-        {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+{% block sidebar %}
 {% endblock %}

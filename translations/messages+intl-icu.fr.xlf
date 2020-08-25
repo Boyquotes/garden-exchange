@@ -58,7 +58,7 @@
 
             <trans-unit id="title.homepage">
                 <source>title.homepage</source>
-                <target><![CDATA[Bienvenue sur l'application <strong>Symfony Demo</strong>]]></target>
+                <target><![CDATA[Bienvenue sur l'application <strong>Garden Exchange</strong>]]></target>
             </trans-unit>
             <trans-unit id="title.source_code">
                 <source>title.source_code</source>
@@ -74,7 +74,7 @@
             </trans-unit>
             <trans-unit id="title.login">
                 <source>title.login</source>
-                <target>Connexion sécurisée</target>
+                <target>Connectez-vous</target>
             </trans-unit>
             <trans-unit id="title.post_list">
                 <source>title.post_list</source>
@@ -355,75 +355,13 @@
                 <target><![CDATA[Votre article "{title}" a reçu un nouveau commentaire. Vous pouvez lire le commentaire en suivant <a href="{link}">ce lien</a>]]></target>
             </trans-unit>
 
-            <trans-unit id="help.app_description">
-                <source>help.app_description</source>
-                <target><![CDATA[Ceci est une <strong>application de démonstration</strong> construite avec le framework Symfony pour illustrer la façon recommandée de développer des applications Symfony.]]></target>
-            </trans-unit>
-            <trans-unit id="help.show_code">
-                <source>help.show_code</source>
-                <target><![CDATA[Cliquez sur ce bouton pour voir le code source du <strong>contrôleur</strong> et du <strong>template</strong> utilisé pour afficher cette page.]]></target>
-            </trans-unit>
-            <trans-unit id="help.browse_app">
-                <source>help.browse_app</source>
-                <target><![CDATA[Parcourir la <strong>section publique</strong> de l'application de démonstration.]]></target>
-            </trans-unit>
-            <trans-unit id="help.browse_admin">
-                <source>help.browse_admin</source>
-                <target><![CDATA[Parcourir l'<strong>interface d'administration</strong> de l'application de démonstration.]]></target>
-            </trans-unit>
-            <trans-unit id="help.login_users">
-                <source>help.login_users</source>
-                <target>Essayez l'un des utilisateurs suivants</target>
-            </trans-unit>
-            <trans-unit id="help.role_user">
-                <source>help.role_user</source>
-                <target>utilisateur normal</target>
-            </trans-unit>
-            <trans-unit id="help.role_admin">
-                <source>help.role_admin</source>
-                <target>administrateur</target>
-            </trans-unit>
-            <trans-unit id="help.reload_fixtures">
-                <source>help.reload_fixtures</source>
-                <target>Si ces utilisateurs ne fonctionnent pas, rechargez les fixtures de l'application en exécutant cette commande depuis le terminal :</target>
-            </trans-unit>
-            <trans-unit id="help.add_user">
-                <source>help.add_user</source>
-                <target>Si vous voulez créer de nouveaux utilisateurs, exécutez cette autre commande :</target>
-            </trans-unit>
-            <trans-unit id="help.more_information">
-                <source>help.more_information</source>
-                <target><![CDATA[Pour plus d'informations, consultez la <a href="https://symfony.com/doc">documentation de Symfony</a>.]]></target>
-            </trans-unit>
-            <trans-unit id="help.post_summary">
-                <source>help.post_summary</source>
-                <target>Les résumés ne peuvent pas contenir de contenu Markdown ou HTML ; seulement du texte brut.</target>
-            </trans-unit>
-            <trans-unit id="help.post_publication">
-                <source>help.post_publication</source>
-                <target>Sélectionnez une date future pour programmer la publication de l'article.</target>
-            </trans-unit>
-            <trans-unit id="help.post_content">
-                <source>help.post_content</source>
-                <target>Utilisez du Markdown pour formater le contenu de l'article. Le HTML est également autorisé.</target>
-            </trans-unit>
-            <trans-unit id="help.comment_content">
-                <source>help.comment_content</source>
-                <target>Les commentaires non conformes à notre code de conduite seront modérés.</target>
-            </trans-unit>
-
-            <trans-unit id="info.change_password">
-                <source>info.change_password</source>
-                <target>Après avoir modifié votre mot de passe, vous serez déconnecté de l'application.</target>
-            </trans-unit>
-
             <trans-unit id="rss.title">
                 <source>rss.title</source>
-                <target>Blog de démo Symfony</target>
+                <target>Blog de Garden Exchange</target>
             </trans-unit>
             <trans-unit id="rss.description">
                 <source>rss.description</source>
-                <target>Derniers articles publiés sur le blog de démo Symfony</target>
+                <target>Derniers articles publiés sur le blog de Garden Exchange</target>
             </trans-unit>
 
             <trans-unit id="paginator.previous">
@@ -434,6 +372,139 @@
                 <source>paginator.next</source>
                 <target>Suivant</target>
             </trans-unit>
+            
+            
+            
+            <trans-unit id="menu.register">
+                <source>menu.register</source>
+                <target>Créer un compte</target>
+            </trans-unit>
+            <trans-unit id="menu.howto">
+                <source>menu.howto</source>
+                <target>Comment ça fonctionne</target>
+            </trans-unit>
+            <trans-unit id="nom.site">
+                <source>nom.site</source>
+                <target>Garden Exchange</target>
+            </trans-unit>
+            <trans-unit id="facebook.community">
+                <source>facebook.community</source>
+                <target>Garden Exchange - Communauté Facebook</target>
+            </trans-unit>
+            <trans-unit id="instagram.community">
+                <source>instagram.community</source>
+                <target>Garden Exchange - Communauté Instagram</target>
+            </trans-unit>
+            <trans-unit id="twitter.community">
+                <source>twitter.community</source>
+                <target>Garden Exchange - Communauté Twitter</target>
+            </trans-unit>
+            <trans-unit id="label.lastname">
+                <source>label.lastname</source>
+                <target>Nom</target>
+            </trans-unit>
+            <trans-unit id="label.firstname">
+                <source>label.firstname</source>
+                <target>Prénom</target>
+            </trans-unit>
+            <trans-unit id="label.agreeTerms">
+                <source>label.agreeTerms</source>
+                <target>En créant ce compte, j'accepte les conditions générales d'utilisation</target>
+            </trans-unit>
+            <trans-unit id="menu.login">
+                <source>menu.login</source>
+                <target>Se connecter</target>
+            </trans-unit>
+            <trans-unit id="user.password_changed_successfully">
+                <source>user.password_changed_successfully</source>
+                <target>Mot de passe changé avec succès, vous devez vous re-connecter</target>
+            </trans-unit>
+            <trans-unit id="user.forgot_password">
+                <source>user.forgot_password</source>
+                <target>Mot de passe oublié ?</target>
+            </trans-unit>
+            <trans-unit id="user.reset_password">
+                <source>user.reset_password</source>
+                <target>Demandez un nouveau mot de passe</target>
+            </trans-unit>
+            <trans-unit id="info.change_password">
+                <source>info.change_password</source>
+                <target>Apres le changement de votre mot de passe, vous devrez vous reconnecter.</target>
+            </trans-unit>
+            <trans-unit id="user.reset_password_help">
+                <source>user.reset_password_help</source>
+                <target>Nous allons vous envoyer un mail pour changer de mot de passe</target>
+            </trans-unit>
+            <trans-unit id="user.no_account.register">
+                <source>user.no_account.register</source>
+                <target>Pas encore membre? Créez votre compte</target>
+            </trans-unit>
+            <trans-unit id="user.register">
+                <source>user.register</source>
+                <target>Devenir membre</target>
+            </trans-unit>
+            <trans-unit id="menu.register.garden">
+                <source>menu.register.garden</source>
+                <target>Ajoutez votre jardin</target>
+            </trans-unit>
+            <trans-unit id="menu.garden_list">
+                <source>menu.garden_list</source>
+                <target>Vos jardins</target>
+            </trans-unit>
+            <trans-unit id="title.garden_list">
+                <source>title.garden_list</source>
+                <target>Vos annonces</target>
+            </trans-unit>
+            <trans-unit id="title.garden_new">
+                <source>title.garden_new</source>
+                <target>Ajoutez votre jardin</target>
+            </trans-unit>
+            <trans-unit id="nb.result.listings">
+                <source>nb.result.listings</source>
+                <target>Annonce(s)</target>
+            </trans-unit>
+            <trans-unit id="label.description">
+                <source>label.description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="label.street">
+                <source>label.street</source>
+                <target>Rue</target>
+            </trans-unit>
+            <trans-unit id="label.postcode">
+                <source>label.postcode</source>
+                <target>Code postal</target>
+            </trans-unit>
+            <trans-unit id="label.city ">
+                <source>label.city</source>
+                <target>Ville</target>
+            </trans-unit>
+            <trans-unit id="label.country ">
+                <source>label.country</source>
+                <target>Pays</target>
+            </trans-unit>
+            <trans-unit id="label.equipments ">
+                <source>label.equipments</source>
+                <target>Equipements</target>
+            </trans-unit>
+            <trans-unit id="label.campingTypes ">
+                <source>label.campingTypes</source>
+                <target>Types de camping acceptés</target>
+            </trans-unit>
+            <trans-unit id="label.addPhotos ">
+                <source>label.addPhotos</source>
+                <target>Ajoutez des photos</target>
+            </trans-unit>
+            <trans-unit id="action.add.garden">
+                <source>action.add.garden</source>
+                <target>Ajouter mon jardin</target>
+            </trans-unit>
+            
+            
+            
+            
+            
+            
         </body>
     </file>
 </xliff>

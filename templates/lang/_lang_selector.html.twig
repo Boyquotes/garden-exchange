@@ -1,0 +1,17 @@
+<div class='lang-select'>
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="locales">
+        <i class="fa fa-globe" aria-hidden="true"></i>
+        <span class="caret"></span>
+        <span class="sr-only">{{ 'menu.choose_language'|trans }}</span>
+    </a>
+    {% set langsSite = [] %}
+    {% set langsSite = langsSite|merge({'French': 'fr'}) %}
+    {% set langsSite = langsSite|merge({'English': 'en'}) %}
+    
+    
+    <ul class="dropdown-menu locales" role="menu" aria-labelledby="locales">
+        {% for lang in langsSite %}
+            <li {% if app.request.locale == lang|lower %}aria-checked="true" class="active"{% else %}aria-checked="false"{% endif %} role="menuitem"><a href="{{ path(app.request.get('_route', 'homepage'), app.request.get('_route_params', [])|merge({_locale: lang|lower})) }}">{{ lang|lower|capitalize }} <small>{{ lang|lower }}</small></a></li>
+        {% endfor %}
+    </ul>
+</div>

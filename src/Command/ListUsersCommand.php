@@ -1,14 +1,4 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Command;
 
 use App\Entity\User;
@@ -22,21 +12,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
-/**
- * A console command that lists all the existing users.
- *
- * To use this command, open a terminal window, enter into your project directory
- * and execute the following:
- *
- *     $ php bin/console app:list-users
- *
- * Check out the code of the src/Command/AddUserCommand.php file for
- * the full explanation about Symfony commands.
- *
- * See https://symfony.com/doc/current/console.html
- *
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- */
 class ListUsersCommand extends Command
 {
     // a good practice is to use the 'app:' prefix to group all your custom application commands

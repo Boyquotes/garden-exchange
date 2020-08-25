@@ -11,7 +11,7 @@ security:
         # To see the users at src/App/DataFixtures/ORM/LoadFixtures.php
         # To load users from somewhere else: https://symfony.com/doc/current/security/user_provider.html#creating-a-custom-user-provider
         database_users:
-            entity: { class: App\Entity\User, property: username }
+            entity: { class: App\Entity\User, property: email }
 
     # https://symfony.com/doc/current/security.html#a-authentication-firewalls
     firewalls:
@@ -28,7 +28,7 @@ security:
             anonymous: true
             lazy: true
 
-            # This allows the user to login by submitting a username and password
+            # This allows the user to login by submitting a email and password
             # Reference: https://symfony.com/doc/current/security/form_login_setup.html
             form_login:
                 # The route name that the login form submits to

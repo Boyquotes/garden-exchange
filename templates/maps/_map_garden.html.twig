@@ -1,0 +1,35 @@
+    <div id="macarte" style="width:50%; height:450px"></div>
+    {% if not is_granted('ROLE_CAMPER') and garden.latCity is defined and garden.lngCity is defined %}
+        <script>
+          var carte = L.map('macarte').setView([{{garden.latCity}}, {{garden.lngCity}}], 10);
+          L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(carte);
+          var marker = L.marker([{{garden.latCity}}, {{garden.lngCity}}], {
+            draggable: 'true'
+          }).bindPopup("").addTo(carte);
+        </script>
+    {% else %}
+        <script>
+          var carte = L.map('macarte').setView([{{garden.lat}}, {{garden.lng}}], 10);
+          L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(carte);
+          var marker = L.marker([{{garden.lat}}, {{garden.lng}}], {
+            draggable: 'true'
+          }).bindPopup("").addTo(carte);
+          marker.on('dragend', relachement);
+
+          function relachement(e) {
+            //marker.getPopup().setContent(');
+            //marker.openPopup();
+            var gps = marker.getLatLng();
+            var lat = gps['lat'];
+            var lng = gps['lng'];
+            var latElementId = document.getElementById('garden_lat');
+            latElementId.value = lat;
+            var lngElementId = document.getElementById('garden_lng');
+            lngElementId.value = lng;
+          }
+        </script>
+    {% endif %}

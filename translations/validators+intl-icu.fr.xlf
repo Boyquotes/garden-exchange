@@ -30,6 +30,20 @@
                 <source>comment.is_spam</source>
                 <target>Le contenu de votre commentaire est considéré comme du spam.</target>
             </trans-unit>
+
+            <trans-unit id="password.blank">
+                <source>password.blank</source>
+                <target>Veuillez ne pas laisser votre mot de passe vide.</target>
+            </trans-unit>
+            <trans-unit id="password.too_short">
+                <source>password.too_short</source>
+                <target>Votre mot de passe est trop court ({ limit } caractères minimum)</target>
+            </trans-unit>
+            <trans-unit id="password.too_long">
+                <source>password.too_long</source>
+                <target>Votre mot de passe est trop long ({ limit } caractères maximum)</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

@@ -38,6 +38,23 @@
                 <source>comment.is_spam</source>
                 <target>The content of this comment is considered spam.</target>
             </trans-unit>
+
+
+            <trans-unit id="password.blank">
+                <source>password.blank</source>
+                <target>Please don't leave your password blank!</target>
+            </trans-unit>
+            <trans-unit id="password.too_short">
+                <source>password.too_short</source>
+                <target>Password is too short ({ limit } characters minimum)</target>
+            </trans-unit>
+            <trans-unit id="password.too_long">
+                <source>password.too_long</source>
+                <target>Password is too long ({ limit } characters minimum)</target>
+            </trans-unit>
+
+
+
         </body>
     </file>
 </xliff>

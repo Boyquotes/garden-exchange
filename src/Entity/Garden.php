@@ -39,27 +39,37 @@ class Garden
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $address;
+    private $street;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255)
      */
     private $postcode;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $town;
+    private $city;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable = true)
      */
     private $lat;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable = true)
      */
     private $lng;
+
+    /**
+     * @ORM\Column(type="float", nullable = true)
+     */
+    private $latCity;
+
+    /**
+     * @ORM\Column(type="float", nullable = true)
+     */
+    private $lngCity;
 
     /**
      * @var datetime $created
@@ -98,7 +108,7 @@ class Garden
     private $locked;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Equipment::class, inversedBy="gardens", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Equipment::class, inversedBy="gardens", cascade={"persist"}, fetch="EAGER")
      */
     private $equipments;
 
@@ -112,8 +122,20 @@ class Garden
      */
     private $gardenImages;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Country::class, inversedBy="gardens")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $country;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=CampingType::class, inversedBy="gardens", cascade={"persist"})
+     */
+    private $campingTypes;
+
     public function __construct()
     {
+        $this->campingTypes = new ArrayCollection();
         $this->equipments = new ArrayCollection();
         $this->gardenImages = new ArrayCollection();
     }
@@ -147,38 +169,38 @@ class Garden
         return $this;
     }
 
-    public function getAddress(): ?string
+    public function getStreet(): ?string
     {
-        return $this->address;
+        return $this->street;
     }
 
-    public function setAddress(string $address): self
+    public function setStreet(string $street): self
     {
-        $this->address = $address;
+        $this->street = $street;
 
         return $this;
     }
 
-    public function getPostcode(): ?int
+    public function getPostcode(): ?string
     {
         return $this->postcode;
     }
 
-    public function setPostcode(int $postcode): self
+    public function setPostcode(string $postcode): self
     {
         $this->postcode = $postcode;
 
         return $this;
     }
 
-    public function getTown(): ?string
+    public function getCity(): ?string
     {
-        return $this->town;
+        return $this->city;
     }
 
-    public function setTown(string $town): self
+    public function setCity(string $city): self
     {
-        $this->town = $town;
+        $this->city = $city;
 
         return $this;
     }
@@ -203,6 +225,30 @@ class Garden
     public function setLng(float $lng): self
     {
         $this->lng = $lng;
+
+        return $this;
+    }
+    
+    public function getLatCity(): ?float
+    {
+        return $this->latCity;
+    }
+
+    public function setLatCity(float $latCity): self
+    {
+        $this->latCity = $latCity;
+
+        return $this;
+    }
+    
+    public function getLngCity(): ?float
+    {
+        return $this->lngCity;
+    }
+
+    public function setLngCity(float $lngCity): self
+    {
+        $this->lngCity = $lngCity;
 
         return $this;
     }
@@ -347,6 +393,44 @@ class Garden
             if ($gardenImage->getGarden() === $this) {
                 $gardenImage->setGarden(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getCountry(): ?Country
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Country $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+    
+    /**
+     * @return Collection|CampingTypes[]
+     */
+    public function getCampingTypes(): Collection
+    {
+        return $this->campingTypes;
+    }
+
+    public function addCampingType(CampingType $campingType): self
+    {
+        if (!$this->campingTypes->contains($campingType)) {
+            $this->campingTypes[] = $campingType;
+        }
+
+        return $this;
+    }
+
+    public function removeCampingType(CampingType $campingType): self
+    {
+        if ($this->campingTypes->contains($campingType)) {
+            $this->campingTypes->removeElement($campingType);
         }
 
         return $this;

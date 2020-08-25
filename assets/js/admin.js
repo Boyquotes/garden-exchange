@@ -83,6 +83,43 @@ $(document).ready( function(){
         });
     });
     
+    $('#main').find('.equipment_choice').each( function(){
+        $(this).click(function () {
+            var idEquipment = $(this).attr('id');
+            if ( $('#garden_equipments option[value="'+idEquipment+'"]').prop( 'selected' ) == true )
+            {
+                $('#garden_equipments option[value="'+idEquipment+'"]').prop('selected', '');
+                $(this).removeClass('equipment_selected');
+            }
+            else if ( $('#garden_equipments option[value="'+idEquipment+'"]').attr( 'selected' ) == 'selected' )
+            {
+                console.log('selec');
+                //~ $('#garden_equipments').hide();
+                $('#garden_equipments option[value="4"]').removeAttr('selected', '');
+                $(this).removeClass('equipment_selected');
+            }
+            else{
+                console.log('sdsd bbb');
+                $('#garden_equipments option[value="'+idEquipment+'"]').attr('selected','selected');
+                $(this).addClass('equipment_selected');
+            }
+        });
+    });
+
+    $('#main').find('.campingType_choice').each( function(){
+        $(this).click(function () {
+            var idCampingType = $(this).attr('id');
+            if ( $('#garden_campingTypes option[value="'+idCampingType+'"]').prop( 'selected' ) == true )
+            {
+                $('#garden_campingTypes option[value="'+idCampingType+'"]').prop('selected', '');
+                $(this).removeClass('campingType_selected');
+            }
+            else{
+                $('#garden_campingTypes option[value="'+idCampingType+'"]').prop('selected','selected');
+                $(this).addClass('campingType_selected');
+            }
+        });
+    });
 
     $('#garden_gardenImages').change(function (event) {
         console.log("hola");

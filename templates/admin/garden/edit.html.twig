@@ -14,17 +14,16 @@
 {% endblock %}
 
 {% block sidebar %}
-    <div class="section">
-        <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-block btn-success">
-            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden'|trans }}
-        </a>
-    </div>
+    <div id="sidebar" class="col-sm-3">
+        <div class="section">
+            <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-block btn-success">
+                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden'|trans }}
+            </a>
+        </div>
 
-    <div class="section actions">
-        {{ include('admin/garden/_delete_form.html.twig', {garden: garden}, with_context = false) }}
+        <div class="section actions">
+            {{ include('admin/garden/_delete_form.html.twig', {garden: garden}, with_context = false) }}
+        </div>
     </div>
-
     {{ parent() }}
-
-    {{ show_source_code(_self) }}
 {% endblock %}

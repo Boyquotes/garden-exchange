@@ -1,29 +1,26 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Form;
 
+use App\Entity\CampingType;
+use App\Entity\Country;
 use App\Entity\Garden;
 use App\Entity\GardenImage;
 use App\Entity\Equipment;
 use App\Form\Type\DateTimePickerType;
-use App\Form\Type\TagsInputType;
-use App\Form\EquipmentType;
+//~ use App\Form\Type\TagsInputType;
+//~ use App\Form\EquipmentType;
 use App\Form\GardenImageType;
+//~ use App\Form\GardenEquipmentType;
+//~ use App\Form\DataTransformer\EquipmentArrayToStringTransformer;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -36,8 +33,10 @@ class GardenType extends AbstractType
     private $slugger;
 
     // Form types are services, so you can inject other services in them if needed
-    public function __construct(SluggerInterface $slugger)
+    //~ public function __construct(EntityManagerInterface $em, SluggerInterface $slugger, EquipmentArrayToStringTransformer $transformer)
+    public function __construct(EntityManagerInterface $em, SluggerInterface $slugger)
     {
+        $this->entityManager = $em;
         $this->slugger = $slugger;
     }
 
@@ -65,114 +64,75 @@ class GardenType extends AbstractType
                 'help' => 'help.garden_description',
                 'label' => 'label.description',
             ])
-            ->add('address', TextareaType::class, [
-                'help' => 'help.gardeb_address',
-                'label' => 'label.summary',
+            ->add('street', null, [
+                'help' => 'help.garden_street',
+                'label' => 'label.street',
             ])
             ->add('postcode', null, [
                 'attr' => [],
                 'label' => 'label.postcode',
             ])
-            ->add('town', null, [
+            ->add('city', null, [
                 'attr' => [],
-                'label' => 'label.town',
+                'label' => 'label.city',
             ])
-            ->add('lat', null, [
+            ->add('lat', HiddenType::class, [
                 'attr' => [],
                 'label' => 'label.lat',
             ])
-            ->add('lng', null, [
+            ->add('lng', HiddenType::class, [
                 'attr' => [],
                 'label' => 'label.lng',
             ])
             
-    
-            
-            //~ ->add('equipments', CollectionType::class, [
-                //~ 'entry_type' => EquipmentType::class,
-                //~ 'entry_options' => ['label' => false],
-            //~ ])
-            
-            //~ ->add('equipments', EquipmentType::class, [
-                //~ 'label' => 'label.name',
-                //~ 'required' => false,
-            //~ ])
-            
-            ->add('equipments', EntityType::class, [
-                'class' => Equipment::class,
-                //~ 'query_builder' => function(EntityRepository $er) {
-                    //~ return $er->createQueryBuilder('e')
-                    //~ ->orderBy('e.name', 'ASC');},
+            ->add('campingTypes', EntityType::class, [
+                'label' => 'label.campingTypes',
+                'class' => CampingType::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'required' => false,
             ])
-            //~ ->add('equipments', ChoiceType::class, [
-                //~ 'label' => false,
-                //~ 'expanded' => true,
-                //~ 'multiple' => true,
-                //~ 'required' => true,
-                //~ // 'choices' => $options['equipments'],
-                //~ 'choices' => [
-                    //~ 'Main Statuses' => [
-                        //~ 'Yes' => 'stock_yes',
-                        //~ 'No' => 'stock_no',
-                    //~ ],
-                    //~ 'Out of Stock Statuses' => [
-                        //~ 'Backordered' => 'stock_backordered',
-                        //~ 'Backordered' => 'stock_backordered',
-                        //~ 'Discontinued' => 'stock_discontinued',
-                    //~ ],
-                //~ ],
-                //~ 'choice_label'=> function($equipment) {
-                    //~ return $equipment->getName();
+            
+            ->add('equipments', EntityType::class, [
+                'label' => 'label.equipments',
+                'class' => Equipment::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'required' => false,
+            ])
+
+            ->add('country', EntityType::class, [
+                'label' => 'label.country',
+                'class' => Country::class,
+                //~ 'query_builder' => function(EntityRepository $er) {
+                    //~ return $er->createQueryBuilder('e')
+                    //~ ->orderBy('e.name', 'ASC');},
+                'choice_label' => 'lang_fr',
+                //~ 'preferred_choices' => ['France'],
+                'required' => true,
+                //~ 'group_by' => function($choice, $key, $value) {
+                    //~ if ($value == '75') {
+                        //~ return 'Soon';
+                    //~ }
+
+                    //~ return 'Later';
                 //~ },
-            //~ ])
+            ])
             
             ->add('gardenImages', FileType::class,[
-                'attr' => ['class' => 'inputfile', 'placeholder' => 'Add photos'],
+                'attr' => ['class' => 'inputfile', 'placeholder' => 'label.addPhotos'],
                 'label' => false,
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false
             ])
-            //~ ->add('gardenImages' , CollectionType::class, [
-                    //~ 'entry_type' => GardenImageType::class,
-                    //~ 'entry_options' => ['label' => false],
-                    //~ 'allow_add' => true,
-                    //~ 'allow_delete' => true,
-            //~ ])
-            //~ ->add('gardenImages', EntityType::class, [
-                //~ 'class' => GardenImage::class,
-                //~ 'choice_label' => 'name',
-                //~ 'multiple' => true,
-                //~ 'required' => false,
-            //~ ])
-
-            
-            //~ ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-                //~ $form = $event->getForm();
-
-                //~ $formOptions = [
-                    //~ 'class' => Equipment::class,
-                    //~ 'choice_label' => 'name',
-                    //~ 'query_builder' => function (EquipmentRepository $EquipmentRepository) {
-                        //~ $EquipmentRepository->findTous();
-                    //~ },
-                //~ ];
-
-                //~ // create the field, this is similar the $builder->add()
-                //~ // field name, field type, field options
-                //~ $form->add('equipmentsGarden', EntityType::class, $formOptions);
-            //~ })
-            // form events let you modify information or fields at different steps
-            // of the form handling process.
-            // See https://symfony.com/doc/current/form/events.html
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 /** @var Garden */
                 $garden = $event->getData();
             })
         ;
+
+
     }
 
     /**
@@ -182,7 +142,6 @@ class GardenType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Garden::class,
-            //~ 'equipments' => []
         ]);
     }
 }

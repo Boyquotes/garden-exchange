@@ -1,14 +1,4 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -24,7 +14,6 @@ use function Symfony\Component\String\u;
  *
  * See https://symfony.com/doc/current/components/http_kernel.html#the-kernel-request-event
  *
- * @author Oleg Voronkovich <oleg-voronkovich@yandex.ru>
  */
 class RedirectToPreferredLocaleSubscriber implements EventSubscriberInterface
 {

@@ -1,14 +1,4 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Security;
 
 use App\Entity\Garden;
@@ -17,22 +7,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * It grants or denies permissions for actions related to blog gardens (such as
- * showing, editing and deleting gardens).
- *
- * See https://symfony.com/doc/current/security/voters.html
- *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
- */
 class GardenVoter extends Voter
 {
-    // Defining these constants is overkill for this simple application, but for real
-    // applications, it's a recommended practice to avoid relying on "magic strings"
+    public const VIEW = 'view';
     public const DELETE = 'delete';
     public const EDIT = 'edit';
-    public const SHOW = 'show';
-
+    
     private $security;
 
     public function __construct(Security $security)
@@ -46,13 +26,13 @@ class GardenVoter extends Voter
     protected function supports($attribute, $subject): bool
     {
         // this voter is only executed for three specific permissions on Garden objects
-        return $subject instanceof Garden && \in_array($attribute, [self::SHOW, self::EDIT, self::DELETE], true);
+        return $subject instanceof Garden && \in_array($attribute, [self::VIEW, self::EDIT, self::DELETE], true);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $garden, TokenInterface $token): bool
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -64,10 +44,55 @@ class GardenVoter extends Voter
         if (!$user instanceof User) {
             return false;
         }
+        $garden = $subject;
 
-        // the logic of this voter is pretty simple: if the logged user is the
-        // author of the given blog garden, grant permission; otherwise, deny it.
-        // (the supports() method guarantees that $garden is a Garden object)
-        return $user === $garden->getUser();
+        switch ($attribute) {
+            case self::VIEW:
+                return $this->canView($garden, $user);
+            case self::EDIT:
+                return $this->canEdit($garden, $user);
+            case self::DELETE:
+                return $this->canDelete($garden, $user);
+        }
+
+        throw new \LogicException('This Voter code should not be reached!');
     }
+    
+    private function canView(Garden $garden, User $user)
+    {
+        if ($this->security->isGranted('ROLE_CAMPER')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function canEdit(Garden $garden, User $user)
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+        
+        // if they can't view, they can't edit
+        if (! $this->canView($garden, $user)) {
+            return false;
+        }
+
+        if ($this->security->isGranted('ROLE_CAMPER') && $user === $garden->getUser()) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private function canDelete(Garden $garden, User $user)
+    {
+        // if they can't edit, they can't delete
+        if ($this->canEdit($garden, $user)) {
+            return true;
+        }
+        
+        return false;
+    }
+    
 }

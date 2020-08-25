@@ -11,17 +11,58 @@
     {{ include('blog/_delete_post_confirmation.html.twig') }}
 {% endif %}
 
+
+{% if app.request.attributes.get('_route') == 'admin_garden_edit' %}
+    {{ include('maps/_map_garden.html.twig') }}
+{% endif %}
+
 {{ form_start(form, {attr: attr|default({})}) }}
-    {{ form_widget(form.gardenImages) }}
-    <div id='upload_garden_image_result'></div>
     {{ form_row(form.title) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.address) }}
+    {{ form_label(form.description) }}
+    {{ form_help(form.description) }}
+    {{ form_widget(form.description,{ 'attr': {'rows': '10', 'cols': '50'} }) }}
+    {{ form_row(form.street) }}
     {{ form_row(form.postcode) }}
-    {{ form_row(form.town) }}
+    {{ form_row(form.city) }}
+    {{ form_row(form.country) }}
     {{ form_row(form.lat) }}
     {{ form_row(form.lng) }}
-    {{ form_row(form.equipments) }}
+    
+    {{ form_row(form.campingTypes, { attr: {class: 'hidden'}}) }}
+    <div class="campingTypes_choice">
+        {% set campingTypesGarden = [] %}
+        {% for campingType in garden.campingTypes %}
+            {% set campingTypesGarden = campingTypesGarden|merge({ (loop.index0):campingType.id}) %}
+        {% endfor %}
+
+        {% for campingType in form.campingTypes.vars.choices %}
+            {% if campingType.data.id in campingTypesGarden %}
+                OUI
+            {% endif %}
+            <div id="{{ campingType.data.id }}" class="campingType_choice{% if campingType.data.id in campingTypesGarden %} campingType_selected{% endif %}">
+                <img src="{{ asset('/uploads/campingTypes/'~campingType.data.picto) }}" alt='{{ campingType.data.name }}' />
+            </div>
+        {% endfor %}
+    </div>
+    
+    {{ form_row(form.equipments, { attr: {class: 'hidden'}}) }}
+    <div class="equipments_choice">
+        {% set equipmentsGarden = [] %}
+        {% for equipment in garden.equipments %}
+            {% set equipmentsGarden = equipmentsGarden|merge({ (loop.index0):equipment.id}) %}
+        {% endfor %}
+
+        {% for equipment in form.equipments.vars.choices %}
+            {% if equipment.data.id in equipmentsGarden %}
+                OUI
+            {% endif %}
+            <div id="{{ equipment.data.id }}" class="equipment_choice{% if equipment.data.id in equipmentsGarden %} equipment_selected{% endif %}">
+                <img src="{{ asset('/uploads/equipments/'~equipment.data.picto) }}" alt='{{ equipment.data.name }}' />
+            </div>
+        {% endfor %}
+    </div>
+    
+    
     {% if app.request.attributes.get('_route') == 'admin_garden_edit' %}
         <h2>Images</h2>
         {% for image in garden.gardenImages %}
@@ -32,14 +73,11 @@
         {% endfor %}
     {% endif %}
     
+    {{ form_widget(form.gardenImages) }}
+    <div id='upload_garden_image_result'></div>
 
     <button type="submit" class="{{ button_css|default("btn btn-primary") }}">
         <i class="fa fa-save" aria-hidden="true"></i> {{ button_label|default('label.create_post'|trans) }}
     </button>
 
-    {% if include_back_to_home_link|default(false) %}
-        <a href="{{ path('admin_post_index') }}" class="btn btn-link">
-            <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'action.back_to_list'|trans }}
-        </a>
-    {% endif %}
 {{ form_end(form) }}

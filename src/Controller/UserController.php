@@ -1,14 +1,4 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Controller;
 
 use App\Form\Type\ChangePasswordType;
@@ -27,7 +17,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @Route("/profile")
  * @IsGranted("ROLE_USER")
  *
- * @author Romain Monteil <monteil.romain@gmail.com>
  */
 class UserController extends AbstractController
 {

@@ -1,14 +1,4 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,19 +9,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
- * @ORM\Table(name="symfony_demo_post")
+ * @ORM\Table(name="post")
  * @UniqueEntity(fields={"slug"}, errorPath="title", message="post.slug_unique")
  *
- * Defines the properties of the Post entity to represent the blog posts.
- *
- * See https://symfony.com/doc/current/doctrine.html#creating-an-entity-class
- *
- * Tip: if you have an existing database, you can generate these entity class automatically.
- * See https://symfony.com/doc/current/doctrine/reverse_engineering.html
- *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
 class Post
 {
@@ -117,7 +97,7 @@ class Post
      * @var Tag[]|ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", cascade={"persist"})
-     * @ORM\JoinTable(name="symfony_demo_post_tag")
+     * @ORM\JoinTable(name="post_tag")
      * @ORM\OrderBy({"name": "ASC"})
      * @Assert\Count(max="4", maxMessage="post.too_many_tags")
      */

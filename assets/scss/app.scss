@@ -21,7 +21,7 @@ $lato-font-path: '~lato-font/fonts';
 
 /* Basic styles
 html {
-    font-size: 1em;
+
 }
    ------------------------------------------------------------------------- */
 p, ul, ol {
@@ -65,7 +65,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-size: 1em;
 }
 
 header {
@@ -225,7 +224,7 @@ body#requirements_checker .panel li {
 /* Page: 'Homepage'
    ------------------------------------------------------------------------- */
 body#homepage {
-  text-align: center
+
 }
 
 /* Page: 'Login'
@@ -412,4 +411,216 @@ body#blog_search .post-metadata {
     /* 4px */
     margin-right: 0.25em;
     /* 4px */
+}
+
+/* Base   ------------------------------------------------------------------------- */
+$baseColorGe :    #303434;
+$baseWeightGE : 600;
+$liHover: #F1F1F1;
+$fontGeneral: DejaVu Sans;
+$coverMaxHeight: 900px;
+$coverMinHeight: 700px;
+$coverHeight: 100vh;
+$verClair : #1CE990;
+
+a{
+    color: $baseColorGe;
+}
+a:hover, a:focus {
+    color: $baseColorGe;
+}
+#sidebar{
+    margin: 4em 0;
+}
+
+/* Header   ------------------------------------------------------------------------- */
+header{
+
+}
+header ul.nav li:hover {
+    background-color: $liHover;
+}
+.add-garden{
+    background-color: $verClair;
+}
+header ul.nav li.add-garden:hover {
+    background-color: #FFF;
+}
+
+/* Navbar   ------------------------------------------------------------------------- */
+.navbar-default {
+    position: fixed;
+    color: $baseColorGe;
+    width: 100%;
+    background-color: #FFF;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;
+    font-weight: $baseWeightGE;
+}
+.navbar-default .navbar-brand {
+    color: $baseColorGe;
+}
+.navbar-default .navbar-nav > li > a {
+    color: $baseColorGe;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: $baseColorGe;
+}
+.navbar-default .navbar-nav .open .dropdown-menu.user > li > a:hover{
+    background-color: $verClair;
+}
+.navbar-default{
+    z-index: 10000;
+}
+.navbar-default .navbar-nav > li > a {
+    border: 1px solid #FFF;
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-right ul li a:hover {
+    /* border: 1px solid $liHover; */
+}
+.navbar-default .navbar-nav > li.add-garden > a {
+    color: #FFF;
+    border: 1px solid $verClair;
+}
+.navbar-default .navbar-nav > li.add-garden > a:hover {
+    color: $verClair;
+    border: 1px solid $verClair;
+}
+form[name='simple_search']{
+    display: flex;
+}
+form[name='simple_search'] .btn-primary{
+    height: 3em;
+    margin: 8px 0 0 1em;
+}
+.form-group {
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+.lang-select{
+    font-size: 2.5em;
+    margin: 6px 0 0 0;
+}
+
+/* Body   ------------------------------------------------------------------------- */
+.body-container {
+    position: relative;
+    width: 100%;
+    margin: 15vh 0 0 0;
+}
+#homepage .body-container {
+    margin: 0;
+}
+.d-flex{
+    display: flex;
+}
+.jc-center{
+    justify-content: center;
+}
+.no-padding{
+    padding: 0;
+}
+
+
+/* Homepage   ------------------------------------------------------------------------- */
+#homepage .homedream-container{
+    position: relative;
+    height: $coverHeight;
+    min-height: $coverMinHeight;
+    max-height: $coverMaxHeight;
+}
+#homepage .homepage_garden_dream {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: url('/uploads/images/homepage_ge2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    z-index: -1;
+}
+
+#homepage .page-header {
+    flex-direction: column;
+    align-items: center;
+}
+#homepage .page-header h1{
+    margin: 5em 0 1em 0;
+    color: #FFF;
+    font-family: $fontGeneral;
+    font-size: 45px;
+    font-weight: 500;
+    line-height: 50px;
+}
+.central-search{
+    width: 25%;
+}
+/* NavBar   ------------------------------------------------------------------------- */
+.navbar-default .navbar-toggle {
+    background-color: #1a252f;
+}
+.navbar-lang{
+    width: 200px;
+}
+header ul.nav li:hover {
+    background-color: #F1F1F1;
+}
+form[name='simple_search'] .form-group{
+    width: 100%;
+}
+
+/* Result   ------------------------------------------------------------------------- */
+.carte-listings{
+    position: sticky;
+    right: 0;
+    top: 200px;
+}
+gardensCarte{
+    heigth: 100%;
+}
+.gardens-listing-result{
+    display: flex;
+    flex-wrap: wrap;
+}
+.garden-result{
+    width: 50%;
+    height: 200px;
+}
+/* Register   ------------------------------------------------------------------------- */
+#register #main{
+    display: flex;
+    justify-content: center;
+}
+#register .well{
+    flex-grow: 1;
+}
+#register .formulaire-registration{
+    width: 400px;
+}
+
+
+/* Responsive   ------------------------------------------------------------------------- */
+@media only screen and (max-device-width: 800px) {
+    .is-hidden-mobile{
+        display: none;
+    }
+    .body-container {
+        margin: 5vh 0 0 0;
+    }
+    header{
+        height: 10vh;
+        margin: 0;
+    }
+    #homepage header {
+        height: auto;
+    }
+    .navbar{
+        margin: 0;
+    }
+}
+@media only screen and (min-device-width: 800px) {
+    .is-hidden-desktop{
+        display: none;
+    }
 }

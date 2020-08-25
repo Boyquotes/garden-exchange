@@ -3,7 +3,7 @@
 @import "bootstrap-tagsinput.scss";
 
 html {
-    font-size: 1em;
+
 }
 
 /* Page: 'Backend post index'
@@ -27,4 +27,10 @@ body#admin_post_show .post-tags .label-default {
 }
 body#admin_post_show .post-tags .label-default i {
   color: #95A6A7;
+}
+
+
+/* Equipment   ------------------------------------------------------------------------- */
+.equipment_selected, .campingType_selected{
+    opacity: .5;
 }

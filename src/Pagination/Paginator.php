@@ -1,23 +1,10 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Pagination;
 
 use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 
-/**
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- */
 class Paginator
 {
     private const PAGE_SIZE = 10;

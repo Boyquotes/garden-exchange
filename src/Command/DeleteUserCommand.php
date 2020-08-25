@@ -1,14 +1,4 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Command;
 
 use App\Entity\User;
@@ -22,21 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * A console command that deletes users from the database.
- *
- * To use this command, open a terminal window, enter into your project
- * directory and execute the following:
- *
- *     $ php bin/console app:delete-user
- *
- * Check out the code of the src/Command/AddUserCommand.php file for
- * the full explanation about Symfony commands.
- *
- * See https://symfony.com/doc/current/console.html
- *
- * @author Oleg Voronkovich <oleg-voronkovich@yandex.ru>
- */
 class DeleteUserCommand extends Command
 {
     protected static $defaultName = 'app:delete-user';

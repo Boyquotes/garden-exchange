@@ -1,0 +1,30 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_garden_index' %}
+
+{% block class_body %}col-sm-6 col-sm-offset-3{% endblock %}
+
+{% block main %}
+    <h1>{{ 'title.garden_list'|trans }}</h1>
+
+        {% for garden in gardens %}
+            {% if is_granted(constant('\\App\\Security\\GardenVoter::EDIT'), garden) %}
+                {{ garden.title }}
+                <div class="item-actions">
+                    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-sm btn-default">
+                        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
+                    </a>
+
+                    <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">
+                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
+                    </a>
+                </div>
+            {% endif %}
+        {% else %}
+            {{ 'garden.no_gardens_found'|trans }}
+        {% endfor %}
+{% endblock %}
+
+{% block sidebar %}
+    {{ parent() }}
+{% endblock %}

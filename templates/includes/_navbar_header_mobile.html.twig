@@ -1,0 +1,69 @@
+<div class="navbar navbar-default navbar-static-top is-hidden-desktop" role="navigation">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="navbar-header col-md-3 col-lg-2">
+                <a class="navbar-brand" href="{{ path('homepage') }}">
+                    Ge
+                </a>
+                <button type="button" class="navbar-toggle"
+                        data-toggle="collapse"
+                        data-target=".navbar-collapse">
+                    <span class="sr-only">{{ 'menu.toggle_nav'|trans }}</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+
+                    {% block header_navigation_links %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin_post_index') }}">
+                                    <i class="fa fa-lock" aria-hidden="true"></i> {{ 'menu.admin'|trans }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endblock %}
+                    
+                    {% if not is_granted('ROLE_CAMPER') %}
+                        <li>
+                            <a href="{{ path('register') }}"> {{ 'user.register'|trans }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('security_login') }}"> {{ 'menu.login'|trans }}</a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="add-garden">
+                        <a href="{{ path('admin_garden_new') }}"> {{ 'menu.register.garden'|trans }}</a>
+                    </li>
+                    
+                    {% if app.user %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="user">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <span class="caret"></span>
+                                <span class="sr-only">{{ app.user.fullname }}</span>
+                            </a>
+                            <ul class="dropdown-menu user" role="menu" aria-labelledby="user">
+                                <li>
+                                    <a href="{{ path('user_edit') }}">
+                                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'menu.user'|trans }}
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="{{ path('security_logout') }}">
+                                        <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

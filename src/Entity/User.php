@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(name="symfony_demo_user")
+ * @ORM\Table(name="user")
  * @ORM\HasLifecycleCallbacks
  */
 class User implements UserInterface, \Serializable
@@ -27,17 +27,30 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", nullable = true)
      */
     private $fullName;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
-     * @Assert\Length(min=2, max=50)
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     */
+    private $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", unique=true, nullable = true)
      */
     private $username;
 
@@ -53,6 +66,13 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="password.blank")
+     * @Assert\Length(
+     *     min=6,
+     *     minMessage="password.too_short",
+     *     max=4096,
+     *     maxMessage="password.too_long"
+     * )
      */
     private $password;
 
@@ -82,6 +102,11 @@ class User implements UserInterface, \Serializable
      */
     private $gardens;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Profile::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $profile;
+
     public function __construct()
     {
         $this->gardens = new ArrayCollection();
@@ -95,6 +120,26 @@ class User implements UserInterface, \Serializable
     public function setFullName(string $fullName): void
     {
         $this->fullName = $fullName;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+    
+    public function setLastName(string $lastName): void
+    {
+        $this->lastName = $lastName;
     }
 
     public function getFullName(): ?string
@@ -256,6 +301,23 @@ class User implements UserInterface, \Serializable
             if ($garden->getUser() === $this) {
                 $garden->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(Profile $profile): self
+    {
+        $this->profile = $profile;
+
+        // set the owning side of the relation if necessary
+        if ($profile->getUser() !== $this) {
+            $profile->setUser($this);
         }
 
         return $this;

@@ -14,10 +14,6 @@
                 <source>not_available</source>
                 <target>Not available</target>
             </trans-unit>
-            <trans-unit id="mit_license">
-                <source>mit_license</source>
-                <target>MIT License</target>
-            </trans-unit>
 
             <trans-unit id="http_error.name">
                 <source>http_error.name</source>
@@ -74,7 +70,7 @@
             </trans-unit>
             <trans-unit id="title.login">
                 <source>title.login</source>
-                <target>Secure Sign in</target>
+                <target>Log in</target>
             </trans-unit>
             <trans-unit id="title.post_list">
                 <source>title.post_list</source>
@@ -167,7 +163,7 @@
             </trans-unit>
             <trans-unit id="action.sign_in">
                 <source>action.sign_in</source>
-                <target>Sign in</target>
+                <target>Log in</target>
             </trans-unit>
             <trans-unit id="action.browse_app">
                 <source>action.browse_app</source>
@@ -271,10 +267,6 @@
                 <source>menu.post_list</source>
                 <target>Post list</target>
             </trans-unit>
-            <trans-unit id="menu.back_to_blog">
-                <source>menu.back_to_blog</source>
-                <target>Back to blog</target>
-            </trans-unit>
             <trans-unit id="menu.homepage">
                 <source>menu.homepage</source>
                 <target>Homepage</target>
@@ -355,75 +347,13 @@
                 <target><![CDATA[Your post "{title}" has received a new comment. You can read the comment by following <a href="{link}">this link</a>]]></target>
             </trans-unit>
 
-            <trans-unit id="help.app_description">
-                <source>help.app_description</source>
-                <target><![CDATA[This is a <strong>demo application</strong> built in the Symfony Framework to illustrate the recommended way of developing Symfony applications.]]></target>
-            </trans-unit>
-            <trans-unit id="help.show_code">
-                <source>help.show_code</source>
-                <target><![CDATA[Click on this button to show the source code of the <strong>Controller</strong> and <strong>template</strong> used to render this page.]]></target>
-            </trans-unit>
-            <trans-unit id="help.browse_app">
-                <source>help.browse_app</source>
-                <target><![CDATA[Browse the <strong>public section</strong> of the demo application.]]></target>
-            </trans-unit>
-            <trans-unit id="help.browse_admin">
-                <source>help.browse_admin</source>
-                <target><![CDATA[Browse the <strong>admin backend</strong> of the demo application.]]></target>
-            </trans-unit>
-            <trans-unit id="help.login_users">
-                <source>help.login_users</source>
-                <target>Try either of the following users</target>
-            </trans-unit>
-            <trans-unit id="help.role_user">
-                <source>help.role_user</source>
-                <target>regular user</target>
-            </trans-unit>
-            <trans-unit id="help.role_admin">
-                <source>help.role_admin</source>
-                <target>administrator</target>
-            </trans-unit>
-            <trans-unit id="help.reload_fixtures">
-                <source>help.reload_fixtures</source>
-                <target>If these users don't work, reload application fixtures by running this command from the terminal:</target>
-            </trans-unit>
-            <trans-unit id="help.add_user">
-                <source>help.add_user</source>
-                <target>If you want to create new users, run this other command:</target>
-            </trans-unit>
-            <trans-unit id="help.more_information">
-                <source>help.more_information</source>
-                <target><![CDATA[For more information, check out the <a href="https://symfony.com/doc">Symfony doc</a>.]]></target>
-            </trans-unit>
-            <trans-unit id="help.post_summary">
-                <source>help.post_summary</source>
-                <target>Summaries can't contain Markdown or HTML contents; only plain text.</target>
-            </trans-unit>
-            <trans-unit id="help.post_publication">
-                <source>help.post_publication</source>
-                <target>Set the date in the future to schedule the blog post publication.</target>
-            </trans-unit>
-            <trans-unit id="help.post_content">
-                <source>help.post_content</source>
-                <target>Use Markdown to format the blog post contents. HTML is allowed too.</target>
-            </trans-unit>
-            <trans-unit id="help.comment_content">
-                <source>help.comment_content</source>
-                <target>Comments not complying with our Code of Conduct will be moderated.</target>
-            </trans-unit>
-
-            <trans-unit id="info.change_password">
-                <source>info.change_password</source>
-                <target>After changing your password, you will be logged out of the application.</target>
-            </trans-unit>
-
             <trans-unit id="rss.title">
                 <source>rss.title</source>
-                <target>Symfony Demo blog</target>
+                <target>Garden Exchange blog</target>
             </trans-unit>
             <trans-unit id="rss.description">
                 <source>rss.description</source>
-                <target>Most recent posts published on the Symfony Demo blog</target>
+                <target>Most recent posts published on the Garden Exchange blog</target>
             </trans-unit>
 
             <trans-unit id="paginator.previous">
@@ -438,6 +368,9 @@
                 <source>paginator.current</source>
                 <target>(current)</target>
             </trans-unit>
+            
+            
+            
             <trans-unit id="menu.register">
                 <source>menu.register</source>
                 <target>Create an account</target>
@@ -446,22 +379,126 @@
                 <source>menu.howto</source>
                 <target>How it works</target>
             </trans-unit>
+            <trans-unit id="nom.site">
+                <source>nom.site</source>
+                <target>Garden Exchange</target>
+            </trans-unit>
+            <trans-unit id="facebook.community">
+                <source>facebook.community</source>
+                <target>Garden Exchange Facebook Community</target>
+            </trans-unit>
+            <trans-unit id="instagram.community">
+                <source>instagram.community</source>
+                <target>Garden Exchange Instagram Community</target>
+            </trans-unit>
+            <trans-unit id="twitter.community">
+                <source>twitter.community</source>
+                <target>Garden Exchange Twitter Community</target>
+            </trans-unit>
+            <trans-unit id="label.lastname">
+                <source>label.lastname</source>
+                <target>Lastname</target>
+            </trans-unit>
+            <trans-unit id="label.firstname">
+                <source>label.firstname</source>
+                <target>Firstname</target>
+            </trans-unit>
+            <trans-unit id="label.agreeTerms">
+                <source>label.agreeTerms</source>
+                <target>By creating this account, I accept the general terms of use</target>
+            </trans-unit>
             <trans-unit id="menu.login">
                 <source>menu.login</source>
-                <target>Sign in</target>
+                <target>Log in</target>
             </trans-unit>
             <trans-unit id="user.password_changed_successfully">
                 <source>user.password_changed_successfully</source>
-                <target>User password updated successfully! You need to sign in</target>
+                <target>User password updated successfully! You need to log in</target>
             </trans-unit>
             <trans-unit id="user.forgot_password">
                 <source>user.forgot_password</source>
+                <target>Forgot password</target>
+            </trans-unit>
+            <trans-unit id="user.reset_password">
+                <source>user.reset_password</source>
                 <target>Reset password</target>
+            </trans-unit>
+            <trans-unit id="user.reset_password_help">
+                <source>user.reset_password_help</source>
+                <target>We’ll email you a link to reset your password</target>
+            </trans-unit>
+            <trans-unit id="info.change_password">
+                <source>info.change_password</source>
+                <target>After changing your password, you will be logged out of the application.</target>
+            </trans-unit>
+            <trans-unit id="user.no_account.register">
+                <source>user.no_account.register</source>
+                <target>No account yet? Sign up</target>
             </trans-unit>
             <trans-unit id="user.register">
                 <source>user.register</source>
-                <target>No account yet? Sign up</target>
+                <target>Sign up</target>
             </trans-unit>
+            <trans-unit id="menu.register.garden">
+                <source>menu.register.garden</source>
+                <target>Add your garden</target>
+            </trans-unit>
+            <trans-unit id="menu.garden_list">
+                <source>menu.garden_list</source>
+                <target>Our's garden</target>
+            </trans-unit>
+            <trans-unit id="title.garden_list">
+                <source>title.garden_list</source>
+                <target>Our's garden</target>
+            </trans-unit>
+            <trans-unit id="title.garden_new">
+                <source>title.garden_new</source>
+                <target>Add our garden</target>
+            </trans-unit>
+            <trans-unit id="nb.result.listings">
+                <source>nb.result.listings</source>
+                <target>Listings</target>
+            </trans-unit>
+            <trans-unit id="label.description">
+                <source>label.description</source>
+                <target>Description</target>
+            </trans-unit>
+            <trans-unit id="label.street">
+                <source>label.street</source>
+                <target>Street</target>
+            </trans-unit>
+            <trans-unit id="label.postcode">
+                <source>label.postcode</source>
+                <target>Post Code</target>
+            </trans-unit>
+            <trans-unit id="label.city ">
+                <source>label.city</source>
+                <target>City</target>
+            </trans-unit>
+            <trans-unit id="label.country ">
+                <source>label.country</source>
+                <target>Country</target>
+            </trans-unit>
+            <trans-unit id="label.equipments ">
+                <source>label.equipments</source>
+                <target>Equipments</target>
+            </trans-unit>
+            <trans-unit id="label.campingTypes ">
+                <source>label.campingTypes</source>
+                <target>Camping type accepted ?</target>
+            </trans-unit>
+            <trans-unit id="label.addPhotos ">
+                <source>label.addPhotos</source>
+                <target>Add photos</target>
+            </trans-unit>
+            <trans-unit id="action.add.garden">
+                <source>action.add.garden</source>
+                <target>Add my garden</target>
+            </trans-unit>
+            
+            
+            
+            
         </body>
     </file>
 </xliff>

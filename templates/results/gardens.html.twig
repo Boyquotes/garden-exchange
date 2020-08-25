@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'results' %}
+
+{% block body %}
+    
+    <div class="row">
+        <div class="listings col-md-6">
+            <div class="page-header">
+                <h1>{{ allGardens|length }} {{ 'nb.result.listings'|trans|raw }}</h1>
+            </div>
+            
+            <div class="gardens-listing-result">
+                {% for garden in allGardens %}
+                    <div class="garden-result">
+                        <div class="titre-garden-listing">
+                            {{ garden.title }}
+                            {% for image in garden.gardenImages %}
+                                {% if loop.index == 1 %}
+                                    <div class="image{{image.id}}">
+                                        <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="carte-listings col-md-6">
+            {{ include('maps/_map_gardens_listing.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
+        </div>
+    </div>
+
+{% endblock %}
