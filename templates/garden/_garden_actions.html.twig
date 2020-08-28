@@ -1,0 +1,31 @@
+<div class="item-actions">
+    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-sm btn-default">
+        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
+    </a>
+
+    <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
+    </a>
+    {% if garden.enabled %}
+        <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('put_offline_garden', {id: garden.id}) }}" data-post data-element="garden" data-classes="btn-danger|btn-success" data-token="{{ csrf_token('publish' ~ garden.id )}}" class="btn btn-sm btn-danger garden{{garden.id}}">
+            <i class="fa fa-times" aria-hidden="true"></i> {{ 'action.offline_garden'|trans }}
+        </a>
+    {% else %}
+        {% if garden.gardenImages|length > 2 and garden.description|length > 50 %}
+            <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('publish_garden', {id: garden.id}) }}" data-post data-element="garden" data-classes="btn-success|btn-danger" data-token="{{ csrf_token('publish' ~ garden.id )}}" class="btn btn-sm btn-success garden{{garden.id}}">
+                <i class="fa fa-power-off" aria-hidden="true"></i> {{ 'action.publish_garden'|trans }}
+            </a>
+        {% else %}
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger garden{{garden.id}} deactivate">
+                <i class="fa fa-times" aria-hidden="true"></i> {{ 'garden_incomplete'|trans }}
+            </a>
+            <div>{{ 'garden.incomplete.because'|trans }}</div>
+            {% if garden.gardenImages|length < 2 %}
+                <div class="helperPublish">{{ 'nb.photos.mandatory.for.publication'|trans }}</div>
+            {% endif %}
+            {% if garden.description|length < 50 %}
+                <div class="helperPublish">{{ 'nb.char.description.mandatory.for.publication'|trans }}</div>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</div>

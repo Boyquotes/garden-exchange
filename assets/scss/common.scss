@@ -1,0 +1,44 @@
+/* Base   ------------------------------------------------------------------------- */
+$baseColorGe :    #303434;
+$baseWeightGE : 600;
+$liHover: #F1F1F1;
+$fontGeneral: DejaVu Sans;
+$coverMaxHeight: 900px;
+$coverMinHeight: 700px;
+$coverHeight: 100vh;
+$verClair : #1CE990;
+
+a{
+    color: $baseColorGe;
+}
+a:hover, a:focus {
+    color: $baseColorGe;
+}
+#sidebar{
+    margin: 4em 0;
+}
+
+/* Body   ------------------------------------------------------------------------- */
+.body-container {
+    position: relative;
+    width: 100%;
+    margin: 15vh 0 0 0;
+}
+#homepage .body-container {
+    margin: 0;
+}
+.d-flex{
+    display: flex;
+}
+.jc-center{
+    justify-content: center;
+}
+.jc-space-evenly{
+    justify-content: space-evenly;
+}
+.txt-center{
+    text-align: center;
+}
+.no-padding{
+    padding: 0;
+}

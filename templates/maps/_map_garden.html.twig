@@ -1,4 +1,4 @@
-    <div id="macarte" style="width:50%; height:450px"></div>
+    <div id="macarte" style="width:100%; height:450px"></div>
     {% if not is_granted('ROLE_CAMPER') and garden.latCity is defined and garden.lngCity is defined %}
         <script>
           var carte = L.map('macarte').setView([{{garden.latCity}}, {{garden.lngCity}}], 10);

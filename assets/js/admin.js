@@ -63,25 +63,66 @@ $(document).on('submit', 'form[data-confirmation]', function (event) {
     }
 });
 
-$(document).ready( function(){
-    $('#main').find('[data-delete]').each( function(){
+function initAjaxPost(){
+    $('#main').find('[data-post]').each( function(){
         $(this).click( function(){
-            var urlDeleteGardenImage = $(this).attr('data-action')
-            var gardenImageId = $(this).attr('data-id')
-            var tokenDeleteGardenImage = $(this).attr('data-token')
-            console.log(urlDeleteGardenImage);
-            console.log('delete');
+            var urlAction = $(this).attr('data-action')
+            var element = $(this).attr('data-element')
+            var id = $(this).attr('data-id')
+            var token = $(this).attr('data-token')
+            var classes = $(this).attr('data-classes')
+            console.log(element);
+            console.log(id);
+            var classesTab = classes.split('|')
+            console.log(classes.split('|'));
+            console.log(classesTab[0]);
             $.ajax({
-              url: urlDeleteGardenImage,
-              method: 'DELETE',
-              data: { _token: tokenDeleteGardenImage }
+              url: urlAction,
+              method: 'POST',
+              data: { _token: token }
             })
-            .done(function( data ) {
-                console.log('image'+gardenImageId);
-                  $('.image'+gardenImageId).hide();
+            .done(function( msg ) {
+                $("."+element+id).removeClass(classesTab[0]);
+                $("."+element+id).addClass(classesTab[1]);
+                console.log(msg);
+                if( typeof msg.route == 'object' ){
+                    $.each( msg.route, function( key, value ) {
+                        $.ajax({
+                          url: value,
+                          method: 'POST'
+                        })
+                        .done(function(data) {
+                            $(key).html(data);
+                            initAjaxPost();
+                        });
+                    });
+                }
             });
         });
     });
+}
+
+function initAjaxDelete(){
+    $('#main').find('[data-delete]').each( function(){
+        $(this).click( function(){
+            var urlAction = $(this).attr('data-action')
+            var id = $(this).attr('data-id')
+            var token = $(this).attr('data-token')
+            $.ajax({
+              url: urlAction,
+              method: 'DELETE',
+              data: { _token: token }
+            })
+            .done(function( data ) {
+                  $('.image'+id).hide();
+            });
+        });
+    });
+}
+
+$(document).ready( function(){
+    initAjaxPost();
+    initAjaxDelete();
     
     $('#main').find('.equipment_choice').each( function(){
         $(this).click(function () {
@@ -91,15 +132,12 @@ $(document).ready( function(){
                 $('#garden_equipments option[value="'+idEquipment+'"]').prop('selected', '');
                 $(this).removeClass('equipment_selected');
             }
-            else if ( $('#garden_equipments option[value="'+idEquipment+'"]').attr( 'selected' ) == 'selected' )
-            {
-                console.log('selec');
-                //~ $('#garden_equipments').hide();
-                $('#garden_equipments option[value="4"]').removeAttr('selected', '');
-                $(this).removeClass('equipment_selected');
-            }
+            //~ else if ( $('#garden_equipments option[value="'+idEquipment+'"]').attr( 'selected' ) == 'selected' )
+            //~ {
+                //~ $('#garden_equipments option[value="4"]').removeAttr('selected', '');
+                //~ $(this).removeClass('equipment_selected');
+            //~ }
             else{
-                console.log('sdsd bbb');
                 $('#garden_equipments option[value="'+idEquipment+'"]').attr('selected','selected');
                 $(this).addClass('equipment_selected');
             }
@@ -120,10 +158,23 @@ $(document).ready( function(){
             }
         });
     });
+    
+    $('#main').find('.zone_choice').each( function(){
+        $(this).click(function () {
+            var idZone = $(this).attr('id');
+            if ( $('#garden_zones option[value="'+idZone+'"]').prop( 'selected' ) == true )
+            {
+                $('#garden_zones option[value="'+idZone+'"]').prop('selected', '');
+                $(this).removeClass('zone_selected');
+            }
+            else{
+                $('#garden_zones option[value="'+idZone+'"]').prop('selected','selected');
+                $(this).addClass('zone_selected');
+            }
+        });
+    });
 
     $('#garden_gardenImages').change(function (event) {
-        console.log("hola");
-        
      //Get count of selected files
      var countFiles = $(this)[0].files.length;
 

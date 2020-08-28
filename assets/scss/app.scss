@@ -14,6 +14,8 @@ $lato-font-path: '~lato-font/fonts';
 @import "~@fortawesome/fontawesome-free/css/v4-shims.css";
 @import "~highlight.js/styles/solarized-light.css";
 
+@import "common.scss";
+
 // pick the Lato fonts individually to avoid importing the entire font family
 @import '~lato-font/scss/public-api';
 @include lato-include-font('normal');
@@ -374,9 +376,9 @@ body#blog_search .post-metadata {
 }
 .inputfile + label {
     color: #f1e5e6;
-    background-color: #d3394c;
-    max-width: 80%;
-    font-size: 1.25rem;
+    background-color: #f8a800;
+    max-width: 100%;
+    font-size: 2rem;
     /* 20px */
     font-weight: 700;
     text-overflow: ellipsis;
@@ -385,7 +387,7 @@ body#blog_search .post-metadata {
     display: inline-block;
     overflow: hidden;
     padding: 0.625rem 1.25rem;
-    /* 10px 20px */
+    margin: 1em 0 2em 0;
 }
 .inputfile:focus + label,
 .inputfile.has-focus + label {
@@ -411,26 +413,6 @@ body#blog_search .post-metadata {
     /* 4px */
     margin-right: 0.25em;
     /* 4px */
-}
-
-/* Base   ------------------------------------------------------------------------- */
-$baseColorGe :    #303434;
-$baseWeightGE : 600;
-$liHover: #F1F1F1;
-$fontGeneral: DejaVu Sans;
-$coverMaxHeight: 900px;
-$coverMinHeight: 700px;
-$coverHeight: 100vh;
-$verClair : #1CE990;
-
-a{
-    color: $baseColorGe;
-}
-a:hover, a:focus {
-    color: $baseColorGe;
-}
-#sidebar{
-    margin: 4em 0;
 }
 
 /* Header   ------------------------------------------------------------------------- */
@@ -499,25 +481,6 @@ form[name='simple_search'] .btn-primary{
 .lang-select{
     font-size: 2.5em;
     margin: 6px 0 0 0;
-}
-
-/* Body   ------------------------------------------------------------------------- */
-.body-container {
-    position: relative;
-    width: 100%;
-    margin: 15vh 0 0 0;
-}
-#homepage .body-container {
-    margin: 0;
-}
-.d-flex{
-    display: flex;
-}
-.jc-center{
-    justify-content: center;
-}
-.no-padding{
-    padding: 0;
 }
 
 

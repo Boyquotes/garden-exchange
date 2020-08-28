@@ -15,11 +15,13 @@ use App\Entity\GardenImage;
 use App\Form\GardenType;
 use App\Repository\GardenRepository;
 use App\Security\GardenVoter;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -304,6 +306,69 @@ class GardenController extends AbstractController
         $this->addFlash('success', 'garden.deleted_successfully');
 
         return $this->redirectToRoute('admin_garden_index');
+    }
+
+    /**
+     * @Route("/{id}/publish", name="publish_garden", methods={"POST"})
+     */
+    public function publishGarden(Request $request, Garden $garden){
+        $token = $request->request->get('_token');
+
+        if($this->isCsrfTokenValid('publish'.$garden->getId(), $token)){
+            if($garden->getEnabled()){
+                $garden->setEnabled(0);
+                $garden->setUpdatedAt(new \DateTime('now'));
+            }
+            else{
+                $garden->setEnabled(1);
+                $garden->setPublishedAt(new \DateTime('now'));
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($garden);
+            $em->flush();
+            $routeReload = array( '#garden'.$garden->getId() => $this->generateUrl( 'actions_garden', array('id' => $garden->getId()) ) );
+            $response = array(
+                'status' => 'success',
+                'route' => $routeReload
+            );
+            return new JsonResponse($response);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
+        }
+    }
+    
+    /**
+     * @Route("/{id}/offline", name="put_offline_garden", methods={"POST"})
+     */
+    public function putOfflineGarden(Request $request, Garden $garden){
+        $token = $request->request->get('_token');
+
+        if($this->isCsrfTokenValid('publish'.$garden->getId(), $token)){
+            $garden->setEnabled(0);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($garden);
+            $em->flush();
+
+            $routeReload = array( '#garden'.$garden->getId() => $this->generateUrl( 'actions_garden', array('id' => $garden->getId()) ) );
+            $response = array(
+                'status' => 'success',
+                'route' => $routeReload
+            );
+            return new JsonResponse($response);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
+        }
+    }
+
+    /**
+     * @Route("/{id}/actions", name="actions_garden", methods={"POST", "GET"})
+     */
+    public function actionsGarden(Request $request, Garden $garden){
+        return $this->render('garden/_garden_actions.html.twig', [
+            'garden' => $garden,
+        ]);
     }
 
 }

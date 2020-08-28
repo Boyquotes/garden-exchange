@@ -27,11 +27,6 @@ class Garden
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $title;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $description;
@@ -133,28 +128,27 @@ class Garden
      */
     private $campingTypes;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $area;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Zone::class, inversedBy="gardens", cascade={"persist"})
+     */
+    private $zones;
+
     public function __construct()
     {
         $this->campingTypes = new ArrayCollection();
         $this->equipments = new ArrayCollection();
         $this->gardenImages = new ArrayCollection();
+        $this->zones = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
     }
 
     public function getDescription(): ?string
@@ -431,6 +425,46 @@ class Garden
     {
         if ($this->campingTypes->contains($campingType)) {
             $this->campingTypes->removeElement($campingType);
+        }
+
+        return $this;
+    }
+
+    public function getArea(): ?string
+    {
+        return $this->area;
+    }
+
+    public function setArea(string $area): self
+    {
+        $this->area = $area;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Zone[]
+     */
+    public function getZones(): Collection
+    {
+        return $this->zones;
+    }
+
+    public function addZone(Zone $zone): self
+    {
+        if (!$this->zones->contains($zone)) {
+            $this->zones[] = $zone;
+            $zone->addGarden($this);
+        }
+
+        return $this;
+    }
+
+    public function removeZone(Zone $zone): self
+    {
+        if ($this->zones->contains($zone)) {
+            $this->zones->removeElement($zone);
+            $zone->removeGarden($this);
         }
 
         return $this;

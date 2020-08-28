@@ -121,14 +121,13 @@ class AppFixtures extends Fixture
     private function loadGardens(ObjectManager $manager): void
     {
         $i = 0;
-        foreach ($this->getGardenData() as [$country_alpha2, $title , $description, $street, $postcode, $city, $lat, $lng, $lat_city, $lng_city, $enabled, $expired, $locked]) {
+        foreach ($this->getGardenData() as [$country_alpha2, $description, $street, $postcode, $city, $lat, $lng, $lat_city, $lng_city, $enabled, $expired, $locked]) {
             $garden = new Garden();
             $garden->setUser($this->getReference('john_user'));
             $garden->setCountry($this->getReference($country_alpha2));
             $garden->addEquipment($this->getReference('Water'));
             $garden->addEquipment($this->getReference('Electricity'));
             $garden->addCampingType($this->getReference('Tent'));
-            $garden->setTitle($title);
             $garden->setDescription($description);
             $garden->setStreet($street);
             $garden->setPostcode($postcode);
@@ -243,8 +242,8 @@ class AppFixtures extends Fixture
     private function getGardenData(): array
     {
         return [
-            ['FR', 'La garrigue','belle vue, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rue des kermes','34990','juvignac','43.6150076','3.8056454','43.6140784','3.8101646','1','0','0'],
-            ['PT', 'La garrigue','Grand terrain, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rua do cuastro','3810-416','Aveiro','40.6244','-8.66122','40.62705','-8.66122','1','0','0'],
+            ['FR', 'belle vue, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rue des kermes','34990','juvignac','43.6150076','3.8056454','43.6140784','3.8101646','1','0','0'],
+            ['PT', 'Grand terrain, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rua do cuastro','3810-416','Aveiro','40.6244','-8.66122','40.62705','-8.66122','1','0','0'],
         ];
     }
 

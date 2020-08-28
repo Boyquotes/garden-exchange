@@ -38,16 +38,19 @@
                         {% endif %}
                     {% endblock %}
                     
-                    {% if not is_granted('ROLE_CAMPER') %}
+                    {% if is_granted('ROLE_CAMPER') %}
+                        <li>
+                            <a href="{{ path('admin_index') }}"> {{ 'title.garden_list'|trans }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('conversation_exchange_index') }}"> {{ 'title.conversation_list'|trans }}</a>
+                        </li>
+                    {% else %}
                         <li>
                             <a href="{{ path('register') }}"> {{ 'user.register'|trans }}</a>
                         </li>
                         <li>
                             <a href="{{ path('security_login') }}"> {{ 'menu.login'|trans }}</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="{{ path('admin_index') }}"> {{ 'title.garden_list'|trans }}</a>
                         </li>
                     {% endif %}
                     

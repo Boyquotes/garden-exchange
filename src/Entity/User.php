@@ -107,9 +107,15 @@ class User implements UserInterface, \Serializable
      */
     private $profile;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MessageExchange::class, mappedBy="user")
+     */
+    private $messageExchanges;
+
     public function __construct()
     {
         $this->gardens = new ArrayCollection();
+        $this->messageExchanges = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -318,6 +324,37 @@ class User implements UserInterface, \Serializable
         // set the owning side of the relation if necessary
         if ($profile->getUser() !== $this) {
             $profile->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MessageExchange[]
+     */
+    public function getMessageExchanges(): Collection
+    {
+        return $this->messageExchanges;
+    }
+
+    public function addMessageExchange(MessageExchange $messageExchange): self
+    {
+        if (!$this->messageExchanges->contains($messageExchange)) {
+            $this->messageExchanges[] = $messageExchange;
+            $messageExchange->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessageExchange(MessageExchange $messageExchange): self
+    {
+        if ($this->messageExchanges->contains($messageExchange)) {
+            $this->messageExchanges->removeElement($messageExchange);
+            // set the owning side to null (unless already changed)
+            if ($messageExchange->getUser() === $this) {
+                $messageExchange->setUser(null);
+            }
         }
 
         return $this;

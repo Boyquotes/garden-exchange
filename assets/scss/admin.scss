@@ -1,10 +1,7 @@
 @import "~bootswatch/flatly/variables";
 @import "~eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
 @import "bootstrap-tagsinput.scss";
-
-html {
-
-}
+@import "common.scss";
 
 /* Page: 'Backend post index'
    ------------------------------------------------------------------------- */
@@ -29,8 +26,69 @@ body#admin_post_show .post-tags .label-default i {
   color: #95A6A7;
 }
 
+#admin_garden_new h4, #admin_garden_edit h4{
+    font-size: 2.5em;
+    font-weight: 700;
+}
 
-/* Equipment   ------------------------------------------------------------------------- */
-.equipment_selected, .campingType_selected{
+/* Photos   ------------------------------------------------------------------------- */
+
+/* Choices  ------------------------------------------------------------------------- */
+.equipment_choice > img, .campingType_choice > img, .zone_choice > img{
     opacity: .5;
+}
+.equipment_selected > img, .campingType_selected > img, .zone_selected > img{
+    opacity: 1;
+    background: $verClair;
+}
+
+/* Equipment choice  ------------------------------------------------------------------------- */
+.equipments_choice{
+    display: flex;
+}
+.equipment_choice{
+    margin: 0 1em;
+}
+.equipment_choice img{
+    height: 100px;
+    padding: 1em;
+    border: 1px solid gray;
+    margin: 0 0 .5em 0;
+}
+
+/* Camping type choice   ------------------------------------------------------------------------- */
+.campingTypes_choice{
+    display: flex;
+}
+.campingType_choice{
+    margin: 0 1em;
+}
+.campingType_choice img{
+    height: 100px;
+    padding: 1em;
+    border: 1px solid gray;
+    margin: 0 0 .5em 0;
+}
+/* Zone type choice   ------------------------------------------------------------------------- */
+.zones_choice{
+    display: flex;
+}
+.zone_choice{
+    margin: 0 1em;
+}
+.zone_choice img{
+    height: 100px;
+    padding: 1em;
+    border: 1px solid gray;
+    margin: 0 0 .5em 0;
+}
+
+.publish-garden button{
+    font-size: 3rem;
+    margin: 3.5em;
+}
+/* Garden Listing */
+.deactivate{
+    opacity: .4;
+    cursor: unset;
 }

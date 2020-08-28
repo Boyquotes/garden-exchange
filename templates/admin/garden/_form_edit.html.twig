@@ -67,19 +67,22 @@
     </div>
 </div>
 <div class="row d-flex jc-center">
-    <div class="col-md-3 txt-center">
-        {{ form_row(form.street) }}
+    <div class="col-md-6">
+            {{ include('maps/_map_garden.html.twig') }}
     </div>
-    <div class="col-md-3 txt-center">
-        {{ form_row(form.postcode) }}
-    </div>
-</div>
-<div class="row d-flex jc-center">
-    <div class="col-md-3 txt-center">
-        {{ form_row(form.city) }}
-    </div>
-    <div class="col-md-3 txt-center">
-        {{ form_row(form.country) }}
+    <div class="col-md-6 txt-center">
+        <div class="col-md-6 txt-center">
+            {{ form_row(form.street) }}
+        </div>
+        <div class="col-md-6 txt-center">
+            {{ form_row(form.postcode) }}
+        </div>
+        <div class="col-md-6 txt-center">
+            {{ form_row(form.city) }}
+        </div>
+        <div class="col-md-6 txt-center">
+            {{ form_row(form.country) }}
+        </div>
     </div>
 </div>
 
@@ -116,6 +119,15 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.gardenImages) }}</h4>
+        <div class="d-flex jc-space-evenly">
+            {% for image in garden.gardenImages %}
+                <div class="image{{image.id}}">
+                    <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
+                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}">Supprimer</a>
+                </div>
+            {% endfor %}
+        </div>
+
         {{ form_widget(form.gardenImages) }}
     </div>
 </div>
@@ -123,7 +135,6 @@
     <div id='upload_garden_image_result' class="d-flex jc-space-evenly"></div>
 </div>
 
-    
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center publish-garden">
         <button type="submit" class="{{ button_css|default("btn btn-primary") }}">

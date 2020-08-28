@@ -479,6 +479,10 @@
                 <source>label.country</source>
                 <target>Country</target>
             </trans-unit>
+            <trans-unit id="label.photos">
+                <source>label.photos</source>
+                <target>Photos</target>
+            </trans-unit>
             <trans-unit id="label.equipments ">
                 <source>label.equipments</source>
                 <target>Equipments</target>
@@ -486,6 +490,10 @@
             <trans-unit id="label.campingTypes ">
                 <source>label.campingTypes</source>
                 <target>Camping type accepted ?</target>
+            </trans-unit>
+            <trans-unit id="label.zones ">
+                <source>label.zones</source>
+                <target>Situation</target>
             </trans-unit>
             <trans-unit id="label.addPhotos ">
                 <source>label.addPhotos</source>
@@ -495,7 +503,50 @@
                 <source>action.add.garden</source>
                 <target>Add my garden</target>
             </trans-unit>
-            
+            <trans-unit id="action.publish_garden">
+                <source>action.publish_garden</source>
+                <target>Publish online</target>
+            </trans-unit>
+            <trans-unit id="action.offline_garden">
+                <source>action.offline_garden</source>
+                <target>Put offline</target>
+            </trans-unit>
+            <trans-unit id="nb.char.description.mandatory.for.publication">
+                <source>nb.char.description.mandatory.for.publication</source>
+                <target>Your garden description is less 50 char</target>
+            </trans-unit>
+            <trans-unit id="nb.photos.mandatory.for.publication">
+                <source>nb.photos.mandatory.for.publication</source>
+                <target>You must add at least 1 garden photo</target>
+            </trans-unit>
+            <trans-unit id="garden_incomplete">
+                <source>garden_incomplete</source>
+                <target>Offline</target>
+            </trans-unit>
+            <trans-unit id="garden.incomplete.because">
+                <source>garden.incomplete.because</source>
+                <target>Your garden can't be publish because :</target>
+            </trans-unit>
+            <trans-unit id="label.area">
+                <source>label.area</source>
+                <target>Surface :</target>
+            </trans-unit>
+            <trans-unit id="title.conversation_list">
+                <source>title.conversation_list</source>
+                <target>Messages</target>
+            </trans-unit>
+            <trans-unit id="title.edit_garden">
+                <source>title.edit_garden</source>
+                <target>Edit your garden</target>
+            </trans-unit>
+            <trans-unit id="localisation">
+                <source>localisation</source>
+                <target>Localisation</target>
+            </trans-unit>
+            <trans-unit id="garden.created_successfully ">
+                <source>garden.created_successfully </source>
+                <target>This garden have been added</target>
+            </trans-unit>
             
             
             

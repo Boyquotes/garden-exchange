@@ -2,28 +2,23 @@
 
 {% block body_id 'admin_garden_edit' %}
 
+{% block class_body %}col-sm-10 col-md-offset-1{% endblock %}
+
 {% block main %}
     <h1>{{ 'title.edit_garden'|trans({'%id%': garden.id}) }}</h1>
-
-    {{ include('admin/garden/_form.html.twig', {
+    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-block btn-success">
+        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden'|trans }}
+    </a>
+    
+    {{ include('admin/garden/_form_edit.html.twig', {
         form: form,
         garden: garden,
         button_label: 'action.save'|trans,
         include_back_to_home_link: true,
     }, with_context = false) }}
+    
 {% endblock %}
 
 {% block sidebar %}
-    <div id="sidebar" class="col-sm-3">
-        <div class="section">
-            <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-block btn-success">
-                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden'|trans }}
-            </a>
-        </div>
-
-        <div class="section actions">
-            {{ include('admin/garden/_delete_form.html.twig', {garden: garden}, with_context = false) }}
-        </div>
-    </div>
     {{ parent() }}
 {% endblock %}

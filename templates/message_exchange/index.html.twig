@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MessageExchange index{% endblock %}
+
+{% block body %}
+    <h1>MessageExchange index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Content</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for message_exchange in message_exchanges %}
+            <tr>
+                <td>{{ message_exchange.id }}</td>
+                <td>{{ message_exchange.content }}</td>
+                <td>
+                    <a href="{{ path('message_exchange_show', {'id': message_exchange.id}) }}">show</a>
+                    <a href="{{ path('message_exchange_edit', {'id': message_exchange.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('message_exchange_new', {'conversationExchangeId':'1'}) }}">Create new</a>
+{% endblock %}

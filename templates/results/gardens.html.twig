@@ -14,7 +14,7 @@
                 {% for garden in allGardens %}
                     <div class="garden-result">
                         <div class="titre-garden-listing">
-                            {{ garden.title }}
+                            {{ garden.city }}
                             {% for image in garden.gardenImages %}
                                 {% if loop.index == 1 %}
                                     <div class="image{{image.id}}">

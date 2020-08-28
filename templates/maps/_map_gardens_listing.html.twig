@@ -20,7 +20,7 @@
           let nom = '';
           let geoloc = '';
           {% for garden in allGardens %}
-            nom = "{{ garden.title }}";
+            nom = "{{ garden.city }}";
             geoloc = [{{ garden.lat }}, {{ garden.lng }}];
             L.marker(geoloc).addTo(gardensCarte).bindPopup(nom);
             pointsList.push(geoloc);

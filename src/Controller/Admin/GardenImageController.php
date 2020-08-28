@@ -36,16 +36,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class GardenImageController extends AbstractController
 {    
     /**
-     * @Route("/{gardenImageId}/delete", name="garden_delete_image", methods={"POST", "GET", "DELETE"})
+     * @Route("/{gardenImageId}/delete", name="garden_delete_image", methods={"DELETE"})
      * @ParamConverter("gardenImage", options={"mapping": {"gardenImageId" : "id"}})
      */
     public function deleteGardenImage(Request $request, GardenImage $gardenImage){
         $token = $request->request->get('_token');
-        //~ dump($request->request->get('_token'));
-//~ dump($request);
-//~ dump($data);
-//~ dump($data['_token']);
-//~ exit;
+
         if($this->isCsrfTokenValid('delete'.$gardenImage->getId(), $token)){
             $name = $gardenImage->getName();
             unlink($this->getParameter('garden_images_directory').'/'.$name);

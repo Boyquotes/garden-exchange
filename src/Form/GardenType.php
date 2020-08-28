@@ -6,14 +6,13 @@ use App\Entity\Country;
 use App\Entity\Garden;
 use App\Entity\GardenImage;
 use App\Entity\Equipment;
+use App\Entity\Zone;
 use App\Form\Type\DateTimePickerType;
-//~ use App\Form\Type\TagsInputType;
-//~ use App\Form\EquipmentType;
 use App\Form\GardenImageType;
-//~ use App\Form\GardenEquipmentType;
-//~ use App\Form\DataTransformer\EquipmentArrayToStringTransformer;
+
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -55,10 +54,6 @@ class GardenType extends AbstractType
         // $builder->add('title', null, ['required' => false, ...]);
 
         $builder
-            ->add('title', null, [
-                'attr' => ['autofocus' => true],
-                'label' => 'label.title',
-            ])
             ->add('description', null, [
                 'attr' => ['rows' => 20],
                 'help' => 'help.garden_description',
@@ -67,6 +62,10 @@ class GardenType extends AbstractType
             ->add('street', null, [
                 'help' => 'help.garden_street',
                 'label' => 'label.street',
+            ])
+            ->add('area', null, [
+                'help' => 'help.garden_area',
+                'label' => 'label.area',
             ])
             ->add('postcode', null, [
                 'attr' => [],
@@ -93,6 +92,14 @@ class GardenType extends AbstractType
                 'required' => false,
             ])
             
+            ->add('zones', EntityType::class, [
+                'label' => 'label.zones',
+                'class' => Zone::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'required' => false,
+            ])
+            
             ->add('equipments', EntityType::class, [
                 'label' => 'label.equipments',
                 'class' => Equipment::class,
@@ -104,24 +111,29 @@ class GardenType extends AbstractType
             ->add('country', EntityType::class, [
                 'label' => 'label.country',
                 'class' => Country::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.enabled', 'DESC');
+                },
                 //~ 'query_builder' => function(EntityRepository $er) {
                     //~ return $er->createQueryBuilder('e')
                     //~ ->orderBy('e.name', 'ASC');},
                 'choice_label' => 'lang_fr',
                 //~ 'preferred_choices' => ['France'],
                 'required' => true,
-                //~ 'group_by' => function($choice, $key, $value) {
-                    //~ if ($value == '75') {
-                        //~ return 'Soon';
-                    //~ }
+                'group_by' => function($choice, $key, $value) {
+                    //~ if( in_array($choice->getCode(), ['250', '276', '620', '724', '756', '826', '528', '20', '56']) ) {
+                    if( $choice->getEnabled() > 0 ) {
+                        return 'Europe';
+                    }
 
-                    //~ return 'Later';
-                //~ },
+                    return 'Monde';
+                },
             ])
             
             ->add('gardenImages', FileType::class,[
                 'attr' => ['class' => 'inputfile', 'placeholder' => 'label.addPhotos'],
-                'label' => false,
+                'label' => 'label.photos',
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false

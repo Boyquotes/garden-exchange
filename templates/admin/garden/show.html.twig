@@ -3,7 +3,7 @@
 {% block body_id 'admin_garden_show' %}
 
 {% block main %}
-    <h1>{{ garden.title }}</h1>
+    <h1>Jardin a {{ garden.city }} ({{ garden.id }})</h1>
 
     <p class="post-metadata">
         {% if garden.publishedAt is defined %}<span class="metadata"><i class="fa fa-calendar"></i> {{ garden.publishedAt|format_datetime('long', 'medium', '', 'UTC') }}</span>{% endif %}
@@ -31,5 +31,4 @@
 
     {{ parent() }}
 
-    {{ show_source_code(_self) }}
 {% endblock %}

@@ -6,18 +6,15 @@
 
 {% block main %}
     <h1>{{ 'title.garden_list'|trans }}</h1>
-
         {% for garden in gardens %}
             {% if is_granted(constant('\\App\\Security\\GardenVoter::EDIT'), garden) %}
-                {{ garden.title }}
-                <div class="item-actions">
-                    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-sm btn-default">
-                        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
-                    </a>
-
-                    <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">
-                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
-                    </a>
+                {{ garden.city }}
+                <div id="garden{{garden.id}}">
+                    {{ render(controller('App\\Controller\\Admin\\GardenController::actionsGarden', {
+                                'garden': garden
+                                })
+                            )
+                    }}
                 </div>
             {% endif %}
         {% else %}
