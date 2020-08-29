@@ -5,10 +5,13 @@
 {% block class_body %}col-sm-10 col-md-offset-1{% endblock %}
 
 {% block main %}
-    <h1>{{ 'title.edit_garden'|trans({'%id%': garden.id}) }}</h1>
-    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-block btn-success">
-        <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden'|trans }}
-    </a>
+
+    <div class="action-garden-edit d-flex clear-wrap">
+        <h1>{{ 'title.edit_garden'|trans({'%id%': garden.id}) }}</h1>
+        <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-success">
+            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden'|trans }}
+        </a>
+    </div>
     
     {{ include('admin/garden/_form_edit.html.twig', {
         form: form,

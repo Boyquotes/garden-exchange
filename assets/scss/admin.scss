@@ -92,3 +92,29 @@ body#admin_post_show .post-tags .label-default i {
     opacity: .4;
     cursor: unset;
 }
+
+/* Garden Edit */
+.action-garden-edit{
+    justify-content: space-around;
+}
+
+/* Garden Show */
+.action-garden-show{
+    justify-content: space-around;
+}
+.img-garden-show{
+    display: flex;
+}
+
+/* Responsive   ------------------------------------------------------------------------- */
+@media only screen and (max-device-width: 800px) {
+    #admin_garden_new h1, #admin_garden_edit h1{
+        text-align: center;
+    }
+    .action-garden-edit{
+        justify-content: center;
+    }
+}
+@media only screen and (min-device-width: 800px) {
+
+}

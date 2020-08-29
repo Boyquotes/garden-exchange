@@ -15,6 +15,21 @@
           L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           }).addTo(carte);
-          var marker = L.marker([{{garden.lat}}, {{garden.lng}}], {}).bindPopup("{{garden.city}}").addTo(carte);
+          var marker = L.marker([{{garden.lat}}, {{garden.lng}}], {
+            draggable: 'true'
+          }).bindPopup("").addTo(carte);
+          marker.on('dragend', relachement);
+
+          function relachement(e) {
+            //marker.getPopup().setContent(');
+            //marker.openPopup();
+            var gps = marker.getLatLng();
+            var lat = gps['lat'];
+            var lng = gps['lng'];
+            var latElementId = document.getElementById('garden_lat');
+            latElementId.value = lat;
+            var lngElementId = document.getElementById('garden_lng');
+            lngElementId.value = lng;
+          }
         </script>
     {% endif %}

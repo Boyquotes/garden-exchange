@@ -489,7 +489,7 @@
             </trans-unit>
             <trans-unit id="label.campingTypes ">
                 <source>label.campingTypes</source>
-                <target>Camping type accepted ?</target>
+                <target>Accessibility with</target>
             </trans-unit>
             <trans-unit id="label.zones ">
                 <source>label.zones</source>

@@ -13,15 +13,32 @@
             <div class="gardens-listing-result">
                 {% for garden in allGardens %}
                     <div class="garden-result">
-                        <div class="titre-garden-listing">
-                            {{ garden.city }}
+                        <div class="img-garden-listing">
+                        {% if garden.gardenImages|length > 0 %}
                             {% for image in garden.gardenImages %}
                                 {% if loop.index == 1 %}
                                     <div class="image{{image.id}}">
-                                        <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
+                                        <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}">
                                     </div>
                                 {% endif %}
                             {% endfor %}
+                        {% else %}
+                                <div class="image-none">
+                                    <img src="{{ asset('/uploads/gardens/none.png') }}" alt="Aucune photo">
+                                </div>
+                        {% endif %}
+                        </div>
+                        <div class="info-camp">
+                            <div class="titre-garden-listing">
+                                <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="">{{ garden.city }}</a>
+                            </div>
+                            <div class="equipments-garden-listing">
+                                {% for equipment in garden.equipments %}
+                                    <div class="equipment-garden-listing">
+                                        <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

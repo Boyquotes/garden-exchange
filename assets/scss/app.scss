@@ -429,6 +429,10 @@ header ul.nav li.add-garden:hover {
     background-color: #FFF;
 }
 
+/* Main   ------------------------------------------------------------------------- */
+#main{
+    margin-top: 5vh;
+}
 /* Navbar   ------------------------------------------------------------------------- */
 .navbar-default {
     position: fixed;
@@ -441,14 +445,14 @@ header ul.nav li.add-garden:hover {
 .navbar-default .navbar-brand {
     color: $baseColorGe;
 }
-.navbar-default .navbar-nav > li > a {
+.navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: $baseColorGe;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
     color: $baseColorGe;
 }
 .navbar-default .navbar-nav .open .dropdown-menu.user > li > a:hover{
-    background-color: $verClair;
+    background-color: none;
 }
 .navbar-default{
     z-index: 10000;
@@ -537,7 +541,7 @@ form[name='simple_search'] .form-group{
 .carte-listings{
     position: sticky;
     right: 0;
-    top: 200px;
+    top: 65px;
 }
 gardensCarte{
     heigth: 100%;
@@ -547,16 +551,41 @@ gardensCarte{
     flex-wrap: wrap;
 }
 .garden-result{
-    width: 50%;
-    height: 200px;
+    width: 46%;
+    height: auto;
+    box-shadow: 0 3px 10px 4px rgba(0,0,0,0.06);
+    border-radius: 6px;
+    border: 1px solid #e7e8e6;
+    margin: 2%;
+}
+.titre-garden-listing{
+    padding: 0 0 1em 0;
+}
+.info-camp{
+    padding: 0 1em 1em 1em;
+}
+.img-garden-listing{
+
+}
+.img-garden-listing img{
+    border-radius: 1%;
+    width: 100%;
+}
+.equipments-garden-listing{
+    display: flex;
+}
+.equipment-garden-listing img{
+    height: 40px;
 }
 /* Register   ------------------------------------------------------------------------- */
 #register #main{
     display: flex;
     justify-content: center;
 }
-#register .well{
+#register .well, #login .well{
     flex-grow: 1;
+    margin: 6em 0 2em 0;
+    padding: 2em;
 }
 #register .formulaire-registration{
     width: 400px;
@@ -580,6 +609,11 @@ gardensCarte{
     }
     .navbar{
         margin: 0;
+    }
+    #register .well, #login .well {
+        flex-grow: 1;
+        margin: 3em 0 1em 0;
+        padding: 1em;
     }
 }
 @media only screen and (min-device-width: 800px) {

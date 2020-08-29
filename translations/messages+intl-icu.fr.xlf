@@ -493,7 +493,7 @@
             </trans-unit>
             <trans-unit id="label.campingTypes ">
                 <source>label.campingTypes</source>
-                <target>Types de camping acceptés</target>
+                <target>Accessible en :</target>
             </trans-unit>
             <trans-unit id="label.zones ">
                 <source>label.zones</source>
@@ -543,9 +543,13 @@
                 <source>title.edit_garden</source>
                 <target>Modifier votre jardin</target>
             </trans-unit>
-            <trans-unit id="garden.created_successfully ">
+            <trans-unit id="garden.created_successfully">
                 <source>garden.created_successfully </source>
                 <target>Ce jardin a été ajouté</target>
+            </trans-unit>
+            <trans-unit id="action.show_garden">
+                <source>action.show_garden</source>
+                <target>Voir l'annonce</target>
             </trans-unit>
             
         </body>
