@@ -14,6 +14,7 @@ $lato-font-path: '~lato-font/fonts';
 @import "~@fortawesome/fontawesome-free/css/v4-shims.css";
 @import "~highlight.js/styles/solarized-light.css";
 
+@import "jquery.lightbox.scss";
 @import "common.scss";
 
 // pick the Lato fonts individually to avoid importing the entire font family
@@ -549,14 +550,15 @@ gardensCarte{
 .gardens-listing-result{
     display: flex;
     flex-wrap: wrap;
+    margin-top: 2em;
 }
 .garden-result{
-    width: 46%;
+    width: 31%;
     height: auto;
     box-shadow: 0 3px 10px 4px rgba(0,0,0,0.06);
     border-radius: 6px;
     border: 1px solid #e7e8e6;
-    margin: 2%;
+    margin-bottom: 1em;
 }
 .titre-garden-listing{
     padding: 0 0 1em 0;
@@ -565,11 +567,18 @@ gardensCarte{
     padding: 0 1em 1em 1em;
 }
 .img-garden-listing{
-
+    display: flex;
+    justify-content: center;
 }
 .img-garden-listing img{
     border-radius: 1%;
     width: 100%;
+}
+.fisrt-image-search{
+    min-height: 224px;
+}
+.img-garden-listing .image-none{
+    margin: 25px 0;
 }
 .equipments-garden-listing{
     display: flex;
@@ -591,7 +600,15 @@ gardensCarte{
     width: 400px;
 }
 
-
+/* Show   ------------------------------------------------------------------------- */
+.desc-picto{
+    text-align: center;
+}
+.contact{
+    position: sticky;
+    top: 100px;
+    float: right;
+}
 /* Responsive   ------------------------------------------------------------------------- */
 @media only screen and (max-device-width: 800px) {
     .is-hidden-mobile{

@@ -20,10 +20,12 @@
           let nom = '';
           let geoloc = '';
           {% for garden in allGardens %}
-            nom = "{{ garden.city }}";
-            geoloc = [{{ garden.lat }}, {{ garden.lng }}];
-            L.marker(geoloc).addTo(gardensCarte).bindPopup(nom);
-            pointsList.push(geoloc);
+            {% if garden.lat and garden.lng and garden.city %}
+                nom = "{{ garden.city }}";
+                geoloc = [{{ garden.lat }}, {{ garden.lng }}];
+                L.marker(geoloc).addTo(gardensCarte).bindPopup(nom);
+                pointsList.push(geoloc);
+            {% endif %}
           {% endfor %}
             if (pointsList.length>0){
                 gardensCarte.fitBounds(pointsList); 

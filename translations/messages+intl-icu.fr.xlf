@@ -461,7 +461,11 @@
             </trans-unit>
             <trans-unit id="nb.result.listings">
                 <source>nb.result.listings</source>
-                <target>Annonce(s)</target>
+                <target>Jardin(s)</target>
+            </trans-unit>
+            <trans-unit id="nb.result.listing">
+                <source>nb.result.listing</source>
+                <target>Jardin</target>
             </trans-unit>
             <trans-unit id="label.description">
                 <source>label.description</source>

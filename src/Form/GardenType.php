@@ -60,7 +60,6 @@ class GardenType extends AbstractType
                 'label' => 'label.description',
             ])
             ->add('street', null, [
-                'help' => 'help.garden_street',
                 'label' => 'label.street',
             ])
             ->add('area', null, [

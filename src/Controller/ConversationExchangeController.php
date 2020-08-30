@@ -42,8 +42,8 @@ class ConversationExchangeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-	    $conversationExchange->addUser($userId);
-	    $conversationExchange->addUser($this->getUser());
+        $conversationExchange->addUser($userId);
+        $conversationExchange->addUser($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($conversationExchange);
             $entityManager->flush();

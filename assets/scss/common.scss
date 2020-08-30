@@ -23,6 +23,7 @@ a:hover, a:focus {
     position: relative;
     width: 100%;
     margin: 5vh 0 0 0;
+    overflow-wrap: anywhere;
 }
 #homepage .body-container {
     margin: 0;
@@ -54,4 +55,7 @@ a:hover, a:focus {
 }
 .no-padding{
     padding: 0;
+}
+.column{
+    flex-direction: column;
 }

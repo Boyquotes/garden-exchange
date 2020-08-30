@@ -1,0 +1,104 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_garden_show' %}
+
+{% block class_body %}col-md-10 col-md-offset-1{% endblock %}
+
+{% block main %}
+    <div class="action-garden-show d-flex clear-wrap">
+{#
+        <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-success">
+            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden_online'|trans }}
+        </a>
+
+        <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-lg btn-success">
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_contents'|trans }}
+        </a>
+#}
+    </div>
+{#
+    <div class="row d-flex jc-center">
+        <p class="post-metadata">
+            {% if garden.publishedAt is defined %}<span class="metadata"><i class="fa fa-calendar"></i> {{ garden.publishedAt|format_datetime('long', 'medium', '', 'UTC') }}</span>{% endif %}
+            <span class="metadata"><i class="fa fa-user"></i> {{ garden.user.fullName }}</span>
+        </p>
+    </div>
+#}
+    <div class="row">
+        <div class="clear-wrap col-md-6">
+            <div class="img-garden-show">
+                {% if garden.gardenImages|length > 0 %}
+                    {% for image in garden.gardenImages %}
+                        {% if loop.index == 1 %}
+                            <div class="image{{image.id}} first-photo col-md-12">
+                                <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="image-none">
+                        <img src="{{ asset('/uploads/images/no-image-available.png') }}" alt="Aucune photo">
+                    </div>
+                {% endif %}
+            </div>
+            <div class="d-flex jc-center col-md-6">
+                {% for campingType in garden.campingTypes %}
+                    <div id="{{ campingType.id }}" class="campingType_choice">
+                        <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
+                        <div class="desc-picto">{{ campingType.name }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="d-flex jc-center col-md-6">
+                {% for equipment in garden.equipments %}
+                    <div id="{{ equipment.id }}" class="equipment_choice">
+                        <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
+                        <div class="desc-picto">{{ equipment.name }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="d-flex other-photos column col-md-1">
+            {% for image in garden.gardenImages %}
+                {% if loop.index > 0 and  loop.index < 5%}
+                    <div class="image{{image.id}}">
+                        <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="description-garden-show clear-wrap col-md-5">
+            <div class="d-flex jc-space-around col-md-12">
+                <div><h1>{{ garden.city }} ({{ garden.id }})</h1></div>
+                {% for zone in garden.zones %}
+                    <div id="{{ zone.id }}" class="zone_choice">
+                        <img src="{{ asset('/uploads/zones/'~zone.picto) }}" alt='{{ zone.name }}' />
+                        <div class="desc-picto">{{ zone.name }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ garden.description }}
+        </div>
+        <div class="contact">
+            <a href="{{ path('conversation_exchange_new', {userId: garden.user.id}) }}" class="btn btn-lg btn-success">
+                <i class="fa fa-eye" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="d-flex jc-center col-md-6">
+
+
+        </div>
+        <div class="col-md-6">
+            {{ include('maps/_map_garden.html.twig') }}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block sidebar %}
+    {{ parent() }}
+{% endblock %}

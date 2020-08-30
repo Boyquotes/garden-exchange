@@ -4,9 +4,13 @@ namespace App\Twig;
 use Symfony\Component\Intl\Locales;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use Twig\TwigFilter;
+use function Symfony\Component\String\u;
 
 class AppExtension extends AbstractExtension
 {
+
+
     private $localeCodes;
     private $locales;
 
@@ -24,6 +28,13 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('locales', [$this, 'getLocales']),
+        ];
+    }
+
+    public function getFilters()
+    {
+        return [
+            new TwigFilter('truncate', [$this, 'truncate']),
         ];
     }
 
@@ -45,4 +56,11 @@ class AppExtension extends AbstractExtension
 
         return $this->locales;
     }
+    
+    public function truncate($string, $nbCut, $cutLastWord = true ): string
+    {
+        return u($string)->truncate($nbCut, '…', $cutLastWord);
+    }
+
+
 }

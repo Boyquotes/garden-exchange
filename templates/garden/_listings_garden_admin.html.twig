@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="listings col-md-6">
+        {#
+        <div class="page-header">
+            <h1>{{ allGardens|length }} {{ 'nb.result.listings'|trans|raw }}</h1>
+        </div>
+        #}
+        
+        <div class="gardens-listing-result jc-space-around">
+            {% for garden in allGardens %}
+                <div class="garden-result">
+                    <div class="img-garden-listing">
+                    {% if garden.gardenImages|length > 0 %}
+                        {% for image in garden.gardenImages %}
+                            {% if loop.index == 1 %}
+                                <div class="image{{image.id}} fisrt-image-search">
+                                    <a href="{{ path('admin_garden_show', {id: garden.id}) }}"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                            <div class="image-none">
+                                <a href="{{ path('admin_garden_show', {id: garden.id}) }}"><img src="{{ asset('/uploads/images/no-image-available.png') }}" alt="Aucune photo"></a>
+                            </div>
+                    {% endif %}
+                    </div>
+                    <div class="info-camp">
+                        <div class="titre-garden-listing">
+                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.city|truncate(3, false) }} - #{{ garden.id }}</a>
+                        </div>
+                        <div class="description-garden-listing">
+                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.description|truncate(200, false) }}</a>
+                        </div>
+                        <div class="equipments-garden-listing">
+                            {% for equipment in garden.equipments %}
+                                <div class="equipment-garden-listing">
+                                    <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="zones-garden-listing">
+                            {% for zone in garden.zones %}
+                                <div class="{{ zone.id }}" class="zone_choice">
+                                    <img src="{{ asset('/uploads/zones/'~zone.picto) }}" alt='{{ zone.name }}' />
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="campingTypes-garden-listing">
+                            {% for campingType in garden.campingTypes %}
+                                <div class="{{ campingType.id }}" class="campingType_choice">
+                                    <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% if is_granted(constant('\\App\\Security\\GardenVoter::EDIT'), garden) %}
+                    {{ garden.city }}
+                    <div id="garden{{garden.id}}">
+                        {{ render(controller('App\\Controller\\Admin\\GardenAdminController::actionsGarden', {
+                                    'garden': garden
+                                    })
+                                )
+                        }}
+                    </div>
+                {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="carte-listings col-md-6">
+        {{ include('maps/_map_gardens_listing.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
+    </div>
+</div>

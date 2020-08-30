@@ -28,4 +28,5 @@
             {% endif %}
         {% endif %}
     {% endif %}
+    <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('admin_garden_delete', {id: garden.id})}}" data-delete data-token="{{ csrf_token('delete' ~ garden.id )}}">Supprimer</a>
 </div>

@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 
 /**
@@ -36,7 +37,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author Boyquotes
  */
-class GardenController extends AbstractController
+class GardenAdminController extends AbstractController
 {
     /**
      * Lists all Garden entities.
@@ -52,11 +53,15 @@ class GardenController extends AbstractController
      * @Route("/", methods="GET", name="admin_index")
      * @Route("/", methods="GET", name="admin_garden_index")
      */
-    public function index(GardenRepository $gardens): Response
+    public function index(GardenRepository $gardens, Security $security): Response
     {
-        $authorGardens = $gardens->findAll();
-
-        return $this->render('admin/garden/listing_garden_admin.html.twig', ['gardens' => $authorGardens]);
+        if ($security->isGranted('ROLE_ADMIN')) {
+            $authorGardens = $gardens->findAll();
+        }
+        else{
+            $authorGardens = $gardens->findByUser($this->getUser());
+        }
+        return $this->render('admin/garden/listing_garden_admin.html.twig', ['allGardens' => $authorGardens]);
     }
 
     /**
@@ -221,22 +226,6 @@ class GardenController extends AbstractController
     }
 
     /**
-     * Finds and displays a Garden entity.
-     *
-     * @Route("/{id<\d+>}", methods="GET", name="admin_garden_show")
-     */
-    public function show(Garden $garden): Response
-    {
-        // This security check can also be performed
-        // using an annotation: @IsGranted("show", subject="garden", message="Gardens can only be shown to their authors.")
-        $this->denyAccessUnlessGranted(GardenVoter::VIEW, $garden, 'Gardens can only be shown to their authors.');
-
-        return $this->render('admin/garden/show.html.twig', [
-            'garden' => $garden,
-        ]);
-    }
-
-    /**
      * Displays a form to edit an existing Garden entity.
      *
      * @Route("/{id<\d+>}/edit", methods="GET|POST", name="admin_garden_edit")
@@ -246,8 +235,11 @@ class GardenController extends AbstractController
     {
         $form = $this->createForm(GardenType::class, $garden);
         $form->handleRequest($request);
-        
+                    //~ dump($form);
+            //~ exit;
         if ($form->isSubmitted() && $form->isValid()) {
+            //~ dump('dfdf');
+            //~ exit;
             // On récupère les images transmises
             $images = $form->get('gardenImages')->getData();
             
@@ -285,27 +277,23 @@ class GardenController extends AbstractController
     /**
      * Deletes a Garden entity.
      *
-     * @Route("/{id}/delete", methods="POST", name="admin_garden_delete")
+     * @Route("/{id}/delete", methods="DELETE", name="admin_garden_delete")
+     * @ParamConverter("garden", options={"mapping": {"id" : "id"}})
      * @IsGranted("delete", subject="garden")
      */
     public function delete(Request $request, Garden $garden): Response
     {
-        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
-            return $this->redirectToRoute('admin_garden_index');
+        $token = $request->request->get('_token');
+
+        if($this->isCsrfTokenValid('delete'.$garden->getId(), $token)){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($garden);
+            $em->flush();
+
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
         }
-
-        // Delete the tags associated with this blog garden. This is done automatically
-        // by Doctrine, except for SQLite (the database used in this application)
-        // because foreign key support is not enabled by default in SQLite
-        $garden->getTags()->clear();
-
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($garden);
-        $em->flush();
-
-        $this->addFlash('success', 'garden.deleted_successfully');
-
-        return $this->redirectToRoute('admin_garden_index');
     }
 
     /**

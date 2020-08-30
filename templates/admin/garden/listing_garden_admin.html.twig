@@ -2,24 +2,16 @@
 
 {% block body_id 'admin_garden_index' %}
 
-{% block class_body %}col-sm-6 col-sm-offset-3{% endblock %}
+{% block class_body %}col-sm-12{% endblock %}
 
 {% block main %}
     <h1>{{ 'title.garden_list'|trans }}</h1>
-        {% for garden in gardens %}
-            {% if is_granted(constant('\\App\\Security\\GardenVoter::EDIT'), garden) %}
-                {{ garden.city }}
-                <div id="garden{{garden.id}}">
-                    {{ render(controller('App\\Controller\\Admin\\GardenController::actionsGarden', {
-                                'garden': garden
-                                })
-                            )
-                    }}
-                </div>
-            {% endif %}
-        {% else %}
-            {{ 'garden.no_gardens_found'|trans }}
-        {% endfor %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('garden/_listings_garden_admin.html.twig') }}
+    {% else %}
+        {{ include('garden/_listings_garden_camper.html.twig') }}
+    {% endif %}
+
 {% endblock %}
 
 {% block sidebar %}

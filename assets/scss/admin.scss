@@ -105,7 +105,37 @@ body#admin_post_show .post-tags .label-default i {
 .img-garden-show{
     display: flex;
 }
-
+.first-photo img{
+    width: 100%;
+}
+.other-photos{
+    height: 500px;
+}
+.other-photos img:first{
+    margin: 0;
+}
+.other-photos img{
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+.other-photos div{
+    justify-content: space-around;
+}
+.zones-garden-listing{
+    display: flex;
+}
+.zones-garden-listing img{
+    height: 40px;
+}
+.campingTypes-garden-listing{
+    display: flex;
+}
+.campingTypes-garden-listing img{
+    height: 40px;
+}
+#upload_garden_image_result > .thumb-image{
+    width: 200px;
+}
 /* Responsive   ------------------------------------------------------------------------- */
 @media only screen and (max-device-width: 800px) {
     #admin_garden_new h1, #admin_garden_edit h1{

@@ -123,7 +123,7 @@ function initAjaxDelete(){
 $(document).ready( function(){
     initAjaxPost();
     initAjaxDelete();
-    
+    $('[rel="lightbox"]').lightbox();
     $('#main').find('.equipment_choice').each( function(){
         $(this).click(function () {
             var idEquipment = $(this).attr('id');
@@ -143,6 +143,36 @@ $(document).ready( function(){
             }
         });
     });
+
+    $('#main').find('#admin_garden_edit .publish-garden button').on('click', function () {
+        console.log('on soumet');
+        event.preventDefault();
+        $('.edit-garden').submit();
+
+    });
+    $('#main').find('.edit-garden').each(function(){
+                console.log('djdjfdsuuytuyt');
+
+        var $form = $(this);
+        $form.submit(function(event){
+            event.preventDefault();
+        console.log($form);
+        console.log('djdjfds');
+            var submit = $form.find('button[type=submit]')[0];
+            $(submit).addClass("disabled");
+            $(submit).attr("disabled","disabled");
+            $.post($form.attr("action"),
+                $form.serialize(),
+                function(msg){
+                    var $msg = $(msg);
+                })
+                .done(function(msg) {
+                    console.log('ok');
+                });
+            });
+        console.log('djdjfds sdsaaaa');
+    });
+            
 
     $('#main').find('.campingType_choice').each( function(){
         $(this).click(function () {

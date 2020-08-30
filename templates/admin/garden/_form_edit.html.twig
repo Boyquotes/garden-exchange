@@ -11,7 +11,7 @@
     {{ include('blog/_delete_post_confirmation.html.twig') }}
 {% endif %}
 
-{{ form_start(form, {attr: attr|default({})}) }}
+{{ form_start(form, {attr: attr|default({class:'edit-garden'}), 'action': path('admin_garden_edit', {'id': garden.id}), 'method': 'POST'}) }}
 
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
