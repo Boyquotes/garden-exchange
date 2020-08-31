@@ -524,6 +524,9 @@ form[name='simple_search'] .btn-primary{
 .central-search{
     width: 25%;
 }
+.baseline{
+    text-align: center;
+}
 /* NavBar   ------------------------------------------------------------------------- */
 .navbar-default .navbar-toggle {
     background-color: #1a252f;
@@ -734,6 +737,9 @@ gardensCarte{
     }
     .navbar{
         margin: 0;
+    }
+    .central-search]{
+        width: 80%;
     }
     #register .well, #login .well {
         flex-grow: 1;

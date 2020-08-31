@@ -13,7 +13,7 @@ class ConversationExchangeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            //~ ->add('title')
             ->add('content');
 //            ->add('users',User::class,[ 'label' => 'label.tags',
  //               'required' => false

@@ -11,6 +11,8 @@ use App\Entity\Profile;
 use App\Entity\Post;
 use App\Entity\Tag;
 use App\Entity\User;
+use App\Entity\Zone;
+
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -35,6 +37,7 @@ class AppFixtures extends Fixture
         $this->loadCampingTypes($manager);
         $this->loadCountries($manager);
         $this->loadEquipments($manager);
+        $this->loadZones($manager);
         $this->loadGardens($manager);
         $this->loadGardenImages($manager);
         $this->loadPosts($manager);
@@ -42,9 +45,11 @@ class AppFixtures extends Fixture
 
     private function loadUsers(ObjectManager $manager): void
     {
-        foreach ($this->getUserData() as [$fullname, $username, $password, $email, $roles]) {
+        foreach ($this->getUserData() as [$fullname, $lastname, $firstname, $username, $password, $email, $roles]) {
             $user = new User();
             $user->setFullName($fullname);
+            $user->setFirstname($firstname);
+            $user->setLastname($lastname);
             $user->setUsername($username);
             $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
             $user->setEmail($email);
@@ -117,21 +122,37 @@ class AppFixtures extends Fixture
 
         $manager->flush();
     }
+    
+    private function loadZones(ObjectManager $manager): void
+    {
+        foreach ($this->getZoneData() as [$name, $picto]) {
+            $zone = new Zone();
+            $zone->setName($name);
+            $zone->setPicto($picto);
+
+            $manager->persist($zone);
+            $this->addReference($name, $zone);
+        }
+
+        $manager->flush();
+    }
 
     private function loadGardens(ObjectManager $manager): void
     {
         $i = 0;
-        foreach ($this->getGardenData() as [$country_alpha2, $description, $street, $postcode, $city, $lat, $lng, $lat_city, $lng_city, $enabled, $expired, $locked]) {
+        foreach ($this->getGardenData() as [$country_alpha2, $description, $street, $postcode, $city, $area, $lat, $lng, $lat_city, $lng_city, $enabled, $expired, $locked]) {
             $garden = new Garden();
             $garden->setUser($this->getReference('john_user'));
             $garden->setCountry($this->getReference($country_alpha2));
             $garden->addEquipment($this->getReference('Water'));
             $garden->addEquipment($this->getReference('Electricity'));
             $garden->addCampingType($this->getReference('Tent'));
+            $garden->addZone($this->getReference('Campagne'));
             $garden->setDescription($description);
             $garden->setStreet($street);
             $garden->setPostcode($postcode);
             $garden->setCity($city);
+            $garden->setArea($area);
             $garden->setLat($lat);
             $garden->setLng($lng);
             $garden->setLatCity($lat_city);
@@ -154,6 +175,9 @@ class AppFixtures extends Fixture
         foreach ($this->getGardenImageData() as [$name]) {
             $gardenImage = new GardenImage();
             $gardenImage->setGarden($this->getReference('garden-1'));
+            if($i == 2){
+                $gardenImage->setGarden($this->getReference('garden-2'));
+            }
             $gardenImage->setName($name);
             foreach (range(1, 5) as $t) {
                 $gardenImage->setCreatedAt(new \DateTime('now + '.$t.'seconds'));
@@ -197,12 +221,12 @@ class AppFixtures extends Fixture
     private function getUserData(): array
     {
         return [
-            // $userData = [$fullname, $username, $password, $email, $roles];
-            ['Jane Doe', 'jane_admin', 'kitten', 'jane_admin@symfony.com', ['ROLE_ADMIN']],
-            ['Tom Doe', 'tom_admin', 'kitten', 'tom_admin@symfony.com', ['ROLE_ADMIN']],
-            ['John Doe', 'john_user', 'kitten', 'john_user@symfony.com', ['ROLE_USER']],
-            ['nicolas V', 'nico', 'nico34', 'nicolas@montpellibre.fr', ['ROLE_ADMIN']],
-            ['nico Camp', 'nicocamp', 'nico34', 'webmaster@linux-live-cd.org', ['ROLE_CAMPER']],
+            // $userData = [$fullname, $lastname, $firstname, $username, $password, $email, $roles];
+            ['Jane Doe', 'Doe', 'Jane', 'jane_admin', 'kitten', 'jane_admin@symfony.com', ['ROLE_ADMIN']],
+            ['Tom Doe', 'Doe', 'Tom', 'tom_admin', 'kitten', 'tom_admin@symfony.com', ['ROLE_ADMIN']],
+            ['John Doe', 'Doe', 'John', 'john_user', 'kitten', 'john_user@symfony.com', ['ROLE_USER']],
+            ['nicolas V', 'V', 'Nicolas', 'nico', 'nico34', 'nicolas@montpellibre.fr', ['ROLE_ADMIN']],
+            ['nico Camp', 'Camp', 'nico', 'nicocamp', 'nico34', 'webmaster@linux-live-cd.org', ['ROLE_CAMPER']],
         ];
     }
 
@@ -238,12 +262,22 @@ class AppFixtures extends Fixture
             ['Toilets','toilet_100.png'],
         ];
     }
+    
+    private function getZoneData(): array
+    {
+        return [
+            ['Campagne','countryside_100.png'],
+            ['Foret','forest_64.png'],
+            ['Champs','field_100.png'],
+        ];
+    }
 
     private function getGardenData(): array
     {
         return [
-            ['FR', 'belle vue, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rue des kermes','34990','juvignac','43.6150076','3.8056454','43.6140784','3.8101646','1','0','0'],
-            ['PT', 'Grand terrain, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rua do cuastro','3810-416','Aveiro','40.6244','-8.66122','40.62705','-8.66122','1','0','0'],
+            ['FR', 'belle vue, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rue des kermes','34990','juvignac','3000','43.6150076','3.8056454','43.6140784','3.8101646','1','0','0'],
+            ['PT', 'Grand terrain, terrain plat et arbores. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rua do cuastro','3810-416','Aveiro','10000', '40.6244','-8.66122','40.62705','-8.66122','1','0','0'],
+            ['FR', 'Potager a disposition, surveille nuit et jour par 2 molosses. Toilettes seches et robinet a disposition. Electricite via panneau solaire','rue de la cesse','30400','Ales','300','44.155136','4.083057','44.155184','4.083046','1','0','0'],
         ];
     }
 
@@ -253,6 +287,8 @@ class AppFixtures extends Fixture
             ['e94ee0d9e92e69cc345a956af3733bff.jpeg'],
             ['17a31c4aaa2893d8a9881d2c2201ddd8.jpeg'],
             ['f439617a9f52a672cad3d0b415ea9171.jpeg'],
+            ['c8bb2578df57e6a4571c5b555faaf419.jpeg'],
+            ['b9cdf48490a6a4dd77bcb597cb66bc47.jpeg'],
         ];
     }
 
