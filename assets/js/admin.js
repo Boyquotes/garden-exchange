@@ -123,7 +123,6 @@ function initAjaxDelete(){
 $(document).ready( function(){
     initAjaxPost();
     initAjaxDelete();
-    $('[rel="lightbox"]').lightbox();
     $('#main').find('.equipment_choice').each( function(){
         $(this).click(function () {
             var idEquipment = $(this).attr('id');

@@ -1,0 +1,17 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}New ConversationExchange{% endblock %}
+
+{% block body_id 'admin_conversation_new' %}
+
+{% block class_body %}col-md-10 col-md-offset-1{% endblock %}
+
+{% block main %}
+    <h1>Create new ConversationExchange</h1>
+    <div class="col-md-3">
+        {{ include('garden/_garden_result.html.twig') }}
+    </div>
+    <div class="col-md-9">
+        {{ include('conversation_exchange/_form_conversation.html.twig') }}
+    </div>
+{% endblock %}

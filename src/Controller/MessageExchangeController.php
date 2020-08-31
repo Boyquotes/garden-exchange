@@ -27,7 +27,7 @@ class MessageExchangeController extends AbstractController
      */
     public function index(MessageExchangeRepository $messageExchangeRepository): Response
     {
-        return $this->render('message_exchange/index.html.twig', [
+        return $this->render('message_exchange/index_conversation.html.twig', [
             'message_exchanges' => $messageExchangeRepository->findAll(),
         ]);
     }

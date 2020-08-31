@@ -16,3 +16,9 @@ import './doclinks.js';
 
 
 import './jquery.lightbox.min.js';
+
+
+
+$(document).ready( function(){
+    $('[rel="lightbox"]').lightbox();
+});

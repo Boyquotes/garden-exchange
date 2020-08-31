@@ -8,7 +8,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                {% if is_granted('ROLE_ADMIN') %}<th>Id</th>{% endif %}
                 <th>Title</th>
                 <th>Content</th>
                 <th>actions</th>
@@ -17,12 +17,11 @@
         <tbody>
         {% for conversation_exchange in conversation_exchanges %}
             <tr>
-                <td>{{ conversation_exchange.id }}</td>
+                {% if is_granted('ROLE_ADMIN') %}<td>{{ conversation_exchange.id }}</td>{% endif %}
                 <td>{{ conversation_exchange.title }}</td>
                 <td>{{ conversation_exchange.content }}</td>
                 <td>
                     <a href="{{ path('conversation_exchange_show', {'id': conversation_exchange.id}) }}">show</a>
-                    <a href="{{ path('conversation_exchange_edit', {'id': conversation_exchange.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +32,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('conversation_exchange_new', {'userId': '2'}) }}">Create new</a>
 {% endblock %}

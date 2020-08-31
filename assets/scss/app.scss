@@ -432,7 +432,7 @@ header ul.nav li.add-garden:hover {
 
 /* Main   ------------------------------------------------------------------------- */
 #main{
-    margin-top: 5vh;
+    /* margin-top: 5vh; */
 }
 /* Navbar   ------------------------------------------------------------------------- */
 .navbar-default {
@@ -537,6 +537,9 @@ header ul.nav li:hover {
 form[name='simple_search'] .form-group{
     width: 100%;
 }
+.navbar-right{
+    margin-right: 0;
+}
 
 /* Result   ------------------------------------------------------------------------- */
 .carte-listings{
@@ -550,10 +553,9 @@ gardensCarte{
 .gardens-listing-result{
     display: flex;
     flex-wrap: wrap;
-    margin-top: 2em;
 }
 .garden-result{
-    width: 31%;
+    width: 48%;
     height: auto;
     box-shadow: 0 3px 10px 4px rgba(0,0,0,0.06);
     border-radius: 6px;
@@ -561,7 +563,9 @@ gardensCarte{
     margin-bottom: 1em;
 }
 .titre-garden-listing{
-    padding: 0 0 1em 0;
+    padding: .5em 0 1em 0;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 .info-camp{
     padding: 0 1em 1em 1em;
@@ -606,8 +610,112 @@ gardensCarte{
 }
 .contact{
     position: sticky;
-    top: 100px;
+    top: 200px;
     float: right;
+    z-index: 1000;
+}
+/* Choices  ------------------------------------------------------------------------- */
+.equipment_choice > img, .campingType_choice > img, .zone_choice > img{
+    opacity: .5;
+}
+.equipment_selected > img, .campingType_selected > img, .zone_selected > img{
+    opacity: 1;
+    background: $verClair;
+}
+
+/* Equipment choice  ------------------------------------------------------------------------- */
+.equipments_choice{
+    display: flex;
+}
+.equipment_choice{
+    margin: 0 1em;
+}
+.equipment_choice img{
+    height: 100px;
+    padding: 1em;
+    border: 1px solid gray;
+    margin: 0 0 .5em 0;
+}
+
+/* Camping type choice   ------------------------------------------------------------------------- */
+.campingTypes_choice{
+    display: flex;
+}
+.campingType_choice{
+    margin: 0 1em;
+}
+.campingType_choice img{
+    height: 100px;
+    padding: 1em;
+    border: 1px solid gray;
+    margin: 0 0 .5em 0;
+}
+/* Zone type choice   ------------------------------------------------------------------------- */
+.zones_choice{
+    display: flex;
+}
+.zone_choice{
+    margin: 0 1em;
+}
+.zone_choice img{
+    height: 100px;
+    padding: 1em;
+    border: 1px solid gray;
+    margin: 0 0 .5em 0;
+}
+
+.publish-garden button{
+    font-size: 3rem;
+    margin: 3.5em;
+}
+/* Garden Listing */
+.deactivate{
+    opacity: .4;
+    cursor: unset;
+}
+
+/* Garden Edit */
+.action-garden-edit{
+    justify-content: space-around;
+}
+
+/* Garden Show */
+.action-garden-show{
+    justify-content: space-around;
+}
+.img-garden-show{
+    display: flex;
+}
+.first-photo img{
+    width: 100%;
+}
+.other-photos{
+    height: 500px;
+}
+.other-photos img:first{
+    margin: 0;
+}
+.other-photos img{
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+.other-photos div{
+    justify-content: space-around;
+}
+.zones-garden-listing{
+    display: flex;
+}
+.zones-garden-listing img{
+    height: 40px;
+}
+.campingTypes-garden-listing{
+    display: flex;
+}
+.campingTypes-garden-listing img{
+    height: 40px;
+}
+.description-garden{
+
 }
 /* Responsive   ------------------------------------------------------------------------- */
 @media only screen and (max-device-width: 800px) {

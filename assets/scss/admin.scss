@@ -33,108 +33,13 @@ body#admin_post_show .post-tags .label-default i {
 
 /* Photos   ------------------------------------------------------------------------- */
 
-/* Choices  ------------------------------------------------------------------------- */
-.equipment_choice > img, .campingType_choice > img, .zone_choice > img{
-    opacity: .5;
-}
-.equipment_selected > img, .campingType_selected > img, .zone_selected > img{
-    opacity: 1;
-    background: $verClair;
-}
-
-/* Equipment choice  ------------------------------------------------------------------------- */
-.equipments_choice{
-    display: flex;
-}
-.equipment_choice{
-    margin: 0 1em;
-}
-.equipment_choice img{
-    height: 100px;
-    padding: 1em;
-    border: 1px solid gray;
-    margin: 0 0 .5em 0;
-}
-
-/* Camping type choice   ------------------------------------------------------------------------- */
-.campingTypes_choice{
-    display: flex;
-}
-.campingType_choice{
-    margin: 0 1em;
-}
-.campingType_choice img{
-    height: 100px;
-    padding: 1em;
-    border: 1px solid gray;
-    margin: 0 0 .5em 0;
-}
-/* Zone type choice   ------------------------------------------------------------------------- */
-.zones_choice{
-    display: flex;
-}
-.zone_choice{
-    margin: 0 1em;
-}
-.zone_choice img{
-    height: 100px;
-    padding: 1em;
-    border: 1px solid gray;
-    margin: 0 0 .5em 0;
-}
-
-.publish-garden button{
-    font-size: 3rem;
-    margin: 3.5em;
-}
-/* Garden Listing */
-.deactivate{
-    opacity: .4;
-    cursor: unset;
-}
-
-/* Garden Edit */
-.action-garden-edit{
-    justify-content: space-around;
-}
-
-/* Garden Show */
-.action-garden-show{
-    justify-content: space-around;
-}
-.img-garden-show{
-    display: flex;
-}
-.first-photo img{
-    width: 100%;
-}
-.other-photos{
-    height: 500px;
-}
-.other-photos img:first{
-    margin: 0;
-}
-.other-photos img{
-    width: 100%;
-    margin: 10px 0 0 0;
-}
-.other-photos div{
-    justify-content: space-around;
-}
-.zones-garden-listing{
-    display: flex;
-}
-.zones-garden-listing img{
-    height: 40px;
-}
-.campingTypes-garden-listing{
-    display: flex;
-}
-.campingTypes-garden-listing img{
-    height: 40px;
-}
 #upload_garden_image_result > .thumb-image{
     width: 200px;
+}
+
+/* Conversation   ------------------------------------------------------------------------- */
+#admin_conversation_new .garden-result{
+    width: 100%;
 }
 /* Responsive   ------------------------------------------------------------------------- */
 @media only screen and (max-device-width: 800px) {

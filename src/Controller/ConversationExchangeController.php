@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\ConversationExchange;
+use App\Entity\Garden;
 use App\Entity\User;
 use App\Form\ConversationExchangeType;
 use App\Repository\ConversationExchangeRepository;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,15 +29,16 @@ class ConversationExchangeController extends AbstractController
      */
     public function index(ConversationExchangeRepository $conversationExchangeRepository): Response
     {
-        return $this->render('conversation_exchange/index.html.twig', [
+        return $this->render('conversation_exchange/index_conversation.html.twig', [
             'conversation_exchanges' => $conversationExchangeRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new/{userId}", name="conversation_exchange_new", methods={"GET","POST"})
+     * @Route("/new/{userId}/garden/{gardenId}", name="conversation_exchange_new", methods={"GET","POST"})
+     * @ParamConverter("garden", options={"mapping": {"gardenId" : "id"}})
      */
-    public function new(Request $request, User $userId): Response
+    public function new(Request $request, User $userId, Garden $garden): Response
     {
         $conversationExchange = new ConversationExchange();
         $form = $this->createForm(ConversationExchangeType::class, $conversationExchange);
@@ -51,8 +54,9 @@ class ConversationExchangeController extends AbstractController
             return $this->redirectToRoute('conversation_exchange_index');
         }
 
-        return $this->render('conversation_exchange/new.html.twig', [
+        return $this->render('conversation_exchange/new_conversation.html.twig', [
             'conversation_exchange' => $conversationExchange,
+            'garden' => $garden ,
             'form' => $form->createView(),
         ]);
     }
@@ -62,7 +66,7 @@ class ConversationExchangeController extends AbstractController
      */
     public function show(ConversationExchange $conversationExchange): Response
     {
-        return $this->render('conversation_exchange/show.html.twig', [
+        return $this->render('conversation_exchange/show_conversation.html.twig', [
             'conversation_exchange' => $conversationExchange,
         ]);
     }

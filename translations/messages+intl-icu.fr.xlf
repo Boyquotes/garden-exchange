@@ -94,7 +94,7 @@
             </trans-unit>
             <trans-unit id="title.edit_user">
                 <source>title.edit_user</source>
-                <target>Modifier l'utilisateur</target>
+                <target>Modifier son profil</target>
             </trans-unit>
             <trans-unit id="title.change_password">
                 <source>title.change_password</source>
@@ -179,11 +179,11 @@
             </trans-unit>
             <trans-unit id="action.edit_user">
                 <source>action.edit_user</source>
-                <target>Modifier l'utilisateur</target>
+                <target>Modifier son profil</target>
             </trans-unit>
             <trans-unit id="action.change_password">
                 <source>action.change_password</source>
-                <target>Modifier le mot de passe</target>
+                <target>Modifier son mot de passe</target>
             </trans-unit>
 
             <trans-unit id="label.title">
