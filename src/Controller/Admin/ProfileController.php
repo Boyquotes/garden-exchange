@@ -24,30 +24,49 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class ProfileController extends AbstractController
 {
     /**
+     * @Route("/{id}", methods="GET|POST", name="user_profile_info")
+     */
+    public function infoProfile(Request $request, Profile $profile): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        
+        return $this->render('profile/info.html.twig', [
+            'profile' => $profile,
+        ]);
+    }
+    
+    /**
      * @Route("/info/edit", methods="GET|POST", name="user_profile_info_edit")
      */
     public function edit(Request $request, ProfileRepository $profiles): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        dump($user->getId());
+        
         $profile = $profiles->findOneByUser($user->getId());
         if( !$profile ){
             $profile = new Profile();
-            dump($profile);
             $profile->setUser($this->getUser());
         }
-        dump($profile);
         
         $formData['user'] = $user;
         $formData['profile']  = $profile;
         $form = $this->createForm(UserProfileType::class, $formData);
         
-        //~ $form = $this->createForm(ProfileType::class, $profile);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //~ $user->setRoles(['ROLE_CAMPER']);
+            $profileImage = $form->get('profileImage')->getData();
+            if($profileImage){
+                $fichier = md5(uniqid()).'.'.$profileImage->guessExtension();
+                $profileImage->move(
+                    $this->getParameter('profile_images_directory'),
+                    $fichier
+                );
+                $profile->setProfileImage($fichier);
+            }
+
             $entityManager->persist($profile);
             $entityManager->flush();
 
@@ -56,7 +75,7 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('user_profile_info_edit');
         }
 
-        return $this->render('profil/edit.html.twig', [
+        return $this->render('profile/edit.html.twig', [
             'profile' => $profile,
             'form' => $form->createView(),
         ]);

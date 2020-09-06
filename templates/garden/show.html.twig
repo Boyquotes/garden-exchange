@@ -16,37 +16,9 @@
     {{ parent() }}
 {% endblock %}
 
-{% block contact %}
-    <div class="contact">
-        <a href="{{ path('conversation_exchange_new', {'userId': garden.user.id, 'gardenId':garden.id}) }}" class="btn btn-lg btn-success">
-            <i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }} {{ garden.user.firstname }}
-        </a>
-    </div>
-{% endblock %}
-
 {% block main %}
 
-    <div class="action-garden-show d-flex clear-wrap">
-{#
-        <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-lg btn-success">
-            <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show_garden_online'|trans }}
-        </a>
-
-        <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-lg btn-success">
-            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_contents'|trans }}
-        </a>
-#}
-    </div>
-{#
-    <div class="row d-flex jc-center">
-        <p class="post-metadata">
-            {% if garden.publishedAt is defined %}<span class="metadata"><i class="fa fa-calendar"></i> {{ garden.publishedAt|format_datetime('long', 'medium', '', 'UTC') }}</span>{% endif %}
-            <span class="metadata"><i class="fa fa-user"></i> {{ garden.user.fullName }}</span>
-        </p>
-    </div>
-#}
-
-    <div class="row photos-description">
+    <div class="row photos">
         <div class="clear-wrap col-md-6">
             <div class="img-garden-show">
                 {% if garden.gardenImages|length > 0 %}
@@ -63,48 +35,76 @@
                     </div>
                 {% endif %}
             </div>
+            <div class="title-garden"><h1>{{ garden.city }} ({{ garden.id }})</h1></div>
         </div>
-        <div class="d-flex other-photos is-hidden-mobile column col-md-1">
+        <div class="d-flex other-photos is-hidden-mobile col-md-6">
             {% for image in garden.gardenImages %}
-                {% if loop.index > 0 and  loop.index < 5%}
+                {% if loop.index > 1 and  loop.index < 6%}
                     <div class="image{{image.id}}">
                         <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
                     </div>
                 {% endif %}
             {% endfor %}
         </div>
-
-        <div class="description-garden-show clear-wrap col-md-5">
-            <div class="description-garden">
-                <div class="title-garden"><h1>{{ garden.city }} ({{ garden.id }})</h1></div>
-                <div class="description-garden">{{ garden.description }}</div>
-            </div>
+    </div>
+    
+    <hr />
+    <div class="row camping-types d-flex jc-center">
+        <h4>{{ 'label.campingTypes'|trans }}</h4>
+        <div class="d-flex jc-center col-md-12">
+            {% for campingType in garden.campingTypes %}
+                <div class="campingType_choice campingType_selected">
+                    <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
+                    <div class="desc-picto">{{ campingType.name }}</div>
+                </div>
+            {% endfor %}
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="d-flex jc-center col-md-6">
-                {% for campingType in garden.campingTypes %}
-                    <div class="campingType_choice campingType_selected">
-                        <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
-                        <div class="desc-picto">{{ campingType.name }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="d-flex jc-center col-md-6">
-                {% for equipment in garden.equipments %}
-                    <div class="equipment_choice equipment_selected">
-                        <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
-                        <div class="desc-picto">{{ equipment.name }}</div>
+    
+    <hr />
+    <div class="row d-flex jc-center description">
+        <h4>{{ 'label.description'|trans }}</h4>
+        <div class="description-garden-show d-flex jc-center col-md-12">
+            <div class="description-garden">{{ garden.description }}</div>
+        </div>
+    </div>
+    
+    {% if garden.equipments|length > 0 %}
+    <hr />
+    <div class="row equipment d-flex jc-center">
+        <h4>{{ 'label.equipments'|trans }}</h4>
+        <div class="d-flex jc-center col-md-12">
+            {% for equipment in garden.equipments %}
+                <div class="equipment_choice equipment_selected">
+                    <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
+                    <div class="desc-picto">{{ equipment.name }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if garden.rules|length > 0 %}
+        <hr />
+        <div class="row rules d-flex jc-center">
+            <h4>{{ 'label.rules'|trans }}</h4>
+            <div class="d-flex jc-center col-md-12">
+                {% for rule in garden.rules %}
+                    <div class="rule_choice rule_selected">
+                        <img src="{{ asset('/uploads/rules/'~rule.picto) }}" alt='{{ rule.name }}' />
+                        <div class="desc-picto">{{ rule.name }}</div>
                     </div>
                 {% endfor %}
             </div>
         </div>
-        <div class="col-md-6">
+    {% endif %}
+    
+    <hr />
+    <div class="row localisation d-flex jc-center">
+        <h4>{{ 'localisation'|trans }}</h4
+        <div class="d-flex jc-center col-md-12">
             {{ include('maps/_map_garden_show.html.twig') }}
         </div>
-
-
     </div>
 
 {% endblock %}

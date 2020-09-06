@@ -479,11 +479,11 @@
                 <source>label.postcode</source>
                 <target>Code postal</target>
             </trans-unit>
-            <trans-unit id="label.city ">
+            <trans-unit id="label.city">
                 <source>label.city</source>
                 <target>Ville</target>
             </trans-unit>
-            <trans-unit id="label.country ">
+            <trans-unit id="label.country">
                 <source>label.country</source>
                 <target>Pays</target>
             </trans-unit>
@@ -491,15 +491,15 @@
                 <source>label.photos</source>
                 <target>Photos</target>
             </trans-unit>
-            <trans-unit id="label.equipments ">
+            <trans-unit id="label.equipments">
                 <source>label.equipments</source>
                 <target>Petits plus :</target>
             </trans-unit>
-            <trans-unit id="label.campingTypes ">
+            <trans-unit id="label.campingTypes">
                 <source>label.campingTypes</source>
                 <target>Accessible en :</target>
             </trans-unit>
-            <trans-unit id="label.addPhotos ">
+            <trans-unit id="label.addPhotos">
                 <source>label.addPhotos</source>
                 <target>Ajoutez des photos</target>
             </trans-unit>

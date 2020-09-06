@@ -35,32 +35,26 @@ class Profile
     private $city;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Country::class, inversedBy="profils")
-     * @ORM\JoinTable(name="profil_country_preference")
-     */
-    private $country;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $telephone;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Country::class, inversedBy="resident")
+     * @ORM\ManyToOne(targetEntity=Country::class, inversedBy="resident")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $country_residence;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="profil", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="profile", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
-    public function __construct()
-    {
-        $this->country = new ArrayCollection();
-        $this->country_residence = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $profileImage;
 
     public function getId(): ?int
     {
@@ -103,32 +97,6 @@ class Profile
         return $this;
     }
 
-    /**
-     * @return Collection|Country[]
-     */
-    public function getCountry(): Collection
-    {
-        return $this->country;
-    }
-
-    public function addCountry(Country $country): self
-    {
-        if (!$this->country->contains($country)) {
-            $this->country[] = $country;
-        }
-
-        return $this;
-    }
-
-    public function removeCountry(Country $country): self
-    {
-        if ($this->country->contains($country)) {
-            $this->country->removeElement($country);
-        }
-
-        return $this;
-    }
-
     public function getTelephone(): ?int
     {
         return $this->telephone;
@@ -141,28 +109,14 @@ class Profile
         return $this;
     }
 
-    /**
-     * @return Collection|Country[]
-     */
-    public function getCountryResidence(): Collection
+    public function getCountryResidence(): ?Country
     {
         return $this->country_residence;
     }
 
-    public function addCountryResidence(Country $countryResidence): self
+    public function setCountryResidence(?Country $country_residence): self
     {
-        if (!$this->country_residence->contains($countryResidence)) {
-            $this->country_residence[] = $countryResidence;
-        }
-
-        return $this;
-    }
-
-    public function removeCountryResidence(Country $countryResidence): self
-    {
-        if ($this->country_residence->contains($countryResidence)) {
-            $this->country_residence->removeElement($countryResidence);
-        }
+        $this->country_residence = $country_residence;
 
         return $this;
     }
@@ -178,4 +132,17 @@ class Profile
 
         return $this;
     }
+    
+    public function getProfileImage(): ?string
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(string $profileImage): self
+    {
+        $this->profileImage = $profileImage;
+
+        return $this;
+    }
+    
 }

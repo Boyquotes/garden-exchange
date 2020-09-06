@@ -1,6 +1,6 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% block body_id 'admin_garden_new' %}
+{% block body_id 'admin_conversation_new' %}
 
 {% block class_body %}col-md-10 col-md-offset-1{% endblock %}
 
@@ -9,18 +9,25 @@
     {% if conversation_exchanges %}
         <div class="conversations-list">
             {% for conversation_exchange in conversation_exchanges %}
-                <a href="{{ path('conversation_exchange_show', {'id': conversation_exchange.id}) }}">
-                    <div>
-                        {{ conversation_exchange.camper.firstname }}
-                    </div>
-                    <div>
-                        {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}{% endif %}
-                        {{ conversation_exchange.content }}
-                    </div>
-                    <div>
-                        {{ conversation_exchange.created|date('d-m-Y h:i') }}
-                    </div>
-                </a>
+            <a href="{{ path('conversation_exchange_show', {'id': conversation_exchange.id}) }}">
+                <div class="conversation">
+                        <div class="conversation-profile-content">
+                            <div class="conversation-profile">
+                                <div class="img-profile">
+                                    <img src="{{ asset('/uploads/profiles/'~conversation_exchange.camper.profile.profileImage) }}" alt='{{ conversation_exchange.camper.firstname }}' />
+                                </div>
+                                {{ conversation_exchange.camper.firstname }}
+                            </div>
+                            <div class="conversation-content">
+                                {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}{% endif %}
+                                {{ conversation_exchange.content }}
+                            </div>
+                        </div>
+                        <div class="conversation-date">
+                            {{ conversation_exchange.created|date('d-m-Y h:i') }}
+                        </div>
+                </div>
+            </a>
             {% endfor %}
         </div>
     {% else %}

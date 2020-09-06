@@ -9,6 +9,7 @@ parameters:
     app_locales: en|fr|de|es|cs|nl|ru|uk|ro|pt_BR|pl|it|ja|id|ca|sl|hr|zh_CN|bg|tr|lt
     app.notifications.email_sender: anonymous@example.com
     garden_images_directory: '%kernel.project_dir%/public/uploads/gardens/'
+    profile_images_directory: '%kernel.project_dir%/public/uploads/profiles/'
     
 services:
     # default configuration for services in *this* file

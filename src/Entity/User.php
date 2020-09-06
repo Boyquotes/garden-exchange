@@ -122,11 +122,6 @@ class User implements UserInterface, \Serializable
      */
     private $conversationCamperExchanges;
 
-    /**
-     * @ORM\OneToMany(targetEntity=GardenImage::class, mappedBy="garden", orphanRemoval=true, cascade={"persist"}, fetch="EAGER")
-     */
-    private $gardenImages;
-
     public function __construct()
     {
         $this->gardens = new ArrayCollection();
@@ -438,6 +433,5 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
-
     
 }

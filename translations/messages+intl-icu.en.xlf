@@ -471,11 +471,11 @@
                 <source>label.postcode</source>
                 <target>Post Code</target>
             </trans-unit>
-            <trans-unit id="label.city ">
+            <trans-unit id="label.city">
                 <source>label.city</source>
                 <target>City</target>
             </trans-unit>
-            <trans-unit id="label.country ">
+            <trans-unit id="label.country">
                 <source>label.country</source>
                 <target>Country</target>
             </trans-unit>
@@ -483,15 +483,15 @@
                 <source>label.photos</source>
                 <target>Photos</target>
             </trans-unit>
-            <trans-unit id="label.equipments ">
+            <trans-unit id="label.equipments">
                 <source>label.equipments</source>
                 <target>More :</target>
             </trans-unit>
-            <trans-unit id="label.campingTypes ">
+            <trans-unit id="label.campingTypes">
                 <source>label.campingTypes</source>
                 <target>Accessibility with</target>
             </trans-unit>
-            <trans-unit id="label.addPhotos ">
+            <trans-unit id="label.addPhotos">
                 <source>label.addPhotos</source>
                 <target>Add photos</target>
             </trans-unit>
@@ -539,8 +539,8 @@
                 <source>localisation</source>
                 <target>Localisation</target>
             </trans-unit>
-            <trans-unit id="garden.created.successfully ">
-                <source>garden.created.successfully </source>
+            <trans-unit id="garden.created.successfully">
+                <source>garden.created.successfully</source>
                 <target>This garden have been added</target>
             </trans-unit>
             

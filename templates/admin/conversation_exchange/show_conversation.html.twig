@@ -1,28 +1,54 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 
-{% block title %}ConversationExchange{% endblock %}
+{% block body_id 'admin_conversation_messages_list' %}
 
-{% block body %}
-    <h1>ConversationExchange</h1>
+{% block class_body %}col-md-10 col-md-offset-1{% endblock %}
 
-    <div class="first-conversation">
-        {{ conversation_exchange.content }}
+{% block main %}
+    <h1>{% if is_granted('ROLE_ADMIN') %}{{ conversation_exchange.id }}{% endif %} {{ 'message.conversation.with'|trans }}</h1>
+
+    <div class="conversation">
+            <div class="conversation-profile-content">
+                <div class="conversation-profile">
+                    <div class="img-profile">
+                        <img src="{{ asset('/uploads/profiles/'~conversation_exchange.camper.profile.profileImage) }}" alt='{{ conversation_exchange.camper.firstname }}' />
+                    </div>
+                    {{ conversation_exchange.camper.firstname }}
+                </div>
+                <div class="conversation-content">
+                    {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}{% endif %}
+                    {{ conversation_exchange.content }}
+                </div>
+            </div>
+            <div class="conversation-date">
+                {{ conversation_exchange.created|date('d-m-Y h:i') }}
+            </div>
     </div>
-    {% if is_granted('ROLE_ADMIN') %}{{ conversation_exchange.id }}{% endif %}
 
-    {% for messageExchange in conversation_exchange.MessageExchanges %}
-        <div class="message-conversation">
-            <div class="message-conversation-content">
-                {{ messageExchange.content }}
-            </div>
-            <div class="message-conversation-user-fullname">
-                {{ messageExchange.user.fullname }}
-            </div>
-        </div>
-    {% endfor %}
+    <div class="messages">
+        {% for messageExchange in conversation_exchange.MessageExchanges %}
+                <div class="message {% if app.user == messageExchange.user %}user{% endif %}">
+                    <div class="message-profile-content">
+                        <div class="message-profile">
+                            <div class="img-profile">
+                                <img src="{{ asset('/uploads/profiles/'~messageExchange.user.profile.profileImage) }}" alt='{{ messageExchange.user.firstname }}' />
+                            </div>
+                            {{ messageExchange.user.firstname }}
+                        </div>
+                        <div class="message-content">
+                            {% if is_granted('ROLE_ADMIN') %}#{{ messageExchange.id }}{% endif %}
+                            {{ messageExchange.content }}
+                        </div>
+                    </div>
+                    <div class="message-date">
+                        {{ conversation_exchange.created|date('d-m-Y h:i') }}
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+    
+    <div class="tchat">
+        {{ include('admin/message/_form_message.html.twig') }}
+    </div>
 
-    {{ include('admin/message/_form_message.html.twig') }}
-
-
-    <a href="{{ path('conversation_exchange_index') }}">back to list</a>
 {% endblock %}

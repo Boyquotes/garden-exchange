@@ -682,6 +682,9 @@ gardensCarte{
 }
 
 /* Garden Show */
+.title-garden{
+    padding: 15px;
+}
 .action-garden-show{
     justify-content: space-around;
 }
@@ -724,6 +727,11 @@ gardensCarte{
 }
 .menu-admin a{
     margin: 1em 0;
+}
+#garden_show h4 {
+    font-size: 2em;
+    font-weight: 700;
+    margin: .5em 0 1em 0;
 }
     
 /* Responsive   ------------------------------------------------------------------------- */

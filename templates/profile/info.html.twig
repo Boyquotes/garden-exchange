@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'user_profile_info_edit' %}
+
+{% block class_body %}col-md-10 col-md-offset-1{% endblock %}
+
+{% block main %}
+    <h1>{{ 'title.info.profile'|trans }}</h1>
+    
+    
+    <div class="img-profile">
+        <img src="{{ asset('/uploads/profiles/'~profile.profileImage) }}" alt='{{ profile.user.firstname }}' />
+    </div>
+    {{ profile.user.firstname }}
+    <ul>
+    <li>Liste de ces annonces ici :</li>
+    </ul>
+{% endblock %}

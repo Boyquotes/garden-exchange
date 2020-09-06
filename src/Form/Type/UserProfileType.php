@@ -7,6 +7,7 @@ use App\Repository\ProfileRepository;
 
 use Symfony\Bridge\Doctrine\Form\DataTransformer\CollectionToArrayTransformer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -29,6 +30,13 @@ class UserProfileType extends AbstractType
         $builder
             ->add('user', UserType::class)
             ->add('profile', ProfileType::class)
+            ->add('profileImage', FileType::class,[
+                'attr' => ['class' => 'inputfile', 'placeholder' => 'label.addPhoto.profile'],
+                'label' => 'label.photo.profile',
+                'multiple' => false,
+                'mapped' => false,
+                'required' => false
+            ])
         ;
     }
 

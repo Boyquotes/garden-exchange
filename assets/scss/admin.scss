@@ -42,8 +42,61 @@ body#admin_post_show .post-tags .label-default i {
 #admin_conversation_new .garden-result{
     width: 100%;
 }
-.send-conversation{
+.send-conversation, .send-message{
     margin: 2em 0;
+}
+.conversation:hover{
+    background: #dadada;
+}
+.conversation{
+    display: flex;
+    background: #FFF;
+    padding: 2.5rem;
+}
+.conversation-profile-content{
+    display: flex;
+    width:90%;
+}
+.conversation-profile{
+    width: 100px;
+}
+.img-profile {
+
+}
+.img-profile img{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+.conversation-content{
+    width: 90%;
+}
+.conversation-date{
+    width: 20%;
+    text-align: right;
+}
+
+/* Message */
+.messages{
+    margin: 0 0 2em 0;
+}
+#admin_conversation_messages_list .conversation{
+    width: 60%;
+}
+#admin_conversation_messages_list .message{
+    width: 60%;
+}
+#admin_conversation_messages_list .message.user{
+    margin: 0 0 0 40%;
+}
+.message{
+    display: flex;
+    background: #FFF;
+    padding: 2.5rem;
+}
+.message-profile{
+    width: 100px;
 }
 
 /* User   ------------------------------------------------------------------------- */

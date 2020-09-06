@@ -8,7 +8,6 @@ use App\Entity\GardenImage;
 use App\Entity\Equipment;
 use App\Entity\Rule;
 use App\Form\Type\DateTimePickerType;
-use App\Form\GardenImageType;
 
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -114,18 +113,12 @@ class GardenType extends AbstractType
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.enabled', 'DESC');
                 },
-                //~ 'query_builder' => function(EntityRepository $er) {
-                    //~ return $er->createQueryBuilder('e')
-                    //~ ->orderBy('e.name', 'ASC');},
                 'choice_label' => 'lang_fr',
-                //~ 'preferred_choices' => ['France'],
                 'required' => true,
                 'group_by' => function($choice, $key, $value) {
-                    //~ if( in_array($choice->getCode(), ['250', '276', '620', '724', '756', '826', '528', '20', '56']) ) {
                     if( $choice->getEnabled() > 0 ) {
                         return 'Europe';
                     }
-
                     return 'Monde';
                 },
             ])
