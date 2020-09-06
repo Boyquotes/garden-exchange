@@ -112,10 +112,27 @@ class User implements UserInterface, \Serializable
      */
     private $messageExchanges;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="host")
+     */
+    private $conversationExchanges;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="camper")
+     */
+    private $conversationCamperExchanges;
+
+    /**
+     * @ORM\OneToMany(targetEntity=GardenImage::class, mappedBy="garden", orphanRemoval=true, cascade={"persist"}, fetch="EAGER")
+     */
+    private $gardenImages;
+
     public function __construct()
     {
         $this->gardens = new ArrayCollection();
         $this->messageExchanges = new ArrayCollection();
+        $this->conversationExchanges = new ArrayCollection();
+        $this->conversationCamperExchanges = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -359,5 +376,68 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @return Collection|ConversationExchange[]
+     */
+    public function getConversationExchanges(): Collection
+    {
+        return $this->conversationExchanges;
+    }
+
+    public function addConversationExchange(ConversationExchange $conversationExchange): self
+    {
+        if (!$this->conversationExchanges->contains($conversationExchange)) {
+            $this->conversationExchanges[] = $conversationExchange;
+            $conversationExchange->setHost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversationExchange(ConversationExchange $conversationExchange): self
+    {
+        if ($this->conversationExchanges->contains($conversationExchange)) {
+            $this->conversationExchanges->removeElement($conversationExchange);
+            // set the owning side to null (unless already changed)
+            if ($conversationExchange->getHost() === $this) {
+                $conversationExchange->setHost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ConversationExchange[]
+     */
+    public function getConversationCamperExchanges(): Collection
+    {
+        return $this->conversationCamperExchanges;
+    }
+
+    public function addConversationCamperExchange(ConversationExchange $conversationCamperExchange): self
+    {
+        if (!$this->conversationCamperExchanges->contains($conversationCamperExchange)) {
+            $this->conversationCamperExchanges[] = $conversationCamperExchange;
+            $conversationCamperExchange->setCamper($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversationCamperExchange(ConversationExchange $conversationCamperExchange): self
+    {
+        if ($this->conversationCamperExchanges->contains($conversationCamperExchange)) {
+            $this->conversationCamperExchanges->removeElement($conversationCamperExchange);
+            // set the owning side to null (unless already changed)
+            if ($conversationCamperExchange->getCamper() === $this) {
+                $conversationCamperExchange->setCamper(null);
+            }
+        }
+
+        return $this;
+    }
+
     
 }

@@ -1,0 +1,30 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_garden_new' %}
+
+{% block class_body %}col-md-10 col-md-offset-1{% endblock %}
+
+{% block main %}
+    <h1>{{ 'title.conversations.list'|trans }}</h1>
+    {% if conversation_exchanges %}
+        <div class="conversations-list">
+            {% for conversation_exchange in conversation_exchanges %}
+                <a href="{{ path('conversation_exchange_show', {'id': conversation_exchange.id}) }}">
+                    <div>
+                        {{ conversation_exchange.camper.firstname }}
+                    </div>
+                    <div>
+                        {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}{% endif %}
+                        {{ conversation_exchange.content }}
+                    </div>
+                    <div>
+                        {{ conversation_exchange.created|date('d-m-Y h:i') }}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ 'no.conversations'|trans }}
+    {% endif %}
+
+{% endblock %}

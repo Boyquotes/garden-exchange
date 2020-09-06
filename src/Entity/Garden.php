@@ -134,16 +134,21 @@ class Garden
     private $area;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Zone::class, inversedBy="gardens", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="garden", orphanRemoval=true)
      */
-    private $zones;
+    private $conversationExchanges;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Rule::class, inversedBy="gardens")
+     */
+    private $rules;
 
     public function __construct()
     {
         $this->campingTypes = new ArrayCollection();
         $this->equipments = new ArrayCollection();
         $this->gardenImages = new ArrayCollection();
-        $this->zones = new ArrayCollection();
+        $this->rules = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -443,28 +448,26 @@ class Garden
     }
 
     /**
-     * @return Collection|Zone[]
+     * @return Collection|Rule[]
      */
-    public function getZones(): Collection
+    public function getRules(): Collection
     {
-        return $this->zones;
+        return $this->rules;
     }
 
-    public function addZone(Zone $zone): self
+    public function addRule(Rule $rule): self
     {
-        if (!$this->zones->contains($zone)) {
-            $this->zones[] = $zone;
-            $zone->addGarden($this);
+        if (!$this->rules->contains($rule)) {
+            $this->rules[] = $rule;
         }
 
         return $this;
     }
 
-    public function removeZone(Zone $zone): self
+    public function removeRule(Rule $rule): self
     {
-        if ($this->zones->contains($zone)) {
-            $this->zones->removeElement($zone);
-            $zone->removeGarden($this);
+        if ($this->rules->contains($rule)) {
+            $this->rules->removeElement($rule);
         }
 
         return $this;

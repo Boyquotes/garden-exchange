@@ -2,19 +2,21 @@
 
 namespace App\Entity;
 
-use App\Repository\ZoneRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\RuleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ZoneRepository::class)
+ * @ApiResource()
+ * @ORM\Entity(repositoryClass=RuleRepository::class)
  */
-class Zone
+class Rule
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -30,12 +32,12 @@ class Zone
     private $information;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $picto;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Garden::class, mappedBy="zones")
+     * @ORM\ManyToMany(targetEntity=Garden::class, mappedBy="rules")
      */
     private $gardens;
 
@@ -78,7 +80,7 @@ class Zone
         return $this->picto;
     }
 
-    public function setPicto(string $picto): self
+    public function setPicto(?string $picto): self
     {
         $this->picto = $picto;
 
@@ -97,6 +99,7 @@ class Zone
     {
         if (!$this->gardens->contains($garden)) {
             $this->gardens[] = $garden;
+            $garden->addRule($this);
         }
 
         return $this;
@@ -106,6 +109,7 @@ class Zone
     {
         if ($this->gardens->contains($garden)) {
             $this->gardens->removeElement($garden);
+            $garden->removeRule($this);
         }
 
         return $this;

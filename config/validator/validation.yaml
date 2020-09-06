@@ -1,0 +1,4 @@
+#~ App\Entity\ConversationExchange:
+    #~ properties:
+        #~ host:
+            #~ - Blank: ~

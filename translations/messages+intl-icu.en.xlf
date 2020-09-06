@@ -273,7 +273,7 @@
             </trans-unit>
             <trans-unit id="menu.admin">
                 <source>menu.admin</source>
-                <target>Backend</target>
+                <target>Admin</target>
             </trans-unit>
             <trans-unit id="menu.user">
                 <source>menu.user</source>
@@ -461,7 +461,7 @@
             </trans-unit>
             <trans-unit id="label.description">
                 <source>label.description</source>
-                <target>Description</target>
+                <target>Environnement</target>
             </trans-unit>
             <trans-unit id="label.street">
                 <source>label.street</source>
@@ -485,15 +485,11 @@
             </trans-unit>
             <trans-unit id="label.equipments ">
                 <source>label.equipments</source>
-                <target>Equipments</target>
+                <target>More :</target>
             </trans-unit>
             <trans-unit id="label.campingTypes ">
                 <source>label.campingTypes</source>
                 <target>Accessibility with</target>
-            </trans-unit>
-            <trans-unit id="label.zones ">
-                <source>label.zones</source>
-                <target>Situation</target>
             </trans-unit>
             <trans-unit id="label.addPhotos ">
                 <source>label.addPhotos</source>
@@ -543,8 +539,8 @@
                 <source>localisation</source>
                 <target>Localisation</target>
             </trans-unit>
-            <trans-unit id="garden.created_successfully ">
-                <source>garden.created_successfully </source>
+            <trans-unit id="garden.created.successfully ">
+                <source>garden.created.successfully </source>
                 <target>This garden have been added</target>
             </trans-unit>
             

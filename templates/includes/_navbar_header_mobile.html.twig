@@ -53,6 +53,11 @@
                                         <i class="fa fa-edit" aria-hidden="true"></i> {{ 'menu.user'|trans }}
                                     </a>
                                 </li>
+                                <li>
+                                    {% if is_granted('IS_IMPERSONATOR') %}
+                                        <a href="{{ path('homepage', {'_switch_user': '_exit'}) }}">Exit impersonation</a>
+                                    {% endif %}
+                                </li>
                                 <li class="divider"></li>
                                 <li>
                                     <a href="{{ path('security_logout') }}">

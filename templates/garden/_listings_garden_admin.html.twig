@@ -38,13 +38,6 @@
                                 </div>
                             {% endfor %}
                         </div>
-                        <div class="zones-garden-listing">
-                            {% for zone in garden.zones %}
-                                <div class="{{ zone.id }}" class="zone_choice">
-                                    <img src="{{ asset('/uploads/zones/'~zone.picto) }}" alt='{{ zone.name }}' />
-                                </div>
-                            {% endfor %}
-                        </div>
                         <div class="campingTypes-garden-listing">
                             {% for campingType in garden.campingTypes %}
                                 <div class="{{ campingType.id }}" class="campingType_choice">

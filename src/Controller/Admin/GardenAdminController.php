@@ -53,16 +53,16 @@ class GardenAdminController extends AbstractController
      * @Route("/", methods="GET", name="admin_index")
      * @Route("/", methods="GET", name="admin_garden_index")
      */
-    public function index(GardenRepository $gardens, Security $security): Response
-    {
-        if ($security->isGranted('ROLE_ADMIN')) {
-            $authorGardens = $gardens->findAll();
+        public function index(GardenRepository $gardens, Security $security): Response
+        {
+            if ($security->isGranted('ROLE_ADMIN')) {
+                $authorGardens = $gardens->findAll();
+            }
+            else{
+                $authorGardens = $gardens->findByUser($this->getUser());
+            }
+            return $this->render('admin/garden/listing_garden_admin.html.twig', ['allGardens' => $authorGardens]);
         }
-        else{
-            $authorGardens = $gardens->findByUser($this->getUser());
-        }
-        return $this->render('admin/garden/listing_garden_admin.html.twig', ['allGardens' => $authorGardens]);
-    }
 
     /**
      * Creates a new Garden entity.
@@ -128,12 +128,9 @@ class GardenAdminController extends AbstractController
             curl_close($ch);
 
             $json_data = json_decode($geopos, true);
-            dump($json_data);
             if(count($json_data) != 0){
                 $latCity = $json_data[0]['lat'];
                 $lngCity = $json_data[0]['lon'];
-                dump($latCity);
-                dump($lngCity);
                 $garden->setLatCity($latCity);
                 $garden->setLngCity($lngCity);
                 $gps = true;
@@ -196,7 +193,7 @@ class GardenAdminController extends AbstractController
             // actions. They are deleted automatically from the session as soon
             // as they are accessed.
             // See https://symfony.com/doc/current/controller.html#flash-messages
-            $this->addFlash('success', 'garden.created_successfully');
+            $this->addFlash('success', 'garden.created.successfully');
             
             $email = (new Email())
                 ->from('share@ge.org')

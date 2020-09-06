@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ConversationExchange{% endblock %}
+
+{% block body %}
+    <h1>ConversationExchange</h1>
+
+    <div class="first-conversation">
+        {{ conversation_exchange.content }}
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}{{ conversation_exchange.id }}{% endif %}
+
+    {% for messageExchange in conversation_exchange.MessageExchanges %}
+        <div class="message-conversation">
+            <div class="message-conversation-content">
+                {{ messageExchange.content }}
+            </div>
+            <div class="message-conversation-user-fullname">
+                {{ messageExchange.user.fullname }}
+            </div>
+        </div>
+    {% endfor %}
+
+    {{ include('admin/message/_form_message.html.twig') }}
+
+
+    <a href="{{ path('conversation_exchange_index') }}">back to list</a>
+{% endblock %}

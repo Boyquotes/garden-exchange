@@ -72,12 +72,6 @@
         <div class="description-garden-show clear-wrap col-md-3">
             <div class="d-flex jc-space-around col-md-12">
                 <div><h1>{{ garden.city }} ({{ garden.id }})</h1></div>
-                {% for zone in garden.zones %}
-                    <div id="{{ zone.id }}" class="zone_choice zone_selected">
-                        <img src="{{ asset('/uploads/zones/'~zone.picto) }}" alt='{{ zone.name }}' />
-                        <div class="desc-picto">{{ zone.name }}</div>
-                    </div>
-                {% endfor %}
             </div>
             {{ garden.description }}
         </div>

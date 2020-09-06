@@ -35,26 +35,6 @@
 
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
-        <h4>{{ form_label(form.zones) }}</h4>
-        {{ form_widget(form.zones, { attr: {class: 'hidden'}}) }}
-        <div class="zones_choice jc-center">
-            {% set zonesGarden = [] %}
-            {% for zone in garden.zones %}
-                {% set zonesGarden = zonesGarden|merge({ (loop.index0):zone.id}) %}
-            {% endfor %}
-
-            {% for zone in form.zones.vars.choices %}
-                <div id="{{ zone.data.id }}" class="zone_choice{% if zone.data.id in zonesGarden %} zone_selected{% endif %}">
-                    <img src="{{ asset('/uploads/zones/'~zone.data.picto) }}" alt='{{ zone.data.name }}' />
-                    <div class="desc-picto">{{ zone.data.name }}</div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
-<div class="row d-flex jc-center">
-    <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.description) }}</h4>
         {{ form_help(form.description) }}
         {{ form_widget(form.description,{ 'attr': {'rows': '10', 'cols': '50'} }) }}
@@ -66,10 +46,10 @@
         <h4>{{ 'localisation'|trans }}</h4>
     </div>
 </div>
+<div class="row">
+    {{ include('maps/_map_garden_edit.html.twig') }}
+</div>
 <div class="row d-flex jc-center">
-    <div class="col-md-6">
-            {{ include('maps/_map_garden_edit.html.twig') }}
-    </div>
     <div class="col-md-6 txt-center">
         <div class="col-md-6 txt-center">
             {{ form_row(form.street) }}
@@ -123,7 +103,7 @@
             {% for image in garden.gardenImages %}
                 <div class="image{{image.id}}">
                     <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
-                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}">Supprimer</a>
+                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
                 </div>
             {% endfor %}
         </div>

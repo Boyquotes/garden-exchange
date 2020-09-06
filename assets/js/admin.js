@@ -143,20 +143,16 @@ $(document).ready( function(){
         });
     });
 
-    $('#main').find('#admin_garden_edit .publish-garden button').on('click', function () {
-        console.log('on soumet');
+    $('#main').find('#admin_garden_edit .publish-garden buttonBAK').on('click', function () {
         event.preventDefault();
         $('.edit-garden').submit();
 
     });
-    $('#main').find('.edit-garden').each(function(){
-                console.log('djdjfdsuuytuyt');
-
+    $('#main').find('.edit-gardenBAK').each(function(){
         var $form = $(this);
         $form.submit(function(event){
             event.preventDefault();
         console.log($form);
-        console.log('djdjfds');
             var submit = $form.find('button[type=submit]')[0];
             $(submit).addClass("disabled");
             $(submit).attr("disabled","disabled");
@@ -169,7 +165,6 @@ $(document).ready( function(){
                     console.log('ok');
                 });
             });
-        console.log('djdjfds sdsaaaa');
     });
             
 
@@ -187,18 +182,24 @@ $(document).ready( function(){
             }
         });
     });
-    
-    $('#main').find('.zone_choice').each( function(){
+
+    $('#main').find('.rule_choice').each( function(){
         $(this).click(function () {
-            var idZone = $(this).attr('id');
-            if ( $('#garden_zones option[value="'+idZone+'"]').prop( 'selected' ) == true )
+            console.log('sdsd');
+            var idRule = $(this).attr('id');
+            if ( $('#garden_rules option[value="'+idRule+'"]').prop( 'selected' ) == true )
             {
-                $('#garden_zones option[value="'+idZone+'"]').prop('selected', '');
-                $(this).removeClass('zone_selected');
+                $('#garden_rules option[value="'+idRule+'"]').prop('selected', '');
+                $(this).removeClass('rule_selected');
             }
+            //~ else if ( $('#garden_rules option[value="'+idRule+'"]').attr( 'selected' ) == 'selected' )
+            //~ {
+                //~ $('#garden_rules option[value="4"]').removeAttr('selected', '');
+                //~ $(this).removeClass('rule_selected');
+            //~ }
             else{
-                $('#garden_zones option[value="'+idZone+'"]').prop('selected','selected');
-                $(this).addClass('zone_selected');
+                $('#garden_rules option[value="'+idRule+'"]').attr('selected','selected');
+                $(this).addClass('rule_selected');
             }
         });
     });

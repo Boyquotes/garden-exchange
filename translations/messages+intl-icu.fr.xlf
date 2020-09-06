@@ -469,7 +469,7 @@
             </trans-unit>
             <trans-unit id="label.description">
                 <source>label.description</source>
-                <target>Description</target>
+                <target>Environnement</target>
             </trans-unit>
             <trans-unit id="label.street">
                 <source>label.street</source>
@@ -493,15 +493,11 @@
             </trans-unit>
             <trans-unit id="label.equipments ">
                 <source>label.equipments</source>
-                <target>Equipements</target>
+                <target>Petits plus :</target>
             </trans-unit>
             <trans-unit id="label.campingTypes ">
                 <source>label.campingTypes</source>
                 <target>Accessible en :</target>
-            </trans-unit>
-            <trans-unit id="label.zones ">
-                <source>label.zones</source>
-                <target>Situation</target>
             </trans-unit>
             <trans-unit id="label.addPhotos ">
                 <source>label.addPhotos</source>
@@ -547,13 +543,77 @@
                 <source>title.edit_garden</source>
                 <target>Modifier votre jardin</target>
             </trans-unit>
-            <trans-unit id="garden.created_successfully">
-                <source>garden.created_successfully </source>
+            <trans-unit id="garden.created.successfully">
+                <source>garden.created.successfully </source>
                 <target>Ce jardin a été ajouté</target>
             </trans-unit>
             <trans-unit id="action.show_garden">
                 <source>action.show_garden</source>
                 <target>Voir l'annonce</target>
+            </trans-unit>
+            <trans-unit id="contact.garden.exchanger">
+                <source>contact.garden.exchanger</source>
+                <target>Contacter</target>
+            </trans-unit>
+            <trans-unit id="send.conversation.message">
+                <source>send.conversation.message</source>
+                <target>Envoyer votre demande</target>
+            </trans-unit>
+            <trans-unit id="send.message">
+                <source>send.message</source>
+                <target>Envoyer votre message</target>
+            </trans-unit>
+            <trans-unit id="menu.campers">
+                <source>menu.campers</source>
+                <target>Campers</target>
+            </trans-unit>
+            <trans-unit id="label.rules">
+                <source>label.rules</source>
+                <target>Règles du jardin :</target>
+            </trans-unit>
+            <trans-unit id="Tent">
+                <source>Tent</source>
+                <target>Tente</target>
+            </trans-unit>
+            <trans-unit id="MotorHome">
+                <source>MotorHome</source>
+                <target>Camping Car</target>
+            </trans-unit>
+            <trans-unit id="Caravan">
+                <source>Caravan</source>
+                <target>Caravane</target>
+            </trans-unit>
+            <trans-unit id="Van">
+                <source>Van</source>
+                <target>Van</target>
+            </trans-unit>
+            <trans-unit id="Water">
+                <source>Water</source>
+                <target>Eau</target>
+            </trans-unit>
+            <trans-unit id="Electricity">
+                <source>Electricity</source>
+                <target>Electricité</target>
+            </trans-unit>
+            <trans-unit id="Toilets">
+                <source>Toilets</source>
+                <target>Toilettes</target>
+            </trans-unit>
+            <trans-unit id="wifi">
+                <source>wifi</source>
+                <target>Wifi</target>
+            </trans-unit>
+            <trans-unit id="pets">
+                <source>pets</source>
+                <target>Animaux bienvenus</target>
+            </trans-unit>
+            <trans-unit id="barbecue">
+                <source>barbecue</source>
+                <target>Barbecue autorisé</target>
+            </trans-unit>
+            <trans-unit id="begin.conversation.to">
+                <source>begin.conversation.to</source>
+                <target>Proposez un echange à </target>
             </trans-unit>
             
         </body>

@@ -424,7 +424,7 @@ header ul.nav li:hover {
     background-color: $liHover;
 }
 .add-garden{
-    background-color: $verClair;
+    background-color: $vert;
 }
 header ul.nav li.add-garden:hover {
     background-color: #FFF;
@@ -453,7 +453,7 @@ header ul.nav li.add-garden:hover {
     color: $baseColorGe;
 }
 .navbar-default .navbar-nav .open .dropdown-menu.user > li > a:hover{
-    background-color: none;
+    background-color: transparent;
 }
 .navbar-default{
     z-index: 10000;
@@ -466,11 +466,11 @@ header ul.nav li.add-garden:hover {
 }
 .navbar-default .navbar-nav > li.add-garden > a {
     color: #FFF;
-    border: 1px solid $verClair;
+    border: 1px solid $vert;
 }
 .navbar-default .navbar-nav > li.add-garden > a:hover {
-    color: $verClair;
-    border: 1px solid $verClair;
+    color: $vert;
+    border: 1px solid $vert;
 }
 form[name='simple_search']{
     display: flex;
@@ -618,12 +618,13 @@ gardensCarte{
     z-index: 1000;
 }
 /* Choices  ------------------------------------------------------------------------- */
-.equipment_choice > img, .campingType_choice > img, .zone_choice > img{
+.equipment_choice > img, .campingType_choice > img, .rules_choice img {
     opacity: .5;
+    border: 3px solid gray;
 }
-.equipment_selected > img, .campingType_selected > img, .zone_selected > img{
+.equipment_choice.equipment_selected > img, .campingType_choice.campingType_selected > img, .rule_choice.rule_selected img{
     opacity: 1;
-    background: $verClair;
+    border: 5px solid $vert;
 }
 
 /* Equipment choice  ------------------------------------------------------------------------- */
@@ -636,7 +637,6 @@ gardensCarte{
 .equipment_choice img{
     height: 100px;
     padding: 1em;
-    border: 1px solid gray;
     margin: 0 0 .5em 0;
 }
 
@@ -650,20 +650,19 @@ gardensCarte{
 .campingType_choice img{
     height: 100px;
     padding: 1em;
-    border: 1px solid gray;
     margin: 0 0 .5em 0;
 }
-/* Zone type choice   ------------------------------------------------------------------------- */
-.zones_choice{
+
+/* Rule choice  ------------------------------------------------------------------------- */
+.rules_choice{
     display: flex;
 }
-.zone_choice{
+.rule_choice{
     margin: 0 1em;
 }
-.zone_choice img{
+.rule_choice img{
     height: 100px;
     padding: 1em;
-    border: 1px solid gray;
     margin: 0 0 .5em 0;
 }
 
@@ -686,6 +685,9 @@ gardensCarte{
 .action-garden-show{
     justify-content: space-around;
 }
+.photos-description{
+    padding: 2em 0;
+}
 .img-garden-show{
     display: flex;
 }
@@ -693,23 +695,16 @@ gardensCarte{
     width: 100%;
 }
 .other-photos{
-    height: 500px;
+
 }
 .other-photos img:first{
     margin: 0;
 }
 .other-photos img{
     width: 100%;
-    margin: 10px 0 0 0;
 }
 .other-photos div{
     justify-content: space-around;
-}
-.zones-garden-listing{
-    display: flex;
-}
-.zones-garden-listing img{
-    height: 40px;
 }
 .campingTypes-garden-listing{
     display: flex;
@@ -720,8 +715,19 @@ gardensCarte{
 .description-garden{
 
 }
+.menu-admin{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    left: 20px;
+    top: 300px;
+}
+.menu-admin a{
+    margin: 1em 0;
+}
+    
 /* Responsive   ------------------------------------------------------------------------- */
-@media only screen and (max-device-width: 800px) {
+@media only screen and (max-device-width: 767px) {
     .is-hidden-mobile{
         display: none;
     }
@@ -738,7 +744,7 @@ gardensCarte{
     .navbar{
         margin: 0;
     }
-    .central-search]{
+    .central-search{
         width: 80%;
     }
     #register .well, #login .well {
@@ -746,8 +752,31 @@ gardensCarte{
         margin: 3em 0 1em 0;
         padding: 1em;
     }
+    .garden-result {
+        width: 100%;
+    }
+    .img-garden-show{
+        width: 100%;
+    }
+    .contact {
+        position: relative;
+        margin: 0 0 1em 0;
+        top: 0;
+        top: 0;
+    }
+    .campingType_choice img, .equipment_choice img, .rule_choice img, {
+        height: 60px;
+    }
 }
-@media only screen and (min-device-width: 800px) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1023px) {
+    .is-hidden-mobile{
+        display: none;
+    }
+    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+        background: transparent;
+    }
+}
+@media only screen and (min-device-width: 1024px) {
     .is-hidden-desktop{
         display: none;
     }

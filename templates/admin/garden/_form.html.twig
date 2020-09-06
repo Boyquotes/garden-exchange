@@ -26,33 +26,14 @@
             {% for campingType in form.campingTypes.vars.choices %}
                 <div id="{{ campingType.data.id }}" class="campingType_choice{% if campingType.data.id in campingTypesGarden %} campingType_selected{% endif %}">
                     <img src="{{ asset('/uploads/campingTypes/'~campingType.data.picto) }}" alt='{{ campingType.data.name }}' />
-                    <div class="desc-picto">{{ campingType.data.name }}</div>
+                    <div class="desc-picto">{{ campingType.data.name|trans }}</div>
                 </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<div class="row d-flex jc-center">
-    <div class="col-md-6 txt-center">
-        <h4>{{ form_label(form.zones) }}</h4>
-        {{ form_widget(form.zones, { attr: {class: 'hidden'}}) }}
-        <div class="zones_choice jc-center">
-            {% set zonesGarden = [] %}
-            {% for zone in garden.zones %}
-                {% set zonesGarden = zonesGarden|merge({ (loop.index0):zone.id}) %}
-            {% endfor %}
-
-            {% for zone in form.zones.vars.choices %}
-                <div id="{{ zone.data.id }}" class="zone_choice{% if zone.data.id in zonesGarden %} zone_selected{% endif %}">
-                    <img src="{{ asset('/uploads/zones/'~zone.data.picto) }}" alt='{{ zone.data.name }}' />
-                    <div class="desc-picto">{{ zone.data.name }}</div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
+<hr />
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.description) }}</h4>
@@ -61,6 +42,49 @@
     </div>
 </div>
 
+<hr />
+<div class="row d-flex jc-center">
+    <div class="col-md-6 txt-center">
+        <h4>{{ form_label(form.equipments) }}</h4>
+        {{ form_widget(form.equipments, { attr: {class: 'hidden'}}) }}
+        <div class="equipments_choice jc-center">
+            {% set equipmentsGarden = [] %}
+            {% for equipment in garden.equipments %}
+                {% set equipmentsGarden = equipmentsGarden|merge({ (loop.index0):equipment.id}) %}
+            {% endfor %}
+
+            {% for equipment in form.equipments.vars.choices %}
+                <div id="{{ equipment.data.id }}" class="equipment_choice{% if equipment.data.id in equipmentsGarden %} equipment_selected{% endif %}">
+                    <img src="{{ asset('/uploads/equipments/'~equipment.data.picto) }}" alt='{{ equipment.data.name }}' />
+                    <div class="desc-picto">{{ equipment.data.name|trans }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row d-flex jc-center">
+    <div class="col-md-6 txt-center">
+        <h4>{{ form_label(form.rules) }}</h4>
+        {{ form_widget(form.rules, { attr: {class: 'hidden'}}) }}
+        <div class="rules_choice jc-center">
+            {% set rulesGarden = [] %}
+            {% for rule in garden.rules %}
+                {% set rulesGarden = rulesGarden|merge({ (loop.index0):rule.id}) %}
+            {% endfor %}
+
+            {% for rule in form.rules.vars.choices %}
+                <div id="{{ rule.data.id }}" class="rule_choice{% if rule.data.id in rulesGarden %} rule_selected{% endif %}">
+                    <img src="{{ asset('/uploads/rules/'~rule.data.picto) }}" alt='{{ rule.data.name }}' />
+                    <div class="desc-picto">{{ rule.data.name|trans }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<hr />
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ 'localisation'|trans }}</h4>
@@ -83,6 +107,7 @@
     </div>
 </div>
 
+<hr />
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.area) }}</h4>
@@ -93,26 +118,8 @@
         {{ form_row(form.lng) }}
     </div>
 </div>
-<div class="row d-flex jc-center">
-    <div class="col-md-6 txt-center">
-        <h4>{{ form_label(form.equipments) }}</h4>
-        {{ form_widget(form.equipments, { attr: {class: 'hidden'}}) }}
-        <div class="equipments_choice jc-center">
-            {% set equipmentsGarden = [] %}
-            {% for equipment in garden.equipments %}
-                {% set equipmentsGarden = equipmentsGarden|merge({ (loop.index0):equipment.id}) %}
-            {% endfor %}
 
-            {% for equipment in form.equipments.vars.choices %}
-                <div id="{{ equipment.data.id }}" class="equipment_choice{% if equipment.data.id in equipmentsGarden %} equipment_selected{% endif %}">
-                    <img src="{{ asset('/uploads/equipments/'~equipment.data.picto) }}" alt='{{ equipment.data.name }}' />
-                    <div class="desc-picto">{{ equipment.data.name }}</div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
+<hr />
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.gardenImages) }}</h4>

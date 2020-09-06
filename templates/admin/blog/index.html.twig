@@ -4,6 +4,21 @@
 
 {% block main %}
     <h1>{{ 'title.post_list'|trans }}</h1>
+    <ul>
+        {% if is_granted('ROLE_ADMIN') %}
+            <li>
+                <a href="{{ path('admin_users_index') }}">
+                    <i class="fa fa-users" aria-hidden="true"></i> {{ 'menu.campers'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_index') }}"> {{ 'title.garden_list'|trans }}</a>
+            </li>
+            <li>
+                <a href="{{ path('conversation_exchange_index') }}"> {{ 'title.conversation_list'|trans }}</a>
+            </li>
+        {% endif %}
+    </ul>
 
     <table class="table table-striped table-middle-aligned">
         <thead>

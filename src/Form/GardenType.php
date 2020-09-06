@@ -6,7 +6,7 @@ use App\Entity\Country;
 use App\Entity\Garden;
 use App\Entity\GardenImage;
 use App\Entity\Equipment;
-use App\Entity\Zone;
+use App\Entity\Rule;
 use App\Form\Type\DateTimePickerType;
 use App\Form\GardenImageType;
 
@@ -91,17 +91,17 @@ class GardenType extends AbstractType
                 'required' => false,
             ])
             
-            ->add('zones', EntityType::class, [
-                'label' => 'label.zones',
-                'class' => Zone::class,
+            ->add('equipments', EntityType::class, [
+                'label' => 'label.equipments',
+                'class' => Equipment::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'required' => false,
             ])
-            
-            ->add('equipments', EntityType::class, [
-                'label' => 'label.equipments',
-                'class' => Equipment::class,
+
+            ->add('rules', EntityType::class, [
+                'label' => 'label.rules',
+                'class' => Rule::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'required' => false,

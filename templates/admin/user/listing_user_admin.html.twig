@@ -1,0 +1,23 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_users_index' %}
+
+{% block class_body %}col-sm-12{% endblock %}
+
+{% block main %}
+    <h1>{{ 'title.users.list'|trans }}</h1>
+    <div class="users-list">
+        {% for camper in allCampers %}
+            <div>
+                #{{ camper.id }}
+                {{ camper.fullname }}
+                {{ camper.email }}<a href="{{ path('admin_garden_index') }}?_switch_user={{ camper.email }}">Prendre identite</a>
+                {{ camper.created|date('d-m-Y h:i') }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+    {{ parent() }}
+{% endblock %}

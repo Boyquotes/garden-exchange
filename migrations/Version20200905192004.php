@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200825162136 extends AbstractMigration
+final class Version20200905192004 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,9 @@ final class Version20200825162136 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE message_exchange DROP INDEX UNIQ_DA1D7468A76ED395, ADD INDEX IDX_DA1D7468A76ED395 (user_id)');
+        $this->addSql('CREATE TABLE garden_rule (garden_id INT NOT NULL, rule_id INT NOT NULL, INDEX IDX_90163EA939F3B087 (garden_id), INDEX IDX_90163EA9744E0351 (rule_id), PRIMARY KEY(garden_id, rule_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE garden_rule ADD CONSTRAINT FK_90163EA939F3B087 FOREIGN KEY (garden_id) REFERENCES garden (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE garden_rule ADD CONSTRAINT FK_90163EA9744E0351 FOREIGN KEY (rule_id) REFERENCES rule (id) ON DELETE CASCADE');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +32,6 @@ final class Version20200825162136 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE message_exchange DROP INDEX IDX_DA1D7468A76ED395, ADD UNIQUE INDEX UNIQ_DA1D7468A76ED395 (user_id)');
+        $this->addSql('DROP TABLE garden_rule');
     }
 }

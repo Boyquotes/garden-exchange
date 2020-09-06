@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\ConversationExchange;
+use App\Entity\MessageExchange;
 use App\Entity\Garden;
 use App\Entity\User;
 use App\Form\ConversationExchangeType;
+use App\Form\MessageExchangeType;
 use App\Repository\ConversationExchangeRepository;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -14,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  *
@@ -27,26 +30,41 @@ class ConversationExchangeController extends AbstractController
     /**
      * @Route("/", name="conversation_exchange_index", methods={"GET"})
      */
-    public function index(ConversationExchangeRepository $conversationExchangeRepository): Response
+    public function index(Security $security, ConversationExchangeRepository $conversationExchangeRepository): Response
     {
-        return $this->render('conversation_exchange/index_conversation.html.twig', [
-            'conversation_exchanges' => $conversationExchangeRepository->findAll(),
+        if ($security->isGranted('ROLE_ADMIN')) {
+            $conversations = $conversationExchangeRepository->findAll();
+        }
+        else{
+            $conversations = $conversationExchangeRepository->findByHost($this->getUser());
+        }
+        
+        dump($conversations);
+        return $this->render('admin/conversation_exchange/index_conversation.html.twig', [
+            'conversation_exchanges' => $conversations,
         ]);
     }
 
     /**
      * @Route("/new/{userId}/garden/{gardenId}", name="conversation_exchange_new", methods={"GET","POST"})
      * @ParamConverter("garden", options={"mapping": {"gardenId" : "id"}})
+     * @ParamConverter("user", options={"mapping": {"userId" : "id"}})
      */
-    public function new(Request $request, User $userId, Garden $garden): Response
+    public function new(Request $request, User $user, Garden $garden): Response
     {
+        if($user == $this->getUser()){
+            $this->addFlash('success', 'conversation.new.warning.you.talking.to.tou');
+            return $this->redirectToRoute('conversation_exchange_index');
+        }
+        
         $conversationExchange = new ConversationExchange();
         $form = $this->createForm(ConversationExchangeType::class, $conversationExchange);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-        $conversationExchange->addUser($userId);
-        $conversationExchange->addUser($this->getUser());
+            $conversationExchange->setHost($user);
+            $conversationExchange->setCamper($this->getUser());
+            $conversationExchange->setGarden($garden);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($conversationExchange);
             $entityManager->flush();
@@ -54,7 +72,7 @@ class ConversationExchangeController extends AbstractController
             return $this->redirectToRoute('conversation_exchange_index');
         }
 
-        return $this->render('conversation_exchange/new_conversation.html.twig', [
+        return $this->render('admin/conversation_exchange/new_conversation.html.twig', [
             'conversation_exchange' => $conversationExchange,
             'garden' => $garden ,
             'form' => $form->createView(),
@@ -62,12 +80,27 @@ class ConversationExchangeController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="conversation_exchange_show", methods={"GET"})
+     * @Route("/{id}", name="conversation_exchange_show", methods={"GET", "POST"})
      */
-    public function show(ConversationExchange $conversationExchange): Response
+    public function show(Request $request, ConversationExchange $conversationExchange): Response
     {
-        return $this->render('conversation_exchange/show_conversation.html.twig', [
+        $messageExchange = New MessageExchange();
+        $form = $this->createForm(MessageExchangeType::class, $messageExchange);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $messageExchange->setConversationExchange($conversationExchange);
+            $messageExchange->setUser($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($messageExchange);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('conversation_exchange_show', ['id' => $conversationExchange->getId()]);
+        }
+
+        return $this->render('admin/conversation_exchange/show_conversation.html.twig', [
             'conversation_exchange' => $conversationExchange,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -85,7 +118,7 @@ class ConversationExchangeController extends AbstractController
             return $this->redirectToRoute('conversation_exchange_index');
         }
 
-        return $this->render('conversation_exchange/edit.html.twig', [
+        return $this->render('admin/conversation_exchange/edit.html.twig', [
             'conversation_exchange' => $conversationExchange,
             'form' => $form->createView(),
         ]);

@@ -1,0 +1,5 @@
+{{ form_start(form) }}
+    {{ form_errors(form.content) }}
+    {{ form_widget(form.content,{ 'attr': {'rows': '10', 'cols': '50'} }) }}
+    <button class="btn btn-primary pull-right send-conversation">{{ button_label|default('send.conversation.message'|trans) }}</button>
+{{ form_end(form) }}
