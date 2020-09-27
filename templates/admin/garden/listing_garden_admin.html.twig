@@ -5,7 +5,6 @@
 {% block class_body %}col-sm-12{% endblock %}
 
 {% block main %}
-    <h1>{{ 'title.garden_list'|trans }}</h1>
     {% if is_granted('ROLE_ADMIN') %}
         {{ include('garden/_listings_garden_admin.html.twig') }}
     {% else %}

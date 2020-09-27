@@ -8,7 +8,7 @@
         
         <div class="gardens-listing-result jc-space-around">
             {% for garden in allGardens %}
-                <div class="garden-result">
+                <div class="garden-result garden-{{garden.id}}">
                     <div class="img-garden-listing">
                     {% if garden.gardenImages|length > 0 %}
                         {% for image in garden.gardenImages %}
@@ -26,28 +26,44 @@
                     </div>
                     <div class="info-camp">
                         <div class="titre-garden-listing">
-                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.city|truncate(3, false) }} - #{{ garden.id }}</a>
+                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">#{{ garden.id }} | {{ garden.street }} | {{ garden.postcode }} | {{ garden.city }} | {{ garden.country.langFR }}</a>
                         </div>
-                        <div class="description-garden-listing">
-                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.description|truncate(200, false) }}</a>
-                        </div>
-                        <div class="equipments-garden-listing">
-                            {% for equipment in garden.equipments %}
-                                <div class="equipment-garden-listing">
-                                    <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <div class="campingTypes-garden-listing">
-                            {% for campingType in garden.campingTypes %}
-                                <div class="{{ campingType.id }}" class="campingType_choice">
-                                    <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
-                                </div>
-                            {% endfor %}
+                        <div class="garden-online">
+                            {% if garden.enabled %}
+                                EN LIGNE
+                            {% else %}
+                                HORS LIGNE
+                            {% endif %}
                         </div>
                     </div>
+                    <div class="campingTypes-garden-listing">
+                        {% for campingType in garden.campingTypes %}
+                            <div class="{{ campingType.id }} campingType_choice campingType_selected">
+                                <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="description-garden-listing">
+                        <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.description|truncate(200, false) }}</a>
+                    </div>
+                    <div class="area-garden-listing">
+                        <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.area }} m<sup>2</sup></a>
+                    </div>
+                    <div class="equipments-garden-listing">
+                        {% for equipment in garden.equipments %}
+                            <div class="{{ equipment.id }} equipment_choice equipment_selected">
+                                <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="rules-garden-listing">
+                        {% for rule in garden.rules %}
+                            <div class="{{ rule.id }} rule_choice rule_selected">
+                                <img src="{{ asset('/uploads/rules/'~rule.picto) }}" alt='{{ rule.name }}' />
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% if is_granted(constant('\\App\\Security\\GardenVoter::EDIT'), garden) %}
-                    {{ garden.city }}
                     <div id="garden{{garden.id}}">
                         {{ render(controller('App\\Controller\\Admin\\GardenAdminController::actionsGarden', {
                                     'garden': garden

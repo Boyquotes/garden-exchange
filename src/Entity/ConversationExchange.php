@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ConversationExchangeRepository;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,6 +55,11 @@ class ConversationExchange
      * @ORM\JoinColumn(nullable=true)
      */
     private $camper;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $exchanged;
 
     public function __construct()
     {
@@ -155,6 +161,18 @@ class ConversationExchange
     public function setGarden(?Garden $garden): self
     {
         $this->garden = $garden;
+
+        return $this;
+    }
+    
+    public function getExchanged(): ?int
+    {
+        return $this->exchanged;
+    }
+
+    public function setExchanged(?int $exchanged): self
+    {
+        $this->exchanged = $exchanged;
 
         return $this;
     }

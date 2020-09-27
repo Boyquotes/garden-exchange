@@ -58,7 +58,7 @@
 
             <trans-unit id="title.homepage">
                 <source>title.homepage</source>
-                <target><![CDATA[Bienvenue sur l'application <strong>Garden Exchange</strong>]]></target>
+                <target><![CDATA[La communauté pour camper autrement]]></target>
             </trans-unit>
             <trans-unit id="title.source_code">
                 <source>title.source_code</source>
@@ -374,7 +374,10 @@
             </trans-unit>
             
             
-            
+            <trans-unit id="menu.post">
+                <source>menu.post</source>
+                <target>Articles</target>
+            </trans-unit>
             <trans-unit id="menu.register">
                 <source>menu.register</source>
                 <target>Créer un compte</target>
@@ -403,6 +406,10 @@
                 <source>label.lastname</source>
                 <target>Nom</target>
             </trans-unit>
+            <trans-unit id="help.lastname">
+                <source>help.lastname</source>
+                <target>Cette information ne sera divulguée qu'en cas d'échange</target>
+            </trans-unit>
             <trans-unit id="label.firstname">
                 <source>label.firstname</source>
                 <target>Prénom</target>
@@ -411,8 +418,16 @@
                 <source>label.agreeTerms</source>
                 <target>En créant ce compte, j'accepte les conditions générales d'utilisation</target>
             </trans-unit>
+            <trans-unit id="constraints.agreeTerms">
+                <source>constraints.agreeTerms</source>
+                <target>Vous devez accepter les Conditions Generales d'Utilisation pour continuer</target>
+            </trans-unit>
             <trans-unit id="menu.login">
                 <source>menu.login</source>
+                <target>Se connecter</target>
+            </trans-unit>
+            <trans-unit id="homepage.login">
+                <source>homepage.login</source>
                 <target>Se connecter</target>
             </trans-unit>
             <trans-unit id="user.password_changed_successfully">
@@ -441,7 +456,11 @@
             </trans-unit>
             <trans-unit id="user.register">
                 <source>user.register</source>
-                <target>Devenir membre</target>
+                <target>S'inscrire</target>
+            </trans-unit>
+            <trans-unit id="homepage.register">
+                <source>homepage.register</source>
+                <target>S'inscrire</target>
             </trans-unit>
             <trans-unit id="menu.register.garden">
                 <source>menu.register.garden</source>
@@ -517,11 +536,11 @@
             </trans-unit>
             <trans-unit id="nb.char.description.mandatory.for.publication">
                 <source>nb.char.description.mandatory.for.publication</source>
-                <target>Your garden description is less 50 char</target>
+                <target>La description du jardin fait moins de 50 caracteres</target>
             </trans-unit>
             <trans-unit id="nb.photos.mandatory.for.publication">
                 <source>nb.photos.mandatory.for.publication</source>
-                <target>You must add at least 1 garden photo</target>
+                <target>Vous devez avoir au moins 2 photos afin de pouvoir publier votre annonce</target>
             </trans-unit>
             <trans-unit id="garden_incomplete">
                 <source>garden_incomplete</source>
@@ -544,12 +563,20 @@
                 <target>Modifier votre jardin</target>
             </trans-unit>
             <trans-unit id="garden.created.successfully">
-                <source>garden.created.successfully </source>
-                <target>Ce jardin a été ajouté</target>
+                <source>garden.created.successfully</source>
+                <target>Votre annonce a été ajoutée</target>
+            </trans-unit>
+            <trans-unit id="garden.updated_successfully">
+                <source>garden.updated_successfully</source>
+                <target>Annonce mise à jour</target>
             </trans-unit>
             <trans-unit id="action.show_garden">
                 <source>action.show_garden</source>
                 <target>Voir l'annonce</target>
+            </trans-unit>
+            <trans-unit id="see.profile">
+                <source>see.profile</source>
+                <target>Voir son profil</target>
             </trans-unit>
             <trans-unit id="contact.garden.exchanger">
                 <source>contact.garden.exchanger</source>
@@ -615,7 +642,199 @@
                 <source>begin.conversation.to</source>
                 <target>Proposez un echange à </target>
             </trans-unit>
+            <trans-unit id="help.garden_description">
+                <source>help.garden_description</source>
+                <target><![CDATA[Décrivez votre terrain (accès, sol, vue, matériels ou commodités à proximité...) et ce qui l'entoure (forêt, lac, champs, zone residentielle...)]]></target>
+            </trans-unit>
+            <trans-unit id="help.garden_area">
+                <source>help.garden_area</source>
+                <target>en m2</target>
+            </trans-unit>
+            <trans-unit id="help.garden.photo">
+                <source>help.garden.photo</source>
+                <target><![CDATA[Ajoutez jusqu'à 5 photos. Pensez à prendre différents points de vues pour que votre hôte voit au mieux l'emplacement et l'environnement autour. Pour que votre annonce soit publiée, vous devez envoyer au minumum 2 photos (max 2MB par image).]]></target>
+            </trans-unit>
+            <trans-unit id="help.garden.photo.2">
+                <source>help.garden.photo.2</source>
+                <target><![CDATA[Pour que votre annonce soit publiée, vous devez envoyer au minumum 2 photos (max 2MB par image).]]></target>
+            </trans-unit>
+            <trans-unit id="garden.not.geolocalised.for.publication">
+                <source>garden.not.geolocalised.for.publication</source>
+                <target>Veuillez renseigner correctement le lieu du jardin(adresse ou marqueur sur la carte) en éditant votre jardin</target>
+            </trans-unit>
+            <trans-unit id="help.reset.password">
+                <source>help.reset.password</source>
+                <target>Vous allez recevoir un mail vous permettant de changer de mot de passe.</target>
+            </trans-unit>
+            <trans-unit id="send.reset.password.email">
+                <source>send.reset.password.email</source>
+                <target>Envoyer</target>
+            </trans-unit>
+            <trans-unit id="reset.password.title">
+                <source>reset.password.title</source>
+                <target>Mot de passe oublié ?</target>
+            </trans-unit>
+            <trans-unit id="try.again">
+                <source>try.again</source>
+                <target>réessayez</target>
+            </trans-unit>
+            <trans-unit id="reset.password.email.help.spam">
+                <source>reset.password.email.help.spam</source>
+                <target>Si vous ne recevez pas le mail, veuillez s'il vous plait regarder dans vos spams ou </target>
+            </trans-unit>
+            <trans-unit id="hours">
+                <source>hours</source>
+                <target>heure(s)</target>
+            </trans-unit>
+            <trans-unit id="reset.password.expire.in">
+                <source>reset.password.expire.in</source>
+                <target>Un mail vous a été envoyé contenant un lien vous permettant de remettre à jour votre mot de passe. Ce lien sera valide pendant </target>
+            </trans-unit>
+            <trans-unit id="reset.password.email.send.ok">
+                <source>reset.password.email.send.ok</source>
+                <target>Demande de renouvellement de mot de passe envoyée</target>
+            </trans-unit>
+            <trans-unit id="no.annonce.warning">
+                <source>no.annonce.warning</source>
+                <target>Vous n'avez pas encore crée d'annonce</target>
+            </trans-unit>
+            <trans-unit id="no.conversations">
+                <source>no.conversations</source>
+                <target>Vous n'avez pas encore eu d'échange avec la communauté.</target>
+            </trans-unit>
+            <trans-unit id="title.conversations.list">
+                <source>title.conversations.list</source>
+                <target>Mes messages</target>
+            </trans-unit>
+            <trans-unit id="menu.user.profile">
+                <source>menu.user.profile</source>
+                <target>Mon compte</target>
+            </trans-unit>
+            <trans-unit id="label.addPhoto.profile">
+                <source>label.addPhoto.profile</source>
+                <target>Ajoutez une photo de profil</target>
+            </trans-unit>
+            <trans-unit id="label.country.residence">
+                <source>label.country.residence</source>
+                <target>Pays de résidence</target>
+            </trans-unit>
+            <trans-unit id="label.profil.description">
+                <source>label.profil.description</source>
+                <target>Présentez vous, votre façon de voyager, de camper...</target>
+            </trans-unit>
+            <trans-unit id="label.profil.langs">
+                <source>label.profil.langs</source>
+                <target>Langues parlées :</target>
+            </trans-unit>
+            <trans-unit id="label.telephone">
+                <source>label.telephone</source>
+                <target>Téléphone :</target>
+            </trans-unit>
+            <trans-unit id="label.profil.campingTypes">
+                <source>label.profil.campingTypes</source>
+                <target>Votre voyagez en :</target>
+            </trans-unit>
+            <trans-unit id="see.all.garden">
+                <source>see.all.garden</source>
+                <target>Chercher un jardin</target>
+            </trans-unit>
+            <trans-unit id="garden.new.another.one">
+                <source>garden.new.another.one</source>
+                <target>Ajoutez un autre jardin</target>
+            </trans-unit>
+            <trans-unit id="title.users.list">
+                <source>title.users.list</source>
+                <target>Liste des campers</target>
+            </trans-unit>
+            <trans-unit id="title.info.profile">
+                <source>title.info.profile</source>
+                <target>Profil</target>
+            </trans-unit>
+            <trans-unit id="message.conversation.with">
+                <source>message.conversation.with</source>
+                <target>Conversation avec </target>
+            </trans-unit>
+            <trans-unit id="garden.at">
+                <source>conversation.garden.at</source>
+                <target> pour le jardin à </target>
+            </trans-unit>
             
+            <trans-unit id="email.inscription">
+                <source>email.inscription</source>
+                <target>Nouvelle inscription</target>
+            </trans-unit>
+            <trans-unit id="email.welcome">
+                <source>email.welcome</source>
+                <target>Bienvenue</target>
+            </trans-unit>
+            <trans-unit id="email.new.mail.notif">
+                <source>email.new.mail.notif</source>
+                <target>, il y a du nouveau sur Garden Exchange</target>
+            </trans-unit>
+            <trans-unit id="email.you.signed">
+                <source>email.you.signed</source>
+                <target><![CDATA[Vous etes maintenant inscris sur le site avec cet email: ]]></target>
+            </trans-unit>
+            <trans-unit id="email.add.garden">
+                <source>email.add.garden</source>
+                <target>Nouveau jardin</target>
+            </trans-unit>
+            <trans-unit id="email.new.garden">
+                <source>email.new.garden</source>
+                <target>Et un jardin de plus dans la communauté !</target>
+            </trans-unit>
+            <trans-unit id="email.the.garden">
+                <source>email.the.garden</source>
+                <target>Votre annonce a été créee, vous serez averti une fois qu'elle sera publié en ligne par notre équipe</target>
+            </trans-unit>
+            <trans-unit id="email.garden.near">
+                <source>email.garden.near</source>
+                <target>Jardin à </target>
+            </trans-unit>
+            <trans-unit id="email.publish.garden">
+                <source>email.publish.garden</source>
+                <target>Votre annonce a été publié en ligne</target>
+            </trans-unit>
+            <trans-unit id="email.garden.online">
+                <source>email.garden.online</source>
+                <target>Votre annonce est maintenant en ligne</target>
+            </trans-unit>
+            <trans-unit id="email.new.conversation">
+                <source>email.new.conversation</source>
+                <target>Vous avez une nouvelle conversation pour un échange</target>
+            </trans-unit>
+            <trans-unit id="email.new.message">
+                <source>email.new.message</source>
+                <target>Vous avez un nouveau message</target>
+            </trans-unit>
+            <trans-unit id="email.reset.password">
+                <source>email.reset.password</source>
+                <target>Vous avez demandez un changement mot de passe</target>
+            </trans-unit>
+            <trans-unit id="email.reset.instruction">
+                <source>email.reset.instruction</source>
+                <target>Pour changer de mot de passe cliquez sur le lien :</target>
+            </trans-unit>
+            <trans-unit id="email.reset.exire">
+                <source>email.reset.exire</source>
+                <target>Ce lien expire dans </target>
+            </trans-unit>
+            <trans-unit id="email.reset.hours">
+                <source>email.reset.hours</source>
+                <target>heure(s)</target>
+            </trans-unit>
+            <trans-unit id="impersonate">
+                <source>impersonate</source>
+                <target>Prendre l'identité</target>
+            </trans-unit>
+            <trans-unit id="label.search.where">
+                <source>label.search.where</source>
+                <target>Où souhaitez vous aller ?</target>
+            </trans-unit>
+            <trans-unit id="flash.warning.mail.reset.password.already.send">
+                <source>flash.warning.mail.reset.password.already.send</source>
+                <target>Vous avez déjà récemment demandé de recevoir un mail pour changer de mot de passe, verifiez votre messagerie et n'oubliez pas de regarder dans vos spams</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

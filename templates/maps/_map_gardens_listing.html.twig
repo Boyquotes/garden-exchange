@@ -1,13 +1,25 @@
-    <div id="gardensCarte" style="width:85%;margin: 0 auto; height:1000px"></div>
-    {% if not is_granted('ROLE_CAMPER') and garden.latCity is defined and garden.lngCity is defined %}
+    <div id="gardensCarte" style="width:100%;margin: 0 auto; height:1000px"></div>
+    {% if not is_granted('ROLE_CAMPER') and allGardens is not null %}
         <script>
-          var carte = L.map('macarte').setView([{{garden.latCity}}, {{garden.lngCity}}], 10);
+          var gardensCarte = L.map('gardensCarte');
           L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          }).addTo(carte);
-          var marker = L.marker([{{garden.latCity}}, {{garden.lngCity}}], {
-            draggable: 'true'
-          }).bindPopup("").addTo(carte);
+            attribution: '©️ OpenStreetMap contributors'
+          }).addTo(gardensCarte);
+          
+          let pointsList = [];
+          let nom = '';
+          let geoloc = '';
+          {% for garden in allGardens %}
+            {% if garden.latCity and garden.lngCity and garden.city %}
+                nom = "{{ garden.city }}";
+                geoloc = [{{ garden.latCity }}, {{ garden.lngCity }}];
+                L.marker(geoloc).addTo(gardensCarte).bindPopup(nom);
+                pointsList.push(geoloc);
+            {% endif %}
+          {% endfor %}
+            if (pointsList.length>0){
+                gardensCarte.fitBounds(pointsList); 
+            }
         </script>
     {% else %}
         <script>
@@ -20,9 +32,9 @@
           let nom = '';
           let geoloc = '';
           {% for garden in allGardens %}
-            {% if garden.lat and garden.lng and garden.city %}
+            {% if garden.latCity and garden.lngCity and garden.city %}
                 nom = "{{ garden.city }}";
-                geoloc = [{{ garden.lat }}, {{ garden.lng }}];
+                geoloc = [{{ garden.latCity }}, {{ garden.lngCity }}];
                 L.marker(geoloc).addTo(gardensCarte).bindPopup(nom);
                 pointsList.push(geoloc);
             {% endif %}

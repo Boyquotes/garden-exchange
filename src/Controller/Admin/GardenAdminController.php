@@ -25,9 +25,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 /**
@@ -56,7 +57,7 @@ class GardenAdminController extends AbstractController
         public function index(GardenRepository $gardens, Security $security): Response
         {
             if ($security->isGranted('ROLE_ADMIN')) {
-                $authorGardens = $gardens->findAll();
+                $authorGardens = $gardens->findBy(array(), array('created' => 'DESC'));
             }
             else{
                 $authorGardens = $gardens->findByUser($this->getUser());
@@ -73,9 +74,10 @@ class GardenAdminController extends AbstractController
      * to constraint the HTTP methods each controller responds to (by default
      * it responds to all methods).
      */
-    public function new(Request $request, MailerInterface $mailer): Response
+    public function new(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
         $garden = new Garden();
+        $user = $this->getUser();
         $gps = false;
         //~ $equipments = $garden->getEquipments();
         //~ $equipments = $this->entityManager->getRepository('AppBundle:Equipment')->findAll();
@@ -94,7 +96,7 @@ class GardenAdminController extends AbstractController
         // However, we explicitly add it to improve code readability.
         // See https://symfony.com/doc/current/forms.html#processing-forms
         if ($form->isSubmitted() && $form->isValid()) {
-            $garden->setUser($this->getUser());
+            $garden->setUser($user);
 
             //~ Geocode de l'adresse
             $street = $form->get('street')->getData();
@@ -153,8 +155,6 @@ class GardenAdminController extends AbstractController
             if(count($json_data) != 0){
                 $lat = $json_data[0]['lat'];
                 $lng = $json_data[0]['lon'];
-                dump($lat);
-                dump($lng);
                 $garden->setLat($lat);
                 $garden->setLng($lng);
                 $gps = true;
@@ -195,19 +195,23 @@ class GardenAdminController extends AbstractController
             // See https://symfony.com/doc/current/controller.html#flash-messages
             $this->addFlash('success', 'garden.created.successfully');
             
-            $email = (new Email())
-                ->from('share@ge.org')
-                ->to('nicolas@montpellibre.fr')
+            $email = $user->getEmail();
+            $emailNewGarden = (new TemplatedEmail())
+                ->from('share@garden-exchange.org')
+                ->to($email)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
-                ->subject('Nouveau jardin')
-                ->text('Nouveau jardin : ')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
-
+                ->subject($translator->trans('email.add.garden'))
+                ->htmlTemplate('emails/new_garden.html.twig')
+                // pass variables (name => value) to the template
+                ->context([
+                    'garden' => $garden,
+                    'username' => $user->getUsername(),
+                ]);
             try {
-                $mailer->send($email);
+                $mailer->send($emailNewGarden);
             } catch (TransportExceptionInterface $e) {
                 // some error prevented the email sending; display an
                 // error message or try to resend the message
@@ -296,13 +300,14 @@ class GardenAdminController extends AbstractController
     /**
      * @Route("/{id}/publish", name="publish_garden", methods={"POST"})
      */
-    public function publishGarden(Request $request, Garden $garden){
+    public function publishGarden(Request $request, MailerInterface $mailer, TranslatorInterface $translator, Garden $garden){
         $token = $request->request->get('_token');
-
+        $user = $this->getUser();
+        
         if($this->isCsrfTokenValid('publish'.$garden->getId(), $token)){
             if($garden->getEnabled()){
                 $garden->setEnabled(0);
-                $garden->setUpdatedAt(new \DateTime('now'));
+                $garden->setUpdated(new \DateTime('now'));
             }
             else{
                 $garden->setEnabled(1);
@@ -312,6 +317,30 @@ class GardenAdminController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($garden);
             $em->flush();
+
+            $email = $user->getEmail();
+            $emailPublishGarden = (new TemplatedEmail())
+                ->from('share@garden-exchange.org')
+                ->to($email)
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject($translator->trans('email.publish.garden'))
+                ->htmlTemplate('emails/garden_online.html.twig')
+                // pass variables (name => value) to the template
+                ->context([
+                    'garden' => $garden,
+                    'username' => $user->getUsername(),
+                ]);
+            try {
+                $mailer->send($emailPublishGarden);
+            } catch (TransportExceptionInterface $e) {
+                // some error prevented the email sending; display an
+                // error message or try to resend the message
+            }
+
+
             $routeReload = array( '#garden'.$garden->getId() => $this->generateUrl( 'actions_garden', array('id' => $garden->getId()) ) );
             $response = array(
                 'status' => 'success',

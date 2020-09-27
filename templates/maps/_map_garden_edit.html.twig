@@ -1,5 +1,28 @@
-    <div id="macarte" style="width:85%;margin: 0 auto; height:350px"></div>
-    {% if not is_granted('ROLE_CAMPER') and garden.latCity is defined and garden.lngCity is defined %}
+    <div id="macarte" style="width:80%;margin: 1em auto 4em auto; height:350px"></div>
+    {% if garden.lat is not null and garden.lng is not null%}
+        <script>
+          var carte = L.map('macarte').setView([{{garden.lat}}, {{garden.lng}}], 10);
+          L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(carte);
+          var marker = L.marker([{{garden.lat}}, {{garden.lng}}], {
+            draggable: 'true'
+          }).bindPopup("").addTo(carte);
+          marker.on('dragend', relachement);
+
+          function relachement(e) {
+            //marker.getPopup().setContent(');
+            //marker.openPopup();
+            var gps = marker.getLatLng();
+            var lat = gps['lat'];
+            var lng = gps['lng'];
+            var latElementId = document.getElementById('garden_lat');
+            latElementId.value = lat;
+            var lngElementId = document.getElementById('garden_lng');
+            lngElementId.value = lng;
+          }
+        </script>
+    {% elseif garden.latCity is not null and garden.lngCity is not null%}
         <script>
           var carte = L.map('macarte').setView([{{garden.latCity}}, {{garden.lngCity}}], 10);
           L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -8,14 +31,27 @@
           var marker = L.marker([{{garden.latCity}}, {{garden.lngCity}}], {
             draggable: 'true'
           }).bindPopup("").addTo(carte);
+          marker.on('dragend', relachement);
+
+          function relachement(e) {
+            //marker.getPopup().setContent(');
+            //marker.openPopup();
+            var gps = marker.getLatLng();
+            var lat = gps['lat'];
+            var lng = gps['lng'];
+            var latElementId = document.getElementById('garden_lat');
+            latElementId.value = lat;
+            var lngElementId = document.getElementById('garden_lng');
+            lngElementId.value = lng;
+          }
         </script>
     {% else %}
         <script>
-          var carte = L.map('macarte').setView([{{garden.lat}}, {{garden.lng}}], 10);
+          var carte = L.map('macarte').setView(['46.07402', '6.39515'], 6);
           L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           }).addTo(carte);
-          var marker = L.marker([{{garden.lat}}, {{garden.lng}}], {
+          var marker = L.marker(['46.07402', '6.39515'], {
             draggable: 'true'
           }).bindPopup("").addTo(carte);
           marker.on('dragend', relachement);

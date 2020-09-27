@@ -40,12 +40,14 @@
                                         <i class="fa fa-sign-in" aria-hidden="true"></i> {{ 'action.sign_in'|trans }}
                                     </button>
                                 </fieldset>
+                                <div class="forget-password">
+                                    <a href="{{ path('app_forgot_password_request') }}">{{ 'user.forgot_password'|trans }}</a>
+                                </div>
                             </form>
-                            <a href="{{ path('app_forgot_password_request') }}">{{ 'user.forgot_password'|trans }}</a>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="well d-flex jc-center">
+                    <div class="col-sm-4 register-login">
+                        <div class="well d-flex jc-center align-center">
                             <a href="{{ path('register') }}" class="btn btn-warning">{{ 'user.no_account.register'|trans }}</a>
                         </div>
                     </div>

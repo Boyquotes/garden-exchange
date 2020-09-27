@@ -42,6 +42,7 @@ class Equipment
     public function __construct()
     {
         $this->gardens = new ArrayCollection();
+        $this->profiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,4 +113,5 @@ class Equipment
 
         return $this;
     }
+
 }

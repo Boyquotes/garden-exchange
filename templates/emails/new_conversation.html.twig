@@ -1,0 +1,10 @@
+{% extends 'emails/layout.html.twig' %}
+
+{% block content %}
+
+    <img src="{{ email.image('@images/logo-garden-exchange.png') }}" alt="Logo Garden Exchange">
+    <h1>{{ 'email.new.conversation'|trans }}</h1>
+
+    <p><a href="{{ path('homepage') }}">{{ 'email.garden.near'|trans }} {{ garden.city }}</a></p>
+
+{% endblock %}

@@ -6,16 +6,19 @@
     {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
 #}
 
-{% if show_confirmation|default(false) %}
-    {% set attr = {'data-confirmation': 'true'} %}
-    {{ include('blog/_delete_post_confirmation.html.twig') }}
-{% endif %}
-
-{{ form_start(form, {attr: attr|default({})}) }}
+{{ form_start(form, {attr: {novalidate: 'novalidate', class:'form-add-garden'}}) }}
 
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.campingTypes) }}</h4>
+        <div class="form-group has-error error-campingTypes">
+            <span class="help-block">
+                <ul class="list-unstyled">
+                    <li><span class="fa fa-exclamation-triangle"></span> Cette valeur ne doit pas être nulle.</li>
+                </ul>
+            </span>
+            {{ form_errors(form.campingTypes) }}
+        </div>
         {{ form_widget(form.campingTypes, { attr: {class: 'hidden'}}) }}
         <div class="campingTypes_choice jc-center">
             {% set campingTypesGarden = [] %}
@@ -38,6 +41,9 @@
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.description) }}</h4>
         {{ form_help(form.description) }}
+        <div class="form-group has-error error-description">
+            {{ form_errors(form.description) }}
+        </div>
         {{ form_widget(form.description,{ 'attr': {'rows': '10', 'cols': '50'} }) }}
     </div>
 </div>
@@ -46,6 +52,7 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.equipments) }}</h4>
+        {{ form_errors(form.equipments) }}
         {{ form_widget(form.equipments, { attr: {class: 'hidden'}}) }}
         <div class="equipments_choice jc-center">
             {% set equipmentsGarden = [] %}
@@ -67,6 +74,7 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.rules) }}</h4>
+        {{ form_errors(form.rules) }}
         {{ form_widget(form.rules, { attr: {class: 'hidden'}}) }}
         <div class="rules_choice jc-center">
             {% set rulesGarden = [] %}
@@ -92,18 +100,34 @@
 </div>
 <div class="row d-flex jc-center">
     <div class="col-md-3 txt-center">
-        {{ form_row(form.street) }}
+        {{ form_label(form.street) }}
+        {{ form_widget(form.street) }}
+        <div class="form-group has-error error-street">
+            {{ form_errors(form.street) }}
+        </div>
     </div>
     <div class="col-md-3 txt-center">
-        {{ form_row(form.postcode) }}
+            {{ form_label(form.postcode) }}
+            {{ form_widget(form.postcode) }}
+        <div class="form-group has-error error-postcode">
+            {{ form_errors(form.postcode) }}
+        </div>
     </div>
 </div>
 <div class="row d-flex jc-center">
     <div class="col-md-3 txt-center">
-        {{ form_row(form.city) }}
+        {{ form_label(form.city) }}
+        {{ form_widget(form.city) }}
+        <div class="form-group has-error error-city">
+            {{ form_errors(form.city) }}
+        </div>
     </div>
     <div class="col-md-3 txt-center">
-        {{ form_row(form.country) }}
+        {{ form_label(form.country) }}
+        {{ form_widget(form.country) }}
+        <div class="form-group has-error error-country">
+            {{ form_errors(form.country) }}
+        </div>
     </div>
 </div>
 
@@ -112,8 +136,12 @@
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.area) }}</h4>
         {{ form_help(form.area) }}
-        {{ form_widget(form.area) }}
-
+        <div class="superficie d-flex jc-center">
+            {{ form_widget(form.area) }}
+        </div>
+        <div class="form-group has-error error-area">
+            {{ form_errors(form.area) }}
+        </div>
         {{ form_row(form.lat) }}
         {{ form_row(form.lng) }}
     </div>
@@ -123,6 +151,8 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.gardenImages) }}</h4>
+        {{ form_help(form.gardenImages) }}
+        {# 'help.garden.photo.2'|trans #}
         {{ form_widget(form.gardenImages) }}
     </div>
 </div>
@@ -133,7 +163,7 @@
     
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center publish-garden">
-        <button type="submit" class="{{ button_css|default("btn btn-primary") }}">
+        <button type="submit" class="{{ button_css|default("btn btn-primary") }}" id="submit-add-garden">
             <i class="fa fa-save" aria-hidden="true"></i> {{ button_label|default('label.create_post'|trans) }}
         </button>
     </div>

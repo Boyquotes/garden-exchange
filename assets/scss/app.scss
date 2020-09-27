@@ -126,14 +126,14 @@ header .locales a:hover small {
 }
 
 footer {
-  background: #ecf0f1;
+  background: #454545;
   margin-top: 2em;
   padding-top: 2em;
-  padding-bottom: 2em
+  padding-bottom: 2em;
+  color: #fff;
 }
 
 footer p {
-  color: #7b8a8b;
   font-size: 13px;
   margin-bottom: 0.25em
 }
@@ -143,9 +143,9 @@ footer #footer-resources {
 }
 
 footer #footer-resources i {
-  color: #7b8a8b;
   font-size: 28.5px;
-  margin-left: 0.5em
+  margin-left: 0.5em;
+  color: #fff;
 }
 
 #sourceCodeModal h3 {
@@ -192,7 +192,7 @@ footer #footer-resources i {
   background-color: #e74c3c;
   color: #fff;
   font-size: 2em;
-  padding: 1em
+  padding: .2em
 }
 
 .form-group.has-error .help-block ul,
@@ -249,6 +249,9 @@ body#login #login-users-help p .console {
   display: block;
   margin: 5px 0;
   padding: 10px
+}
+.register-login{
+    margin: 4em 0 0 0;
 }
 
 /* Common Blog page elements
@@ -416,6 +419,77 @@ body#blog_search .post-metadata {
     /* 4px */
 }
 
+/* Loading   ------------------------------------------------------------------------- */
+.loading{
+    display: none;
+    position: absolute;
+    top: 0;
+    background: #ccc;
+    opacity: .7;
+    height: 10000vh;
+    width: 100%;
+    z-index: 100000;
+    overflow:hidden;
+    flex-direction: column;
+    align-items: center;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 15em;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
 /* Header   ------------------------------------------------------------------------- */
 header{
 
@@ -445,6 +519,11 @@ header ul.nav li.add-garden:hover {
 }
 .navbar-default .navbar-brand {
     color: $baseColorGe;
+    padding: 0 1em;
+}
+.navbar-brand img{
+    height: 52px;
+    margin: 1px 0 0 0;
 }
 .navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: $baseColorGe;
@@ -521,13 +600,37 @@ form[name='simple_search'] .btn-primary{
     font-weight: 500;
     line-height: 50px;
 }
-.central-search{
+.homepage-search{
     width: 25%;
 }
 .baseline{
     text-align: center;
 }
+.homepage-intro{
+    padding: 4em 0em;
+}
+.homepage-intro{
+    font-size: 1.5em;
+}
+.homepage-encart{
+    padding: 2em 0;
+}
+.homepage-encart div.step{
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 12px;
+    border-radius: 2%;
+}
+.homepage-encart-title{
+    font-size: 1.5em;
+    font-weight: 700;
+    padding: 1em 0 0 0;
+}
+.homepage-encart-content{
+    padding: 0 0 1em 0;
+}
 /* NavBar   ------------------------------------------------------------------------- */
+.navbar{
+    padding: .5em 0;
+}
 .navbar-default .navbar-toggle {
     background-color: #1a252f;
 }
@@ -571,7 +674,10 @@ gardensCarte{
     text-transform: uppercase;
 }
 .info-camp{
-    padding: 0 1em 1em 1em;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1em 0 1em;
+    margin: 1.3em 1em 1em 1em;
 }
 .img-garden-listing{
     display: flex;
@@ -587,11 +693,15 @@ gardensCarte{
 .img-garden-listing .image-none{
     margin: 25px 0;
 }
-.equipments-garden-listing{
+.campingTypes-garden-listing, .equipments-garden-listing, .rules-garden-listing{
     display: flex;
 }
-.equipment-garden-listing img{
-    height: 40px;
+.campingTypes-garden-listing .campingType_choice, .equipments-garden-listing .equipment_choice, .rules-garden-listing .rule_choice {
+    margin: 0 .4em;
+}
+.campingTypes-garden-listing .campingType_choice img, .equipments-garden-listing .equipment_choice img, .rules-garden-listing .rule_choice img{
+    height: 45px;
+    padding: .2rem;
 }
 /* Register   ------------------------------------------------------------------------- */
 #register #main{
@@ -600,11 +710,44 @@ gardensCarte{
 }
 #register .well, #login .well{
     flex-grow: 1;
-    margin: 6em 0 2em 0;
-    padding: 2em;
+    margin: 2em 0 2em 0;
+    padding: 4em;
+    background: #FFF;
 }
 #register .formulaire-registration{
-    width: 400px;
+    width: 475px;
+}
+#register .formulaire-registration .form-group{
+    margin: 15px 0 0 0;
+}
+#register .formulaire-registration label{
+    margin: 0;
+}
+#register .formulaire-registration input[type="text"], #register .formulaire-registration input[type="password"], #register .formulaire-registration input[type="email"]{
+    width: 100%;
+    margin: 0 0 .5em 0;
+}
+#register .formulaire-registration .help-block{
+    margin: 0;
+}
+#register .formulaire-registration .form-group.has-error{
+    margin: 0 0 1em 0;
+}
+#register .formulaire-registration .form-group.has-error .list-unstyled{
+    margin: 0;
+    font-size: .5em;
+}
+.messages .form-group{
+    margin: 0;
+}
+
+/* Reset password   ------------------------------------------------------------------------- */
+#reset-password .well{
+    margin: 4em 0;
+    padding: 2em;
+}
+#reset-password .messages{
+    margin: 2em 0 0 0;
 }
 
 /* Show   ------------------------------------------------------------------------- */
@@ -613,18 +756,23 @@ gardensCarte{
 }
 .contact{
     position: sticky;
-    top: 200px;
+    top: 100px;
+    margin: 100px 0 0 0;
     float: right;
+    right: 70px;
     z-index: 1000;
 }
 /* Choices  ------------------------------------------------------------------------- */
 .equipment_choice > img, .campingType_choice > img, .rules_choice img {
-    opacity: .5;
+    opacity: .1;
     border: 3px solid gray;
+}
+.equipment_choice, .campingType_choice, .rule_choice{
+    text-align: center;
 }
 .equipment_choice.equipment_selected > img, .campingType_choice.campingType_selected > img, .rule_choice.rule_selected img{
     opacity: 1;
-    border: 5px solid $vert;
+    border: 3px solid $vert;
 }
 
 /* Equipment choice  ------------------------------------------------------------------------- */
@@ -685,6 +833,9 @@ gardensCarte{
 .title-garden{
     padding: 15px;
 }
+.title-garden h1{
+    font-size: 2.5rem;
+}
 .action-garden-show{
     justify-content: space-around;
 }
@@ -704,19 +855,21 @@ gardensCarte{
     margin: 0;
 }
 .other-photos img{
-    width: 100%;
+    height: 100px;
 }
 .other-photos div{
     justify-content: space-around;
 }
-.campingTypes-garden-listing{
-    display: flex;
-}
-.campingTypes-garden-listing img{
-    height: 40px;
-}
 .description-garden{
-
+    word-wrap: anywhere;
+    width: 50%;
+    word-wrap: break-word;
+}
+#garden_show .equipment_choice > img, #garden_show .campingType_choice > img{
+    opacity: 0.3;
+}
+#garden_show .equipment_choice.equipment_selected > img, #garden_show .campingType_choice.campingType_selected > img{
+    opacity: 1;
 }
 .menu-admin{
     position: absolute;
@@ -733,59 +886,42 @@ gardensCarte{
     font-weight: 700;
     margin: .5em 0 1em 0;
 }
-    
-/* Responsive   ------------------------------------------------------------------------- */
-@media only screen and (max-device-width: 767px) {
-    .is-hidden-mobile{
-        display: none;
-    }
-    .body-container {
-        margin: 5vh 0 0 0;
-    }
-    header{
-        height: 10vh;
-        margin: 0;
-    }
-    #homepage header {
-        height: auto;
-    }
-    .navbar{
-        margin: 0;
-    }
-    .central-search{
-        width: 80%;
-    }
-    #register .well, #login .well {
-        flex-grow: 1;
-        margin: 3em 0 1em 0;
-        padding: 1em;
-    }
-    .garden-result {
-        width: 100%;
-    }
-    .img-garden-show{
-        width: 100%;
-    }
-    .contact {
-        position: relative;
-        margin: 0 0 1em 0;
-        top: 0;
-        top: 0;
-    }
-    .campingType_choice img, .equipment_choice img, .rule_choice img, {
-        height: 60px;
-    }
+#garden_show .desc-picto {
+    opacity: .5;
 }
-@media only screen and (min-device-width: 768px) and (max-device-width: 1023px) {
-    .is-hidden-mobile{
-        display: none;
-    }
-    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-        background: transparent;
-    }
+#garden_show .campingType_selected .desc-picto, #garden_show .equipment_selected .desc-picto, #garden_show rule_selected .desc-picto {
+    opacity: 1;
 }
-@media only screen and (min-device-width: 1024px) {
-    .is-hidden-desktop{
-        display: none;
-    }
+.superficie > input{
+    width: 20%;
+    text-align: center
+}
+
+/* EDIT PROFILE   ------------------------------------------------------------------------- */
+.error-campingTypes{
+    display: none;
+}
+.img-profile-view img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin: 0 7em 0 0;
+}
+#user_profile_profile_langs{
+    display: flex;
+    justify-content: space-between;
+}
+#user_profile_profile_langs .checkbox{
+    margin: .5em;
+}
+.form-edit-profile label{
+    margin-top: 1.5em
+}
+#user_profile_profile_langs .checkbox label{
+    margin-top: 0;
+}
+.forget-password{
+    margin: 1em 0;
+    float: right;
 }

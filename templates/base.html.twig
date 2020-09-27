@@ -15,7 +15,10 @@
     </head>
 
     <body id="{% block body_id %}{% endblock %}">
-
+        <div class='loading'>
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            <div>Création de l'annonce en cours</div>
+        </div>
         {% block header %}
             <header>
                 {{ include('includes/_navbar_header.html.twig') }}
@@ -54,9 +57,9 @@
                         </div>
                         <div id="footer-resources" class="col-md-6">
                             <p>
-                                <a href="https://www.instagram.com/gardenexchanger" title="{{ 'instagram.community'|trans }}"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                                <a href="https://fb.me/gardenexchange" title="{{ 'facebook.community'|trans }}"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                <a href="https://twitter.com/GardenExchanger" title="{{ 'twitter.community'|trans }}"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                <a href="https://www.instagram.com/gardenexchanger" title="{{ 'instagram.community'|trans }}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                <a href="https://fb.me/gardenexchange" title="{{ 'facebook.community'|trans }}"><i class="fa fa-facebook" aria-hidden="true"  target="_blank"></i></a>
+                                <a href="https://twitter.com/GardenExchanger" title="{{ 'twitter.community'|trans }}"><i class="fa fa-twitter" aria-hidden="true"  target="_blank"></i></a>
                             </p>
                         </div>
                     </div>

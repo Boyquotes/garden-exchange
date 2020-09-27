@@ -20,6 +20,38 @@
             <div class="homepage_garden_dream">
             </div>
         </div>
+
+        <div class="homepage-intro col-sm-12 txt-center d-flex jc-space-around">
+            {% for post in introPost %}
+                <div class="col-sm-8">
+                    {{ post.content|raw }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <hr />
+
+        <div class="homepage-encart col-sm-12 no-padding txt-center d-flex jc-space-around">
+            {% for post in encartPosts %}
+                <div class="col-sm-3 step">
+                    <div class="homepage-encart-title">
+                        {{ post.title }}
+                    </div>
+                    <div class="homepage-encart-content">
+                        {{ post.content|raw }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
+            {% for post in nuiteesPost %}
+                <div class="col-sm-8">
+                    {{ post.content|raw }}
+                </div>
+            {% endfor %}
+        </div>
+
     </div>
 
 {% endblock %}

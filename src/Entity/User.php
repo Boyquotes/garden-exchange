@@ -98,7 +98,7 @@ class User implements UserInterface, \Serializable
     protected $updated;
 
     /**
-     * @ORM\OneToMany(targetEntity=Garden::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Garden::class, mappedBy="user", orphanRemoval=true, fetch="EAGER")
      */
     private $gardens;
 
@@ -113,7 +113,7 @@ class User implements UserInterface, \Serializable
     private $messageExchanges;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="host")
+     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="host", fetch="EAGER")
      */
     private $conversationExchanges;
 
@@ -122,12 +122,28 @@ class User implements UserInterface, \Serializable
      */
     private $conversationCamperExchanges;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ResetPasswordRequest::class, mappedBy="user", orphanRemoval=true, cascade={"remove"}, fetch="EAGER")
+     */
+    private $requestPasswordRequest;
+    
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="author", cascade={"remove"})
+     */
+    private $comments;
+    
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="author", cascade={"remove"})
+     */
+    private $posts;
+
     public function __construct()
     {
         $this->gardens = new ArrayCollection();
         $this->messageExchanges = new ArrayCollection();
         $this->conversationExchanges = new ArrayCollection();
         $this->conversationCamperExchanges = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -263,7 +279,7 @@ class User implements UserInterface, \Serializable
         return $this->created;
     }
 
-    public function getUpdated(): \DateTime
+    public function getUpdated()
     {
         return $this->updated;
     }

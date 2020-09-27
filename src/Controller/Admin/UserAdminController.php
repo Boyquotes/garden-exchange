@@ -12,6 +12,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\UserVoter;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -30,7 +31,7 @@ use Symfony\Component\Security\Core\Security;
 /**
  *
  * @Route("/admin/users")
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_ADMIN", message="User admin pages.")
  *
  * @author Boyquotes
  */
@@ -44,9 +45,31 @@ class UserAdminController extends AbstractController
     public function indexUsers(UserRepository $users, Security $security): Response
     {
         if ($security->isGranted('ROLE_ADMIN')) {
-            $allCampers = $users->findAll();
+            $allCampers = $users->findSortedDesc();
         }
         return $this->render('admin/user/listing_user_admin.html.twig', ['allCampers' => $allCampers]);
+    }
+
+    /**
+     * Deletes a User entity.
+     *
+     * @Route("/{id}/delete", methods="DELETE", name="admin_user_delete")
+     * @ParamConverter("user", options={"mapping": {"id" : "id"}})
+     * @IsGranted("delete", subject="user", message="User can only be deleted by admin.")
+     */
+    public function delete(Request $request, User $user): Response
+    {
+        $token = $request->request->get('_token');
+
+        if($this->isCsrfTokenValid('delete'.$user->getId(), $token)){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($user);
+            $em->flush();
+
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
+        }
     }
 
 }

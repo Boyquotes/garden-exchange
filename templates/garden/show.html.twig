@@ -16,6 +16,21 @@
     {{ parent() }}
 {% endblock %}
 
+{% block contact %}
+    <div class="contact">
+        <p>
+            <a href="{{ path('conversation_exchange_new', {'userId': garden.user.id, 'gardenId':garden.id}) }}" class="btn btn-lg btn-success">
+                <i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }} {{ garden.user.firstname }}
+            </a>
+        </p>
+        <div class="contact-profile">
+            <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}"" class="btn btn-lg btn-warning">
+                <i class="fa fa-user" aria-hidden="true"></i> {{ 'see.profile'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block main %}
 
     <div class="row photos">
@@ -35,7 +50,7 @@
                     </div>
                 {% endif %}
             </div>
-            <div class="title-garden"><h1>{{ garden.city }} ({{ garden.id }})</h1></div>
+            <div class="title-garden"><h1>{{ garden.city }}{% if is_granted('ROLE_ADMIN') %}(#{{ garden.id }}){% endif %}</h1></div>
         </div>
         <div class="d-flex other-photos is-hidden-mobile col-md-6">
             {% for image in garden.gardenImages %}
@@ -48,14 +63,19 @@
         </div>
     </div>
     
-    <hr />
+    <hr class="is-hidden-mobile" />
     <div class="row camping-types d-flex jc-center">
         <h4>{{ 'label.campingTypes'|trans }}</h4>
         <div class="d-flex jc-center col-md-12">
+            {% set campingTypesGarden = [] %}
             {% for campingType in garden.campingTypes %}
-                <div class="campingType_choice campingType_selected">
+                {% set campingTypesGarden = campingTypesGarden|merge({ (loop.index0):campingType.id}) %}
+            {% endfor %}
+
+            {% for campingType in campingTypes %}
+                <div class="campingType_choice{% if campingType.id in campingTypesGarden %} campingType_selected{% endif %}">
                     <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
-                    <div class="desc-picto">{{ campingType.name }}</div>
+                    <div class="desc-picto">{{ campingType.name|trans }}</div>
                 </div>
             {% endfor %}
         </div>
@@ -70,18 +90,22 @@
     </div>
     
     {% if garden.equipments|length > 0 %}
-    <hr />
-    <div class="row equipment d-flex jc-center">
-        <h4>{{ 'label.equipments'|trans }}</h4>
-        <div class="d-flex jc-center col-md-12">
-            {% for equipment in garden.equipments %}
-                <div class="equipment_choice equipment_selected">
-                    <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
-                    <div class="desc-picto">{{ equipment.name }}</div>
-                </div>
-            {% endfor %}
+        <hr />
+        <div class="row equipment d-flex jc-center">
+            <h4>{{ 'label.equipments'|trans }}</h4>
+            <div class="d-flex jc-center col-md-12">
+                {% set equipmentsGarden = [] %}
+                {% for equipment in garden.equipments %}
+                    {% set equipmentsGarden = equipmentsGarden|merge({ (loop.index0):equipment.id}) %}
+                {% endfor %}
+                {% for equipment in equipments %}
+                    <div class="equipment_choice{% if equipment.id in equipmentsGarden %} equipment_selected{% endif %}">
+                        <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
+                        <div class="desc-picto">{{ equipment.name|trans }}</div>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
     {% endif %}
     
     {% if garden.rules|length > 0 %}
@@ -92,20 +116,21 @@
                 {% for rule in garden.rules %}
                     <div class="rule_choice rule_selected">
                         <img src="{{ asset('/uploads/rules/'~rule.picto) }}" alt='{{ rule.name }}' />
-                        <div class="desc-picto">{{ rule.name }}</div>
+                        <div class="desc-picto">{{ rule.name|trans }}</div>
                     </div>
                 {% endfor %}
             </div>
         </div>
     {% endif %}
-    
-    <hr />
-    <div class="row localisation d-flex jc-center">
-        <h4>{{ 'localisation'|trans }}</h4
-        <div class="d-flex jc-center col-md-12">
-            {{ include('maps/_map_garden_show.html.twig') }}
+    {% if (garden.lat is not null and garden.lng is not null) or (garden.latCity is not null and garden.lngCity is not null) %}
+        <hr />
+        <div class="row localisation d-flex jc-center">
+            <h4>{{ 'localisation'|trans }}</h4
+            <div class="d-flex jc-center col-md-12">
+                {{ include('maps/_map_garden_show.html.twig') }}
+            </div>
         </div>
-    </div>
+    {% endif %}
 
 {% endblock %}
 

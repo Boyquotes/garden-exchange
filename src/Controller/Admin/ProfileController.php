@@ -7,6 +7,7 @@ use App\Form\Type\UserProfileType;
 use App\Repository\ProfileRepository;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,14 +25,29 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route("/{id}", methods="GET|POST", name="user_profile_info")
+     * @Route("/{profileId<\d+>}", methods="GET|POST", name="user_profile_info")
+     * @ParamConverter("profile", options={"mapping": {"profileId" : "id"}})
      */
     public function infoProfile(Request $request, Profile $profile): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         
-        return $this->render('profile/info.html.twig', [
+        return $this->render('profile/info_view_profile.html.twig', [
+            'profile' => $profile,
+        ]);
+    }
+    
+    /**
+     * @Route("/view/{profileId<\d+>}", methods="GET|POST", name="user_profile_info_view")
+     * @ParamConverter("profile", options={"mapping": {"profileId" : "id"}})
+     */
+    public function infoViewProfile(Request $request, Profile $profile): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        
+        return $this->render('profile/info_view_profile.html.twig', [
             'profile' => $profile,
         ]);
     }
@@ -75,7 +91,7 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('user_profile_info_edit');
         }
 
-        return $this->render('profile/edit.html.twig', [
+        return $this->render('profile/edit_profile.html.twig', [
             'profile' => $profile,
             'form' => $form->createView(),
         ]);

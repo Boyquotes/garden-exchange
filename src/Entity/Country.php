@@ -77,12 +77,12 @@ class Country
     private $gardens;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Profile::class, mappedBy="country")
+     * @ORM\OneToMany(targetEntity=Profile::class, mappedBy="country")
      */
     private $profiles;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Profile::class, mappedBy="country_residence")
+     * @ORM\OneToMany(targetEntity=Profile::class, mappedBy="country_residence")
      */
     private $resident;
 
@@ -90,6 +90,11 @@ class Country
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $enabled;
+    
+    /**
+     * @ORM\Column(type="integer", nullable=false, options={"default" : 1000})
+     */
+    private $orderForm;
 
     public function __construct()
     {
@@ -318,6 +323,18 @@ class Country
     public function setEnabled(?bool $enabled): self
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getOrderForm(): ?int
+    {
+        return $this->orderForm;
+    }
+
+    public function setOrderForm(int $orderForm): self
+    {
+        $this->orderForm = $orderForm;
 
         return $this;
     }

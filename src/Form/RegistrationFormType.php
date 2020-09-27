@@ -22,9 +22,16 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('lastname', TextType::class, [
                 'label' => 'label.lastname',
+                'help' => 'help.lastname',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'label.firstname',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('email', EmailType::class, [
                 'label' => 'label.email',
@@ -34,7 +41,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'label.agreeTerms',
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez accepter les Conditions Generales d\'Utilisation pour continuer',
                     ]),
                 ],
             ])

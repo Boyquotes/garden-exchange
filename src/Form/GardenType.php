@@ -25,6 +25,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Positive;
 
 class GardenType extends AbstractType
 {
@@ -57,6 +60,12 @@ class GardenType extends AbstractType
                 'attr' => ['rows' => 20],
                 'help' => 'help.garden_description',
                 'label' => 'label.description',
+                'constraints' => [
+                    new Length([
+                        'min' => 50,
+                        'max' => 10000,
+                    ]),
+                ],
             ])
             ->add('street', null, [
                 'label' => 'label.street',
@@ -64,10 +73,16 @@ class GardenType extends AbstractType
             ->add('area', null, [
                 'help' => 'help.garden_area',
                 'label' => 'label.area',
+                'constraints' => [
+                    new Positive(),
+                ],
             ])
             ->add('postcode', null, [
                 'attr' => [],
                 'label' => 'label.postcode',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('city', null, [
                 'attr' => [],
@@ -87,7 +102,7 @@ class GardenType extends AbstractType
                 'class' => CampingType::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'required' => false,
+                'required' => true,
             ])
             
             ->add('equipments', EntityType::class, [
@@ -111,12 +126,13 @@ class GardenType extends AbstractType
                 'class' => Country::class,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('c')
-                        ->orderBy('c.enabled', 'DESC');
+                        ->addOrderBy('c.orderForm', 'ASC')
+                        ->addOrderBy('c.enabled', 'DESC');
                 },
                 'choice_label' => 'lang_fr',
                 'required' => true,
                 'group_by' => function($choice, $key, $value) {
-                    if( $choice->getEnabled() > 0 ) {
+                    if( $choice->getOrderForm() > 0 ) {
                         return 'Europe';
                     }
                     return 'Monde';
@@ -126,6 +142,7 @@ class GardenType extends AbstractType
             ->add('gardenImages', FileType::class,[
                 'attr' => ['class' => 'inputfile', 'placeholder' => 'label.addPhotos'],
                 'label' => 'label.photos',
+                'help' => 'help.garden.photo',
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false

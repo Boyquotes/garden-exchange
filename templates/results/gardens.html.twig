@@ -5,6 +5,9 @@
 {% block body %}
     
     <div class="row">
+        <div class="carte-listings col-md-6 is-hidden-desktop">
+            {{ include('maps/_map_gardens_listing_mobile.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
+        </div>
         <div class="listings col-md-6">
             {#
             <div class="page-header">
@@ -21,9 +24,6 @@
 
         <div class="carte-listings col-md-6 is-hidden-mobile">
             {{ include('maps/_map_gardens_listing.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
-        </div>
-        <div class="carte-listings col-md-6 is-hidden-desktop">
-            {{ include('maps/_map_gardens_listing_mobile.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
         </div>
     </div>
 

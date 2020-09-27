@@ -13,10 +13,14 @@ use App\Repository\ConversationExchangeRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  *
@@ -33,13 +37,14 @@ class ConversationExchangeController extends AbstractController
     public function index(Security $security, ConversationExchangeRepository $conversationExchangeRepository): Response
     {
         if ($security->isGranted('ROLE_ADMIN')) {
-            $conversations = $conversationExchangeRepository->findAll();
+            $conversations = $conversationExchangeRepository->findBy(array(), array('created' => 'DESC'));
         }
         else{
-            $conversations = $conversationExchangeRepository->findByHost($this->getUser());
+            $conversationsHost = $conversationExchangeRepository->findByHost($this->getUser());
+            $conversationsCamper = $conversationExchangeRepository->findByCamper($this->getUser());
+            $conversations = array_merge($conversationsHost, $conversationsCamper);
         }
-        
-        dump($conversations);
+
         return $this->render('admin/conversation_exchange/index_conversation.html.twig', [
             'conversation_exchanges' => $conversations,
         ]);
@@ -50,10 +55,10 @@ class ConversationExchangeController extends AbstractController
      * @ParamConverter("garden", options={"mapping": {"gardenId" : "id"}})
      * @ParamConverter("user", options={"mapping": {"userId" : "id"}})
      */
-    public function new(Request $request, User $user, Garden $garden): Response
+    public function new(Request $request, MailerInterface $mailer, TranslatorInterface $translator, User $user, Garden $garden): Response
     {
         if($user == $this->getUser()){
-            $this->addFlash('success', 'conversation.new.warning.you.talking.to.tou');
+            $this->addFlash('success', 'conversation.new.warning.you.talking.to.you');
             return $this->redirectToRoute('conversation_exchange_index');
         }
         
@@ -69,6 +74,28 @@ class ConversationExchangeController extends AbstractController
             $entityManager->persist($conversationExchange);
             $entityManager->flush();
 
+            $email = $user->getEmail();
+            $emailNewConversation = (new TemplatedEmail())
+                ->from('share@garden-exchange.org')
+                ->to($email)
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject($translator->trans('email.new.conversation'))
+                ->htmlTemplate('emails/new_conversation.html.twig')
+                // pass variables (name => value) to the template
+                ->context([
+                    'garden' => $garden,
+                    'username' => $user->getUsername(),
+                ]);
+            try {
+                $mailer->send($emailNewConversation);
+            } catch (TransportExceptionInterface $e) {
+                // some error prevented the email sending; display an
+                // error message or try to resend the message
+            }
+
             return $this->redirectToRoute('conversation_exchange_index');
         }
 
@@ -82,9 +109,10 @@ class ConversationExchangeController extends AbstractController
     /**
      * @Route("/{id}", name="conversation_exchange_show", methods={"GET", "POST"})
      */
-    public function show(Request $request, ConversationExchange $conversationExchange): Response
+    public function show(Request $request, MailerInterface $mailer, TranslatorInterface $translator, ConversationExchange $conversationExchange): Response
     {
         $messageExchange = New MessageExchange();
+        $user = $this->getUser();
         $form = $this->createForm(MessageExchangeType::class, $messageExchange);
         $form->handleRequest($request);
 
@@ -94,6 +122,28 @@ class ConversationExchangeController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($messageExchange);
             $entityManager->flush();
+            
+            $email = $user->getEmail();
+            $emailNewMessage = (new TemplatedEmail())
+                ->from('share@garden-exchange.org')
+                ->to($email)
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject($translator->trans('email.new.message'))
+                ->htmlTemplate('emails/new_message.html.twig')
+                // pass variables (name => value) to the template
+                ->context([
+                    'conversationExchange' => $conversationExchange,
+                    'username' => $user->getUsername(),
+                ]);
+            try {
+                $mailer->send($emailNewMessage);
+            } catch (TransportExceptionInterface $e) {
+                // some error prevented the email sending; display an
+                // error message or try to resend the message
+            }
             
             return $this->redirectToRoute('conversation_exchange_show', ['id' => $conversationExchange->getId()]);
         }
@@ -137,4 +187,23 @@ class ConversationExchangeController extends AbstractController
 
         return $this->redirectToRoute('conversation_exchange_index');
     }
+    
+    /**
+     * @Route("/{conversationExchangeId}/accepted", name="garden_exchange_accepted", methods={"POST"})
+     * @ParamConverter("conversationExchange", options={"mapping": {"conversationExchangeId" : "id"}})
+     */
+    public function deleteGardenImage(Request $request, ConversationExchange $conversationExchange){
+        $token = $request->request->get('_token');
+
+        if($this->isCsrfTokenValid('acceptedExchange'.$conversationExchange->getId(), $token)){
+            $conversationExchange->setExchanged('1');
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
+        }
+    }
+    
 }

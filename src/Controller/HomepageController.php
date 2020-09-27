@@ -26,10 +26,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class HomepageController extends AbstractController
 {
-    public function homepage(Request $request, GardenRepository $gardens): Response
+    public function homepage(Request $request, GardenRepository $gardens, PostRepository $posts): Response
     {
         $allGardens = $gardens->findAll();
-        dump($allGardens);
+        //~ $allPosts = $posts->findAll();
+        $encartPosts = $posts->findThreeFisrt();
+        $introPost = $posts->findIntro();
+        $nuiteesPost = $posts->findNuitees();
 
         $form = $this->createForm(SimpleSearchType::class);
         $form->handleRequest($request);
@@ -37,12 +40,14 @@ class HomepageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $where = $form->get('where')->getData();
-            dump($where);
             return $this->redirectToRoute('garden_results');
         }
 
         return $this->render('default/homepage.html.twig', [
             'allGardens' => $allGardens,
+            'encartPosts' => $encartPosts,
+            'introPost' => $introPost,
+            'nuiteesPost' => $nuiteesPost,
         ]);
     }
 

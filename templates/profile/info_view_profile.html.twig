@@ -1,0 +1,96 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'user_profile_info_edit' %}
+
+{% block class_body %}col-md-10 col-md-offset-1{% endblock %}
+
+{% block main %}
+    <h1>{{ 'title.info.profile'|trans }}</h1>
+    {% if app.user == profile.user %}
+        <a href="{{ path('user_profile_info_edit', {id: profile.id}) }}" class="btn btn-sm btn-primary">
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
+        </a>
+    {% endif %}
+    <div class="profile-view-photo-name d-flex">
+        {% if profile.profileImage is not null %}
+            <div class="img-profile-view">
+                <img src="{{ asset('/uploads/profiles/'~profile.profileImage) }}" alt='{{ profile.user.firstname }}' />
+            </div>
+        {% endif %}
+        <div class="profile-view-name">
+            {{ profile.user.firstname }}
+        </div>
+        {% if profile.langs|length > 0 %}
+            <div class="profile-view-langs">
+                <h2>{{ 'label.profil.langs'|trans }}</h2>
+                {% for lang in profile.langs %}
+                    {{ lang }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    {% if profile.description != '' %}
+        <h2>{{ 'Description'|trans }} :</h2>
+        <div class="profile-view-description">
+            {{ profile.description }}
+        </div>
+    {% endif %}
+    {% if profile.campingTypes|length > 0 %}
+        <h2>Campe en :</h2>
+        <div class="campingTypes-garden-listing">
+            {% for campingType in profile.campingTypes %}
+                <div class="campingType_choice campingType_selected">
+                    <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if profile.user.gardens|length > 0 %}
+        <h2>Son annonce :</h2>
+        <div class="profile-garden-listing">
+            {% for garden in profile.user.gardens %}
+                {% if garden.enabled %}
+                    <div class="col-md-6">
+                        {{ include('garden/_garden_result.html.twig') }}
+                    </div>
+                {% else %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <div class="col-md-6">
+                            ADMIN {{ include('garden/_garden_result.html.twig') }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <h2>Conversation(s) :</h2>
+        <div class="profile-conversation-listing">
+            {% for conversation_exchange in profile.user.conversationExchanges %}
+                <div class="conversation">
+                        <div class="conversation-profile-content">
+                            <a href="{{ path('user_profile_info', {'profileId': conversation_exchange.camper.profile.id}) }}">
+                                <div class="conversation-profile">
+                                {% if conversation_exchange.camper.profile.profileImage is not null %}
+                                    <div class="img-profile">
+                                        <img src="{{ asset('/uploads/profiles/'~conversation_exchange.camper.profile.profileImage) }}" alt='{{ conversation_exchange.camper.firstname }}' />
+                                    </div>
+                                {% endif %}
+                                    {{ conversation_exchange.camper.firstname }}
+                                </div>
+                            </a>
+                            <a href="{{ path('conversation_exchange_show', {'id': conversation_exchange.id}) }}" class="index-content-conversation">
+                                <div class="conversation-content">
+                                    {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}{% endif %}
+                                    {{ conversation_exchange.content }}
+                                </div>
+                            </a>
+                        </div>
+                        <div class="conversation-date">
+                            {{ conversation_exchange.created|date('d-m-Y h:i') }}
+                        </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

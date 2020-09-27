@@ -38,7 +38,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_edit');
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('user/edit_user.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);

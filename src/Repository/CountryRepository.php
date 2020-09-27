@@ -36,7 +36,7 @@ class CountryRepository extends ServiceEntityRepository
     }
     */
 
-    public function findAllEnabled()
+    public function findAllCountriesEnabled()
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.enabled = :val')

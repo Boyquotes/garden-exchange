@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
+/*
 if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '95.176.51.69', '193.253.180.33','93.23.106.26','88.122.1.205','93.23.250.6'))
 ) {
     header('HTTP/1.0 403 Forbidden');
@@ -13,6 +14,7 @@ echo $_SERVER['REMOTE_ADDR'].'<br>';
 
     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 }
+*/
 //exit;
 
 

@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'user_profile_info_edit' %}
+
+{% block class_body %}col-sm-4 col-sm-offset-3 col-md-4 col-md-offset-4 {% endblock %}
+
+
+{% block main %}
+    <h1>{{ 'title.edit_user'|trans }}</h1>
+    {% if profile.user.roles[0] == 'ROLE_SUPER_ADMIN' %}
+        SUPER ADMIN
+    {% endif %}
+    {{ form_start(form, {attr: {novalidate: 'novalidate', class:'form-edit-profile'}}) }}
+        {% if profile.profileImage %}
+            <div class="img-profile-view">
+                <img src="{{ asset('/uploads/profiles/'~profile.profileImage) }}" alt='{{ profile.user.firstname }}' />
+            </div>
+        {% endif %}
+        {{ form_widget(form.profileImage) }}
+        {{ form_label(form.user.email) }}
+        <div class="form-group has-error error-user-mail">
+            {{ form_errors(form.user.email) }}
+        </div>
+        {{ form_widget(form.user.email) }}
+        {{ form_label(form.user.firstname) }}
+        <div class="form-group has-error error-user-firstname">
+            {{ form_errors(form.user.firstname) }}
+        </div>
+        {{ form_widget(form.user.firstname) }}
+        {{ form_label(form.user.lastname) }}
+        <div class="form-group has-error error-profile-lastname">
+            {{ form_errors(form.user.lastname) }}
+        </div>
+        {{ form_widget(form.user.lastname) }}
+        {{ form_label(form.profile.telephone) }}
+        <div class="form-group has-error error-profile-telephone">
+            {{ form_errors(form.profile.telephone) }}
+        </div>
+        {{ form_widget(form.profile.telephone) }}
+        {{ form_label(form.profile.langs) }}
+        <div class="form-group has-error error-profile-langs">
+            {{ form_errors(form.profile.langs) }}
+        </div>
+        {{ form_widget(form.profile.langs) }}
+        
+        {{ form_label(form.profile.campingTypes) }}
+        <div class="form-group has-error error-campingTypes">
+            <span class="help-block">
+                <ul class="list-unstyled">
+                    <li><span class="fa fa-exclamation-triangle"></span> Cette valeur ne doit pas être nulle.</li>
+                </ul>
+            </span>
+            {{ form_errors(form.profile.campingTypes) }}
+        </div>
+        {{ form_widget(form.profile.campingTypes, { attr: {class: 'hidden'}}) }}
+        <div class="campingTypes_choice jc-center">
+            {% set campingTypesGarden = [] %}
+            {% for campingType in profile.campingTypes %}
+                {% set campingTypesGarden = campingTypesGarden|merge({ (loop.index0):campingType.id}) %}
+            {% endfor %}
+
+            {% for campingType in form.profile.campingTypes.vars.choices %}
+                <div id="{{ campingType.data.id }}" class="campingType_choice{% if campingType.data.id in campingTypesGarden %} campingType_selected{% endif %}">
+                    <img src="{{ asset('/uploads/campingTypes/'~campingType.data.picto) }}" alt='{{ campingType.data.name }}' />
+                    <div class="desc-picto">{{ campingType.data.name|trans }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {{ form_label(form.profile.description) }}
+        <div class="form-group has-error error-profile-description">
+            {{ form_errors(form.profile.description) }}
+        </div>
+        {{ form_widget(form.profile.description,{ 'attr': {'rows': '5', 'cols': '50'} }) }}
+        {{ form_label(form.profile.street) }}
+        <div class="form-group has-error error-profile-street">
+            {{ form_errors(form.profile.street) }}
+        </div>
+        {{ form_widget(form.profile.street) }}
+        {{ form_label(form.profile.postcode) }}
+        <div class="form-group has-error error-profile-postcode">
+            {{ form_errors(form.profile.postcode) }}
+        </div>
+        {{ form_widget(form.profile.postcode) }}
+        {{ form_label(form.profile.city) }}
+        <div class="form-group has-error error-profile-city">
+            {{ form_errors(form.profile.city) }}
+        </div>
+        {{ form_widget(form.profile.city) }}
+        {{ form_label(form.profile.countryResidence) }}
+        <div class="form-group has-error error-profile-countryResidence">
+            {{ form_errors(form.profile.countryResidence) }}
+        </div>
+        {{ form_widget(form.profile.countryResidence) }}
+
+        <button type="submit" class="btn btn-primary pull-right margin-top-2">
+            <i class="fa fa-save" aria-hidden="true"></i> {{ 'action.save'|trans }}
+        </button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block sidebar %}
+    <div id="sidebar" class="col-sm-4 col-md-4">
+        <div class="section">
+            <a href="{{ path('user_change_password') }}" class="btn btn-md btn-danger">
+                <i class="fa fa-lock" aria-hidden="true"></i> {{ 'action.change_password'|trans }}
+            </a>
+        </div>
+    </div>
+    {{ parent() }}
+{% endblock %}

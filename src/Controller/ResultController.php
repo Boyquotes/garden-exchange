@@ -31,10 +31,8 @@ class ResultController extends AbstractController
      */
     public function gardensListing(Request $request, CountryRepository $countries, GardenRepository $gardens): Response
     {
-        $allGardens = $gardens->findAll();
-        dump($allGardens);
-        $langs = $countries->findAllEnabled();
-        dump($langs);
+        $allGardens = $gardens->findAllGardensEnabled();
+        $langs = $countries->findAllCountriesEnabled();
 
         $form = $this->createForm(SimpleSearchType::class);
         $form->handleRequest($request);
@@ -42,7 +40,6 @@ class ResultController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $where = $form->get('where')->getData();
-            dump($where);
             return $this->redirectToRoute('garden_results');
         }
 

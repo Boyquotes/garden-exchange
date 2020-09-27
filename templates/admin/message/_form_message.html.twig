@@ -1,5 +1,7 @@
 {{ form_start(form) }}
-    {{ form_errors(form.content) }}
+    <div class="form-group has-error error-content">
+        {{ form_errors(form.content) }}
+    </div>
     {{ form_widget(form.content,{ 'attr': {'rows': '10', 'cols': '50'} }) }}
     <button class="btn btn-primary pull-right send-message">{{ button_label|default('send.message'|trans) }}</button>
 {{ form_end(form) }}

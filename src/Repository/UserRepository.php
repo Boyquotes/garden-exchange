@@ -11,4 +11,10 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+    
+    public function findSortedDesc()
+    {
+        return $this->findBy(array(), array('created' => 'DESC'));
+    }
+    
 }

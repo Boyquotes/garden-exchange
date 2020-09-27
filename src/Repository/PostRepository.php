@@ -34,6 +34,42 @@ class PostRepository extends ServiceEntityRepository
         return (new Paginator($qb))->paginate($page);
     }
 
+    public function findThreeFisrt()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->setFirstResult(0)
+            ->setMaxResults(3)
+        ;
+        $query = $qb->getQuery();
+        $resultat = $query->getResult();
+        
+        return $resultat;
+    }
+    
+    public function findIntro()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->setFirstResult(3)
+            ->setMaxResults(1)
+        ;
+        $query = $qb->getQuery();
+        $resultat = $query->getResult();
+        
+        return $resultat;
+    }
+    
+    public function findNuitees()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->setFirstResult(4)
+            ->setMaxResults(1)
+        ;
+        $query = $qb->getQuery();
+        $resultat = $query->getResult();
+        
+        return $resultat;
+    }
+
     /**
      * @return Post[]
      */

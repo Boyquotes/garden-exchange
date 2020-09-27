@@ -39,9 +39,15 @@ class CampingType
      */
     private $gardens;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Profile::class, mappedBy="campingTypes")
+     */
+    private $profiles;
+
     public function __construct()
     {
         $this->gardens = new ArrayCollection();
+        $this->profiles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,6 +114,34 @@ class CampingType
         if ($this->gardens->contains($garden)) {
             $this->gardens->removeElement($garden);
             $garden->removeCampingType($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Profile[]
+     */
+    public function getProfiles(): Collection
+    {
+        return $this->profiles;
+    }
+
+    public function addProfile(Profile $profile): self
+    {
+        if (!$this->profiles->contains($profile)) {
+            $this->profiles[] = $profile;
+            $profile->addCampingType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfile(Profile $profile): self
+    {
+        if ($this->profiles->contains($profile)) {
+            $this->profiles->removeElement($profile);
+            $profile->removeCampingType($this);
         }
 
         return $this;

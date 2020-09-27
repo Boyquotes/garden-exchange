@@ -12,15 +12,22 @@
     {% endfor %}
     <div class="formulaire-registration">
         <div class="well">
-            {{ form_start(registrationForm) }}
+            {{ form_start(registrationForm, {attr: {novalidate: 'novalidate', class:'form-add-user'}}) }}
                 <legend><i class="fa fa-user" aria-hidden="true"></i>{{ 'user.register'|trans }}</legend>
-                {{ form_row(registrationForm.lastname) }}
+                <div class="form-group">
+                    {{ form_label(registrationForm.lastname) }}
+                    {{ form_help(registrationForm.lastname) }}
+                    {{ form_widget(registrationForm.lastname) }}
+                </div>
+                <div class="form-group has-error error-lastname">
+                    {{ form_errors(registrationForm.lastname) }}
+                </div>                
                 {{ form_row(registrationForm.firstname) }}
                 {{ form_row(registrationForm.email) }}
                 {{ form_row(registrationForm.password) }}
                 {{ form_row(registrationForm.agreeTerms) }}
 
-                <button type="submit" class="{{ button_css|default("btn btn-primary") }}">{{ 'user.register'|trans }}</button>
+                <button type="submit" class="{{ button_css|default("btn btn-primary") }} pull-right">{{ 'user.register'|trans }}</button>
             {{ form_end(registrationForm) }}
         </div>
     </div>

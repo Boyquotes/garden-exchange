@@ -1,8 +1,8 @@
 <div class="item-actions">
-    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-sm btn-default">
+    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-sm btn-warning">
         <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
     </a>
-
+    <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}"" class="btn btn-sm btn-success">{{ 'see.profile'|trans }} ( {{ garden.user.lastname }} )</a>
     <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">
         <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
     </a>
@@ -11,7 +11,7 @@
             <i class="fa fa-times" aria-hidden="true"></i> {{ 'action.offline_garden'|trans }}
         </a>
     {% else %}
-        {% if garden.gardenImages|length > 2 and garden.description|length > 50 %}
+        {% if garden.gardenImages|length >= 2 and garden.description|length > 50 %}
             <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('publish_garden', {id: garden.id}) }}" data-post data-element="garden" data-classes="btn-success|btn-danger" data-token="{{ csrf_token('publish' ~ garden.id )}}" class="btn btn-sm btn-success garden{{garden.id}}">
                 <i class="fa fa-power-off" aria-hidden="true"></i> {{ 'action.publish_garden'|trans }}
             </a>
@@ -26,7 +26,10 @@
             {% if garden.description|length < 50 %}
                 <div class="helperPublish">{{ 'nb.char.description.mandatory.for.publication'|trans }}</div>
             {% endif %}
+            {% if garden.latCity is null %}
+                <div class="helperPublish">{{ 'garden.not.geolocalised.for.publication'|trans }}</div>
+            {% endif %}
         {% endif %}
     {% endif %}
-    <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('admin_garden_delete', {id: garden.id})}}" data-delete data-token="{{ csrf_token('delete' ~ garden.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
+    <a href="javascript:void(0);" data-id="{{ garden.id }}" data-element="garden" data-action="{{ path('admin_garden_delete', {id: garden.id})}}" data-delete data-token="{{ csrf_token('delete' ~ garden.id )}}" class="btn btn-sm btn-danger">Supprimer</a>
 </div>

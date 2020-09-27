@@ -18,10 +18,10 @@
         <div class="titre-garden-listing">
             <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.city|truncate(3, false) }}</a>
         </div>
-        <div class="equipments-garden-listing">
-            {% for equipment in garden.equipments %}
-                <div class="equipment-garden-listing">
-                    <img src="{{ asset('/uploads/equipments/'~equipment.picto) }}" alt='{{ equipment.name }}' />
+        <div class="campingTypes-garden-listing">
+            {% for campingType in garden.campingTypes %}
+                <div class="campingType_choice campingType_selected">
+                    <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
                 </div>
             {% endfor %}
         </div>

@@ -32,15 +32,37 @@ body#admin_post_show .post-tags .label-default i {
     margin: .5em 0 1em 0;
 }
 
+/* Add Garden   ------------------------------------------------------------------------- */
+.error-campingTypes{
+    display: none;
+}
+/* Show Garden   ------------------------------------------------------------------------- */
+.description-garden-listing{
+    word-wrap: anywhere;
+    word-wrap: break-word;
+}
+
 /* Photos   ------------------------------------------------------------------------- */
 
 #upload_garden_image_result > .thumb-image{
     width: 200px;
 }
+#upload_garden_image_result > .thumb-image-mobile{
+    height: 100px;
+}
 
 /* Conversation   ------------------------------------------------------------------------- */
 #admin_conversation_new .garden-result{
     width: 100%;
+}
+a.index-content-conversation{
+    width: 100%;
+}
+#admin_conversation_messages_list .conversation{
+    background: #ddd;
+}
+#admin_conversation_messages_list .conversation:hover{
+    background: #ddd;
 }
 .send-conversation, .send-message{
     margin: 2em 0;
@@ -60,6 +82,7 @@ body#admin_post_show .post-tags .label-default i {
 .conversation-profile{
     width: 100px;
 }
+
 .img-profile {
 
 }
@@ -84,11 +107,22 @@ body#admin_post_show .post-tags .label-default i {
 #admin_conversation_messages_list .conversation{
     width: 60%;
 }
-#admin_conversation_messages_list .message{
+#admin_conversation_messages_list .conversation.user{
+    margin: 0 0 0 40%;
+    justify-content: space-between;
+}
+#admin_conversation_messages_list .first-photo{
+    width: 200px;
+}
+#admin_conversation_messages_list .messages .conversation{
+    background: #FFF;
     width: 60%;
 }
-#admin_conversation_messages_list .message.user{
-    margin: 0 0 0 40%;
+.messages .conversation-content{
+    background: #FFF;
+}
+.messages .conversation-date{
+    background: #FFF;
 }
 .message{
     display: flex;
@@ -104,15 +138,95 @@ body#admin_post_show .post-tags .label-default i {
     display: flex;
     flex-direction: column;
 }
+.user-list:hover{
+    background: #dadada;
+}
+.user-list{
+    display: flex;
+    padding: 2.5rem;
+    background: #FFF;
+}
+.name-profile{
+
+}
+.mail-profile{
+
+}
+.impersonate-profile{
+
+}
+.date-profile{
+
+}
+.date-update-profile{
+
+}
+
+/* Profil view   ------------------------------------------------------------------------- */
+.profile-view-photo-name{
+
+}
+.img-profile-view img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin: 0 7em 0 0;
+}
+.profile-view-name{
+    width: 60%;
+    margin: 0;
+    font-weight: 700;
+    font-size: 3em;
+}
+.profile-view-langs{
+    float: right;
+}
+.profile-view-description{
+    width: 80%;
+    margin: 4em auto;
+}
+
+/* Gardens   ------------------------------------------------------------------------- */
+.add-garden-and-result{
+    
+}
+
+
 /* Responsive   ------------------------------------------------------------------------- */
-@media only screen and (max-device-width: 800px) {
+@media only screen and (max-device-width: 867px) {
+    .is-hidden-mobile{
+        display: none;
+    }
+    .body-container {
+        margin: 0 0 0 0;
+    }
+    .navbar-brand img {
+        height: 50px;
+        margin: 5px 0 0 0;
+        padding: 0 0;
+    }
     #admin_garden_new h1, #admin_garden_edit h1{
         text-align: center;
+    }
+    .superficie > input {
+        width: 50%;
     }
     .action-garden-edit{
         justify-content: center;
     }
+    .conversation {
+        flex-direction: column;
+    }
+    .conversation-profile-content{
+        flex-direction: column;
+    }
+    .conversation-date {
+        width: 100%;
+    }
 }
 @media only screen and (min-device-width: 800px) {
-
+    .is-hidden-desktop{
+        display: none;
+    }
 }

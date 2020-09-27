@@ -13,7 +13,7 @@ class LangController extends AbstractController
 
     public function langSelector(Request $request, CountryRepository $countries): Response
     {
-        $langs = $countries->findAllEnabled();
+        $langs = $countries->findAllCountriesEnabled();
         
         return $this->render('lang/_lang_selector.html.twig', [
             'langs' => $langs,

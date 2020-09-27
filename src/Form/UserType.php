@@ -2,11 +2,14 @@
 namespace App\Form;
 
 use App\Entity\User;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Defines the form used to edit an user.
@@ -36,12 +39,17 @@ class UserType extends AbstractType
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'label.firstname',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'label.lastname',
-            ])
-            ->add('fullName', TextType::class, [
-                'label' => 'label.fullname',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
         ;
     }

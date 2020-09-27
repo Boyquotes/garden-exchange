@@ -1,0 +1,87 @@
+/* Responsive   ------------------------------------------------------------------------- */
+@media only screen and (max-device-width: 767px) {
+    .is-hidden-mobile{
+        display: none;
+    }
+    .body-container {
+        margin: 0 0 0 0;
+    }
+    .navbar-header{
+        padding: 0;
+    }
+    .navbar-brand img {
+        height: 50px;
+        margin: 5px 0 0 0;
+        padding: 0 0;
+    }
+    .navbar-default .navbar-brand {
+        padding: 0;
+    }
+    header{
+        height: 10vh;
+        margin: 0;
+    }
+    #homepage .page-header h1{
+        margin: 3em 0 1em 0;
+    }
+    #homepage header {
+        height: auto;
+    }
+    .navbar{
+        margin: 0;
+    }
+    .homepage-search{
+        width: 80%;
+    }
+    .homepage-encart div.step{
+        width: 100%;
+    }
+    #register .well, #login .well {
+        flex-grow: 1;
+        margin: 1em 0 1em 0;
+        padding: 2em;
+    }
+    .garden-result {
+        width: 100%;
+    }
+    .carte-listings{
+        position: relative;
+        top: 0;
+        margin: 0 0 1em 0;
+    }
+    .title-garden h1{
+        font-size: 1.5rem;
+    }
+    .img-garden-show{
+        width: 100%;
+    }
+    .contact {
+        position: relative;
+        margin: 0 0 1em 0;
+        top: 0;
+        top: 0;
+    }
+    .campingType_choice, .equipment_choice, .rule_choice {
+        margin: 0 .5em;
+    }
+    .campingType_choice img, .equipment_choice img, .rule_choice img, {
+        height: 75px;
+        padding: .5em;
+    }
+    .profile-view-photo-name{
+        flex-direction: column;
+    }
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1023px) {
+    .is-hidden-mobile{
+        display: none;
+    }
+    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+        background: transparent;
+    }
+}
+@media only screen and (min-device-width: 1024px) {
+    .is-hidden-desktop{
+        display: none;
+    }
+}

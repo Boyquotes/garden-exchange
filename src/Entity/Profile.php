@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ProfileRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 class Profile
 {
@@ -40,8 +41,14 @@ class Profile
     private $telephone;
 
     /**
+     * @ORM\ManyToOne(targetEntity=Country::class, inversedBy="profiles")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $country;
+    
+    /**
      * @ORM\ManyToOne(targetEntity=Country::class, inversedBy="resident")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $country_residence;
 
@@ -55,6 +62,40 @@ class Profile
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $profileImage;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
+
+    /**
+     * @var datetime $updated
+     * 
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    protected $updated;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=CampingType::class, inversedBy="profiles")
+     */
+    private $campingTypes;
+
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $langs = [];
+
+    public function __construct()
+    {
+        $this->campingTypes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -143,6 +184,89 @@ class Profile
         $this->profileImage = $profileImage;
 
         return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTime $updated): void
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * @return Collection|CampingType[]
+     */
+    public function getCampingTypes(): Collection
+    {
+        return $this->campingTypes;
+    }
+
+    public function addCampingType(CampingType $campingType): self
+    {
+        if (!$this->campingTypes->contains($campingType)) {
+            $this->campingTypes[] = $campingType;
+        }
+
+        return $this;
+    }
+
+    public function removeCampingType(CampingType $campingType): self
+    {
+        if ($this->campingTypes->contains($campingType)) {
+            $this->campingTypes->removeElement($campingType);
+        }
+
+        return $this;
+    }
+
+    public function getLangs(): ?array
+    {
+        return $this->langs;
+    }
+
+    public function setLangs(?array $langs): self
+    {
+        $this->langs = $langs;
+
+        return $this;
+    }
+    
+    /**
+     * Gets triggered only on insert
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
+    }
+    
+    /**
+     * Gets triggered every time on update
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updated = new \DateTime("now");
     }
     
 }

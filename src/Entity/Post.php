@@ -50,9 +50,7 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="post.blank_summary")
-     * @Assert\Length(max=255)
+     * @ORM\Column(type="string", nullable = true)
      */
     private $summary;
 
@@ -75,7 +73,7 @@ class Post
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -183,12 +181,12 @@ class Post
         $this->comments->removeElement($comment);
     }
 
-    public function getSummary(): ?string
+    public function getSummary()
     {
         return $this->summary;
     }
 
-    public function setSummary(string $summary): void
+    public function setSummary($summary): void
     {
         $this->summary = $summary;
     }

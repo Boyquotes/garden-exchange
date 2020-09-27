@@ -11,11 +11,19 @@
     {{ include('blog/_delete_post_confirmation.html.twig') }}
 {% endif %}
 
-{{ form_start(form, {attr: attr|default({class:'edit-garden'}), 'action': path('admin_garden_edit', {'id': garden.id}), 'method': 'POST'}) }}
+{{ form_start(form, {attr: attr|default({novalidate: 'novalidate', class:'form-edit-garden'}) }) }}
 
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.campingTypes) }}</h4>
+        <div class="form-group has-error error-campingTypes">
+            <span class="help-block">
+                <ul class="list-unstyled">
+                    <li><span class="fa fa-exclamation-triangle"></span> Cette valeur ne doit pas être nulle.</li>
+                </ul>
+            </span>
+            {{ form_errors(form.campingTypes) }}
+        </div>
         {{ form_widget(form.campingTypes, { attr: {class: 'hidden'}}) }}
         <div class="campingTypes_choice jc-center">
             {% set campingTypesGarden = [] %}
@@ -38,6 +46,9 @@
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.description) }}</h4>
         {{ form_help(form.description) }}
+        <div class="form-group has-error error-description">
+            {{ form_errors(form.description) }}
+        </div>
         {{ form_widget(form.description,{ 'attr': {'rows': '10', 'cols': '50'} }) }}
     </div>
 </div>
@@ -46,6 +57,7 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.equipments) }}</h4>
+        {{ form_errors(form.equipments) }}
         {{ form_widget(form.equipments, { attr: {class: 'hidden'}}) }}
         <div class="equipments_choice jc-center">
             {% set equipmentsGarden = [] %}
@@ -56,7 +68,7 @@
             {% for equipment in form.equipments.vars.choices %}
                 <div id="{{ equipment.data.id }}" class="equipment_choice{% if equipment.data.id in equipmentsGarden %} equipment_selected{% endif %}">
                     <img src="{{ asset('/uploads/equipments/'~equipment.data.picto) }}" alt='{{ equipment.data.name }}' />
-                    <div class="desc-picto">{{ equipment.data.name }}</div>
+                    <div class="desc-picto">{{ equipment.data.name|trans }}</div>
                 </div>
             {% endfor %}
         </div>
@@ -67,6 +79,7 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.rules) }}</h4>
+        {{ form_errors(form.rules) }}
         {{ form_widget(form.rules, { attr: {class: 'hidden'}}) }}
         <div class="rules_choice jc-center">
             {% set rulesGarden = [] %}
@@ -86,18 +99,6 @@
 
 <hr/>
 <div class="row d-flex jc-center">
-    <div class="col-md-12 txt-center">
-        <h4>{{ form_label(form.area) }}</h4>
-        {{ form_help(form.area) }}
-        {{ form_widget(form.area) }}
-
-        {{ form_row(form.lat) }}
-        {{ form_row(form.lng) }}
-    </div>
-</div>
-
-<hr/>
-<div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ 'localisation'|trans }}</h4>
     </div>
@@ -108,17 +109,50 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <div class="col-md-6 txt-center">
-            {{ form_row(form.street) }}
+            {{ form_label(form.street) }}
+            {{ form_widget(form.street) }}
+            <div class="form-group has-error error-street">
+                {{ form_errors(form.street) }}
+            </div>
         </div>
         <div class="col-md-6 txt-center">
-            {{ form_row(form.postcode) }}
+            {{ form_label(form.postcode) }}
+            {{ form_widget(form.postcode) }}
+            <div class="form-group has-error error-postcode">
+                {{ form_errors(form.postcode) }}
+            </div>
         </div>
         <div class="col-md-6 txt-center">
-            {{ form_row(form.city) }}
+            {{ form_label(form.city) }}
+            {{ form_widget(form.city) }}
+            <div class="form-group has-error error-city">
+                {{ form_errors(form.city) }}
+            </div>
         </div>
         <div class="col-md-6 txt-center">
-            {{ form_row(form.country) }}
+            {{ form_label(form.country) }}
+            {{ form_widget(form.country) }}
+            <div class="form-group has-error error-country">
+                {{ form_errors(form.country) }}
+            </div>
         </div>
+    </div>
+</div>
+
+<hr/>
+<div class="row d-flex jc-center">
+    <div class="col-md-12 txt-center">
+        <h4>{{ form_label(form.area) }}</h4>
+        {{ form_help(form.area) }}
+        <div class="superficie d-flex jc-center">
+            {{ form_widget(form.area) }}
+        </div>
+        <div class="form-group has-error error-area">
+            {{ form_errors(form.area) }}
+        </div>
+        
+        {{ form_row(form.lat) }}
+        {{ form_row(form.lng) }}
     </div>
 </div>
 
@@ -126,7 +160,15 @@
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
         <h4>{{ form_label(form.gardenImages) }}</h4>
-        <div class="d-flex jc-space-evenly">
+        <div class="d-flex jc-space-evenly-no-wrap is-hidden-mobile">
+            {% for image in garden.gardenImages %}
+                <div class="image{{image.id}}">
+                    <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
+                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="d-flex jc-space-evenly is-hidden-desktop">
             {% for image in garden.gardenImages %}
                 <div class="image{{image.id}}">
                     <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
@@ -139,12 +181,12 @@
     </div>
 </div>
 <div class="row">
-    <div id='upload_garden_image_result' class="d-flex jc-space-evenly"></div>
+    <div id='upload_garden_image_result' class="d-flex jc-space-evenly-no-wrap"></div>
 </div>
 
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center publish-garden">
-        <button type="submit" class="{{ button_css|default("btn btn-primary") }}">
+        <button type="submit" class="{{ button_css|default("btn btn-primary") }}"  id="submit-edit-garden">
             <i class="fa fa-save" aria-hidden="true"></i> {{ button_label|default('label.create_post'|trans) }}
         </button>
     </div>

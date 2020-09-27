@@ -73,17 +73,21 @@ function initAjaxPost(){
             var classes = $(this).attr('data-classes')
             console.log(element);
             console.log(id);
-            var classesTab = classes.split('|')
-            console.log(classes.split('|'));
-            console.log(classesTab[0]);
+            if(classes){
+                var classesTab = classes.split('|')
+                console.log(classes.split('|'));
+                console.log(classesTab[0]);
+            }
             $.ajax({
               url: urlAction,
               method: 'POST',
               data: { _token: token }
             })
             .done(function( msg ) {
-                $("."+element+id).removeClass(classesTab[0]);
-                $("."+element+id).addClass(classesTab[1]);
+                if(classes){
+                    $("."+element+id).removeClass(classesTab[0]);
+                    $("."+element+id).addClass(classesTab[1]);
+                }
                 console.log(msg);
                 if( typeof msg.route == 'object' ){
                     $.each( msg.route, function( key, value ) {
@@ -107,14 +111,17 @@ function initAjaxDelete(){
         $(this).click( function(){
             var urlAction = $(this).attr('data-action')
             var id = $(this).attr('data-id')
+            var element = $(this).attr('data-element')
             var token = $(this).attr('data-token')
+            console.log('.'+element+'-'+id);
             $.ajax({
               url: urlAction,
               method: 'DELETE',
               data: { _token: token }
             })
             .done(function( data ) {
-                  $('.image'+id).hide();
+                  //$('.image'+id).hide();
+                  $('.'+element+'-'+id).hide();
             });
         });
     });
@@ -123,25 +130,54 @@ function initAjaxDelete(){
 $(document).ready( function(){
     initAjaxPost();
     initAjaxDelete();
-    $('#main').find('.equipment_choice').each( function(){
-        $(this).click(function () {
-            var idEquipment = $(this).attr('id');
-            if ( $('#garden_equipments option[value="'+idEquipment+'"]').prop( 'selected' ) == true )
-            {
-                $('#garden_equipments option[value="'+idEquipment+'"]').prop('selected', '');
-                $(this).removeClass('equipment_selected');
+    
+    $('#submit-add-garden').on('click', function () {
+        event.preventDefault();
+        var count = 0;
+        $('#main').find('.campingType_choice').each( function(){
+            if($(this).hasClass('campingType_selected')){
+                count++;
             }
-            //~ else if ( $('#garden_equipments option[value="'+idEquipment+'"]').attr( 'selected' ) == 'selected' )
-            //~ {
-                //~ $('#garden_equipments option[value="4"]').removeAttr('selected', '');
-                //~ $(this).removeClass('equipment_selected');
-            //~ }
+            if(count == 0){
+                $('.error-campingTypes').show();
+                window.scrollTo(100,0);
+                $('.loading').hide();
+            }
             else{
-                $('#garden_equipments option[value="'+idEquipment+'"]').attr('selected','selected');
-                $(this).addClass('equipment_selected');
+                $('.error-campingTypes').hide();
+            }
+        });
+        if(count > 0){
+                $('.loading').addClass('d-flex');
+                $('.loading').show();
+                window.scrollTo(100,0);
+                $('.form-add-garden').submit();
+        };
+    });
+    
+    $('#submit-edit-garden').on('click', function () {
+        $('.loading').addClass('d-flex');
+        $('.loading').show();
+        window.scrollTo(100,0);
+        event.preventDefault();
+        var count = 0;
+        $('#main').find('.campingType_choice').each( function(){
+            if($(this).hasClass('campingType_selected')){
+                count++;
+            }
+            if(count == 0){
+                $('.error-campingTypes').show();
+                window.scrollTo(100,0);
+                $('.loading').hide();
+            }
+            else{
+                $('.error-campingTypes').hide();
+                $('.form-edit-garden').submit();
+                $('.loading').hide();
             }
         });
     });
+    
 
     $('#main').find('#admin_garden_edit .publish-garden buttonBAK').on('click', function () {
         event.preventDefault();
@@ -168,35 +204,94 @@ $(document).ready( function(){
     });
             
 
+    $('#garden_description').on('keyup', function(){
+        if($('#garden_description').val().length > 50){
+            $('.error-description').hide();
+        }
+        else if($('#garden_description').val().length == 0){
+            $('.error-description').show();
+        }
+    });
+
+    $('#garden_street').on('keyup', function(){
+        if($('#garden_street').val().length > 2){
+            $('.error-street').hide();
+        }
+        else if($('#garden_street').val().length == 0){
+            $('.error-street').show();
+        }
+    });
+    $('#garden_postcode').on('keyup', function(){
+        if($('#garden_postcode').val().length > 2){
+            $('.error-postcode').hide();
+        }
+        else if($('#garden_postcode').val().length == 0){
+            $('.error-postcode').show();
+        }
+    });
+    $('#garden_city').on('keyup', function(){
+        if($('#garden_city').val().length > 2){
+            $('.error-city').hide();
+        }
+        else if($('#garden_city').val().length == 0){
+            $('.error-city').show();
+        }
+    });
+    $('#garden_area').on('keyup', function(){
+        if($('#garden_area').val().length > 2){
+            $('.error-area').hide();
+        }
+        else if($('#garden_area').val().length == 0){
+            $('.error-area').show();
+        }
+    });
+
+    $('#main').find('.equipment_choice').each( function(){
+        $(this).click(function () {
+            var idEquipment = $(this).attr('id');
+            console.log(idEquipment);
+            console.log($('#garden_equipments option[value="'+idEquipment+'"]').prop( 'selected' ));
+            if ( $('#garden_equipments option[value="'+idEquipment+'"]').prop( 'selected' ) == true )
+            {
+                $('#garden_equipments option[value="'+idEquipment+'"]').removeAttr('selected');
+                $(this).removeClass('equipment_selected');
+            }
+            else{
+                $('#garden_equipments option[value="'+idEquipment+'"]').attr('selected','selected');
+                $(this).addClass('equipment_selected');
+            }
+        });
+    });
+
     $('#main').find('.campingType_choice').each( function(){
         $(this).click(function () {
             var idCampingType = $(this).attr('id');
+            console.log(idCampingType);
+            console.log($('#garden_campingTypes option[value="'+idCampingType+'"]').prop( 'selected' ));
             if ( $('#garden_campingTypes option[value="'+idCampingType+'"]').prop( 'selected' ) == true )
             {
-                $('#garden_campingTypes option[value="'+idCampingType+'"]').prop('selected', '');
+                $('#garden_campingTypes option[value="'+idCampingType+'"]').removeAttr('selected');
                 $(this).removeClass('campingType_selected');
             }
             else{
-                $('#garden_campingTypes option[value="'+idCampingType+'"]').prop('selected','selected');
+                $('#garden_campingTypes option[value="'+idCampingType+'"]').attr('selected','selected');
                 $(this).addClass('campingType_selected');
+            }
+
+            if($('.campingType_choice').hasClass('campingType_selected')){
+                $('.error-campingTypes').hide();
             }
         });
     });
 
     $('#main').find('.rule_choice').each( function(){
         $(this).click(function () {
-            console.log('sdsd');
             var idRule = $(this).attr('id');
             if ( $('#garden_rules option[value="'+idRule+'"]').prop( 'selected' ) == true )
             {
-                $('#garden_rules option[value="'+idRule+'"]').prop('selected', '');
+                $('#garden_rules option[value="'+idRule+'"]').removeAttr('selected');
                 $(this).removeClass('rule_selected');
             }
-            //~ else if ( $('#garden_rules option[value="'+idRule+'"]').attr( 'selected' ) == 'selected' )
-            //~ {
-                //~ $('#garden_rules option[value="4"]').removeAttr('selected', '');
-                //~ $(this).removeClass('rule_selected');
-            //~ }
             else{
                 $('#garden_rules option[value="'+idRule+'"]').attr('selected','selected');
                 $(this).addClass('rule_selected');
@@ -213,7 +308,7 @@ $(document).ready( function(){
      var image_holder = $("#upload_garden_image_result");
      image_holder.empty();
 
-     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+     if (extn == "png" || extn == "jpg" || extn == "jpeg") {
          if (typeof (FileReader) != "undefined") {
 
              //loop for each file selected for uploaded.
@@ -223,7 +318,11 @@ $(document).ready( function(){
                  reader.onload = function (e) {
                      $("<img />", {
                          "src": e.target.result,
-                             "class": "thumb-image"
+                             "class": "thumb-image is-hidden-mobile"
+                     }).appendTo(image_holder);
+                     $("<img />", {
+                         "src": e.target.result,
+                             "class": "thumb-image-mobile is-hidden-desktop"
                      }).appendTo(image_holder);
                  }
 
@@ -235,86 +334,8 @@ $(document).ready( function(){
              alert("This browser does not support FileReader.");
          }
      } else {
-         alert("Pls select only images");
+         alert("Ce type de fichier n'est pas supporte, seulement jpg, jpeg, png");
      }
-        
-        //~ console.log(event);
-        var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
-        //~ console.log(filename);
-        var fi = $('#garden_gardenImages')[0]; // GET THE FILE INPUT AS VARIABLE.
-//~ console.log(fi);
-        var totalFileSize = 0;
-
-        // VALIDATE OR CHECK IF ANY FILE IS SELECTED.
-        if (fi.files.length > 0)
-        {
-            // RUN A LOOP TO CHECK EACH SELECTED FILE.
-            for (var i = 0; i <= fi.files.length - 1; i++)
-            {
-                //ACCESS THE SIZE PROPERTY OF THE ITEM OBJECT IN FILES COLLECTION. IN THIS WAY ALSO GET OTHER PROPERTIES LIKE FILENAME AND FILETYPE
-                var fsize = fi.files.item(i).size;
-                //~ console.log(fi.files.item(i));
-                //~ console.log(fsize);
-                totalFileSize = totalFileSize + fsize;
-                //~ document.getElementById('fp').innerHTML =
-                //~ document.getElementById('fp').innerHTML
-                +
-                '<br /> ' + 'File Name is <b>' + fi.files.item(i).name
-                +
-                '</b> and Size is <b>' + Math.round((fsize / 1024)) //DEFAULT SIZE IS IN BYTES SO WE DIVIDING BY 1024 TO CONVERT IT IN KB
-                +
-                '</b> KB and File Type is <b>' + fi.files.item(i).type + "</b>.";
-            }
-        }
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-        // VALIDATE OR CHECK IF ANY FILE IS SELECTED.
-            if (fi.files.length > 0)
-            {
-                // RUN A LOOP TO CHECK EACH SELECTED FILE.
-                for (var i = 0; i <= fi.files.length - 1; i++)
-                {
-                //~ console.log(e.target.result);
-                // get loaded data and render thumbnail.
-                //~ $("#image").attr('src', e.target.result);
-                $('.upload_garden_image_result').append("<img src='" + e.target.result + "' />");
-                }
-            }
-        };
-
-        // read the image file as a data URL.
-        reader.readAsDataURL(fi.files[0]);
-        
-                if(typeof FileReader == "undefined") return true;
-
-        var elem = $(this);
-        var files = event.target.files;
-
-        for (var i = 0, f; f = files[i]; i++) {
-            if (f.type.match('image.*')) {
-                var reader = new FileReader();
-                reader.onload = (function(theFile) {
-                    return function(e) {
-                        var image = e.target.result;
-                        console.log(image);
-                        var previewDiv = $('.upload_garden_image_result', elem.parent());
-                        var bg_width = previewDiv.width() * 2;
-                        previewDiv.css({
-                            "background-size":bg_width + "px, auto",
-                            "background-position":"50%, 50%",
-                            "background-image":"url("+image+")",
-                        });
-                    };
-                })(f);
-                reader.readAsDataURL(f);
-            }
-        }
-        
-        //~ $('.upload_garden_image_result').append("Total File(s) Size is <b>" + Math.round(totalFileSize / 1024) + "</b> KB");
-        //~ $('.upload_garden_image_result').append("<img src='" + e.target.result + "' />");
-        //~ var img = 
-        //~ $('.upload_garden_image_result').append("<img src='"+e.target.result+"'>);
         
     });
     

@@ -13,6 +13,8 @@ namespace App\Controller;
 use App\Entity\Garden;
 use App\Entity\GardenImage;
 use App\Form\GardenType;
+use App\Repository\CampingTypeRepository;
+use App\Repository\EquipmentRepository;
 use App\Repository\GardenRepository;
 use App\Security\GardenVoter;
 
@@ -43,10 +45,12 @@ class GardenController extends AbstractController
      *
      * @Route("/{id<\d+>}", methods="GET", name="admin_garden_show")
      */
-    public function show(Garden $garden): Response
+    public function show(Garden $garden, EquipmentRepository $equipmentRepository, CampingTypeRepository $campingTypeRepository): Response
     {
         return $this->render('garden/show.html.twig', [
             'garden' => $garden,
+            'equipments' => $equipmentRepository->findAll(),
+            'campingTypes' => $campingTypeRepository->findAll(),
         ]);
     }
 

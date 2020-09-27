@@ -26,7 +26,7 @@ class SimpleSearchType extends AbstractType
             ->add('where', TextType::class, array(
                 'label' => false,
                 'attr' => array(
-                    'placeholder' => 'Where ?',
+                    'placeholder' => 'label.search.where',
                 )
             ))
         ;

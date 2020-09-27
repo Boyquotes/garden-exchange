@@ -1,5 +1,5 @@
-<div id="macarte" style="width:85%;margin: 0 auto; height:250px"></div>
-{% if not is_granted('ROLE_CAMPER') and garden.latCity is defined and garden.lngCity is defined %}
+<div id="macarte" style="width:80%;margin: 0 auto; height:250px"></div>
+{% if not is_granted('ROLE_CAMPER') and garden.latCity is not null and garden.lngCity is not null %}
     <script>
       var carte = L.map('macarte').setView([{{garden.latCity}}, {{garden.lngCity}}], 10);
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -9,7 +9,7 @@
         draggable: 'true'
       }).bindPopup("").addTo(carte);
     </script>
-{% else %}
+{% elseif garden.lat is not null and garden.lng is not null%}
     <script>
       var carte = L.map('macarte').setView([{{garden.lat}}, {{garden.lng}}], 9);
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {

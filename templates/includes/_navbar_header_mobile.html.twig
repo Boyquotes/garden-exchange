@@ -3,7 +3,7 @@
         <div class="row">
             <div class="navbar-header col-md-3 col-lg-2">
                 <a class="navbar-brand" href="{{ path('homepage') }}">
-                    Ge
+                    <img src="{{ asset('/uploads/images/logo-garden-exchange.png') }}" alt='Logo Garden Exhchange' />
                 </a>
                 <button type="button" class="navbar-toggle"
                         data-toggle="collapse"
@@ -17,16 +17,6 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
 
-                    {% block header_navigation_links %}
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li>
-                                <a href="{{ path('admin_post_index') }}">
-                                    <i class="fa fa-lock" aria-hidden="true"></i> {{ 'menu.admin'|trans }}
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endblock %}
-                    
                     {% if not is_granted('ROLE_CAMPER') %}
                         <li>
                             <a href="{{ path('register') }}"> {{ 'user.register'|trans }}</a>
@@ -34,37 +24,66 @@
                         <li>
                             <a href="{{ path('security_login') }}"> {{ 'menu.login'|trans }}</a>
                         </li>
+                        <li>
+                            <a href="{{ path('homepage') }}"> {{ 'menu.search'|trans }}</a>
+                        </li>
                     {% endif %}
                     
+                    {% if is_granted('ROLE_CAMPER') %}
+                        <li>
+                            <a href="{{ path('admin_index') }}">
+                                <i class="fa fa-th-large" aria-hidden="true"></i> {{ 'title.garden_list'|trans }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('conversation_exchange_index') }}">
+                                <i class="fa fa-comments" aria-hidden="true"></i> {{ 'title.conversation_list'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% block header_navigation_links %}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin_users_index') }}">
+                                    <i class="fa fa-users" aria-hidden="true"></i> {{ 'menu.campers'|trans }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_post_index') }}">
+                                    <i class="fa fa-lock" aria-hidden="true"></i> {{ 'menu.post'|trans }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endblock %}
+
                     <li class="add-garden">
                         <a href="{{ path('admin_garden_new') }}"> {{ 'menu.register.garden'|trans }}</a>
                     </li>
-                    
+
                     {% if app.user %}
-                        <li class="dropdown">
+                        <li>
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="user">
                                 <i class="fa fa-user" aria-hidden="true"></i>
                                 <span class="caret"></span>
                                 <span class="sr-only">{{ app.user.fullname }}</span>
                             </a>
-                            <ul class="dropdown-menu user" role="menu" aria-labelledby="user">
-                                <li>
-                                    <a href="{{ path('user_edit') }}">
-                                        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'menu.user'|trans }}
-                                    </a>
-                                </li>
-                                <li>
-                                    {% if is_granted('IS_IMPERSONATOR') %}
-                                        <a href="{{ path('homepage', {'_switch_user': '_exit'}) }}">Exit impersonation</a>
-                                    {% endif %}
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="{{ path('security_logout') }}">
-                                        <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
+                        <li>
+                        <li>
+                            <a href="{{ path('user_profile_info_edit') }}">
+                                <i class="fa fa-edit" aria-hidden="true"></i> {{ 'menu.user.profile'|trans }}
+                            </a>
+                        </li>
+                        <li>
+                            {% if is_granted('IS_IMPERSONATOR') %}
+                                <a href="{{ path('homepage', {'_switch_user': '_exit'}) }}">Exit impersonation</a>
+                            {% endif %}
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="{{ path('security_logout') }}">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
+                            </a>
                         </li>
                     {% endif %}
                 </ul>

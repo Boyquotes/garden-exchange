@@ -15,5 +15,14 @@ class GardenRepository extends ServiceEntityRepository
         parent::__construct($registry, Garden::class);
     }
 
+    public function findAllGardensEnabled()
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.enabled = :val')
+            ->setParameter('val', 1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 }

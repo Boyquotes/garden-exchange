@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MessageExchangeRepository::class)
+ * @ORM\HasLifecycleCallbacks
  */
 
 class MessageExchange {
@@ -28,6 +29,13 @@ class MessageExchange {
      */
 
     private $content;
+
+    /**
+     * @var datetime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $created;
 
     /**
      * @ORM\ManyToOne(targetEntity=ConversationExchange::class, inversedBy="messagesExchange")
@@ -57,6 +65,11 @@ class MessageExchange {
         return $this;
     }
 
+    public function getCreated(): \DateTime
+    {
+        return $this->created;
+    }
+
     public function getConversationExchange(): ?ConversationExchange
     {
         return $this->conversationExchange;
@@ -79,6 +92,15 @@ class MessageExchange {
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * Gets triggered only on insert
+     * @ORM\PrePersist
+     */
+    public function onPrePersist()
+    {
+        $this->created = new \DateTime("now");
     }
 
 }

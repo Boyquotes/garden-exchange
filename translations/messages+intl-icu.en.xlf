@@ -543,7 +543,30 @@
                 <source>garden.created.successfully</source>
                 <target>This garden have been added</target>
             </trans-unit>
-            
+            <trans-unit id="send.reset.password.email">
+                <source>send.reset.password.email</source>
+                <target>Send</target>
+            </trans-unit>
+            <trans-unit id="try.again">
+                <source>try.again</source>
+                <target>try again</target>
+            </trans-unit>
+            <trans-unit id="reset.password.email.help.spam">
+                <source>reset.password.email.help.spam</source>
+                <target>If you don't receive an email please check your spam folder or </target>
+            </trans-unit>
+            <trans-unit id="hours">
+                <source>hours</source>
+                <target>hour(s)</target>
+            </trans-unit>
+            <trans-unit id="reset.password.expire.in">
+                <source>reset.password.expire.in</source>
+                <target>An email has been sent that contains a link that you can click to reset your password. This link will expire in </target>
+            </trans-unit>
+            <trans-unit id="reset.password.email.send.ok">
+                <source>reset.password.email.send.ok</source>
+                <target>Demande de renouvellement de mot de passe envoyée</target>
+            </trans-unit>
             
             
         </body>

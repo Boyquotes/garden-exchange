@@ -9,29 +9,40 @@
     {% if conversation_exchanges %}
         <div class="conversations-list">
             {% for conversation_exchange in conversation_exchanges %}
-            <a href="{{ path('conversation_exchange_show', {'id': conversation_exchange.id}) }}">
                 <div class="conversation">
                         <div class="conversation-profile-content">
-                            <div class="conversation-profile">
-                                <div class="img-profile">
-                                    <img src="{{ asset('/uploads/profiles/'~conversation_exchange.camper.profile.profileImage) }}" alt='{{ conversation_exchange.camper.firstname }}' />
+                            <a href="{{ path('user_profile_info', {'profileId': conversation_exchange.camper.profile.id}) }}">
+                                <div class="conversation-profile">
+                                {% if conversation_exchange.camper.profile.profileImage is not null %}
+                                    <div class="img-profile">
+                                        <img src="{{ asset('/uploads/profiles/'~conversation_exchange.camper.profile.profileImage) }}" alt='{{ conversation_exchange.camper.firstname }}' />
+                                    </div>
+                                {% endif %}
+                                    {{ conversation_exchange.camper.firstname }}
                                 </div>
-                                {{ conversation_exchange.camper.firstname }}
-                            </div>
-                            <div class="conversation-content">
-                                {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}{% endif %}
-                                {{ conversation_exchange.content }}
-                            </div>
+                            </a>
+                            <a href="{{ path('conversation_exchange_show', {'id': conversation_exchange.id}) }}" class="index-content-conversation">
+                                <div class="conversation-content">
+                                    {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}{% endif %}
+                                    {{ conversation_exchange.content }}
+                                </div>
+                            </a>
                         </div>
                         <div class="conversation-date">
                             {{ conversation_exchange.created|date('d-m-Y h:i') }}
                         </div>
                 </div>
-            </a>
             {% endfor %}
         </div>
     {% else %}
-        {{ 'no.conversations'|trans }}
+        <div class="carte-listings-no-annonce col-md-8 col-md-offset-2">
+            {{ 'no.conversations'|trans }}
+            <div class="go-result d-flex jc-center">
+                <div>
+                    <a href="{{ path('garden_results') }}" class="btn btn-success">{{'see.all.garden'|trans}}</a>
+                </div>
+            </div>
+        </div>
     {% endif %}
 
 {% endblock %}

@@ -1,8 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block title %}{{ 'reset.password.email.send.ok'|trans }}{% endblock %}
 
-{% block body %}
-    <p>An email has been sent that contains a link that you can click to reset your password. This link will expire in {{ tokenLifetime|date('g') }} hour(s).</p>
-    <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+{% block class_body %}col-md-10 col-md-offset-1{% endblock %}
+
+{% block body_id 'reset-password-send-email-ok' %}
+
+{% block main %}
+    <div class="row">
+        <div class="listings col-md-6 col-md-offset-3 margin-top-4">
+            <p>{{ 'reset.password.expire.in'|trans }}{{ tokenLifetime|date('g') }} {{ 'hours'|trans }}.</p>
+            <p>{{ 'reset.password.email.help.spam'|trans }}<a href="{{ path('app_forgot_password_request') }}">{{ 'try.again'|trans }}</a>.</p>
+        </div>
+    </div>
 {% endblock %}
