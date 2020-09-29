@@ -52,8 +52,15 @@
             <footer>
                 <div class="container">
                     <div class="row">
-                        <div id="footer-copyright" class="col-md-6">
+                        <div id="footer-copyright" class="col-md-3">
                             <p>&copy; {{ 'now'|date('Y') }} - {{ 'nom.site'|trans }}</p>
+                        </div>
+                        <div id="footer-infos" class="col-md-3">
+                            <ul>
+                                <li><a href="{{ path('blog_post', {slug: 'conditions-generales-d-utilisation'} ) }}" target="_blank">{{ 'footer.conditions.generales.utilisation'|trans }} d'Utilisation</a></li>
+                                <li><a href="{{ path('blog_post', {slug: 'donnees-personnelles'} ) }}" target="_blank">{{ 'footer.private.data'|trans }}</a></li>
+                                <li><a href="{{ path('blog_post', {slug: 'mentions-legales'} ) }}" target="_blank">{{ 'footer.legal.mention'|trans }} d'Utilisation</a></li>
+                            </p>
                         </div>
                         <div id="footer-resources" class="col-md-6">
                             <p>

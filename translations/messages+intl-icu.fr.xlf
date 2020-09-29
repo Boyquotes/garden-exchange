@@ -831,6 +831,18 @@
                 <source>label.search.where</source>
                 <target>Où souhaitez vous aller ?</target>
             </trans-unit>
+            <trans-unit id="footer.conditions.generales.utilisation">
+                <source>footer.conditions.generales.utilisation</source>
+                <target>Conditions Générales d'Utilisation</target>
+            </trans-unit>
+            <trans-unit id="footer.legal.mention">
+                <source>footer.legal.mention</source>
+                <target>Mentions légales</target>
+            </trans-unit>
+            <trans-unit id="footer.private.data">
+                <source>footer.private.data</source>
+                <target>Données personnelles</target>
+            </trans-unit>
             <trans-unit id="flash.warning.mail.reset.password.already.send">
                 <source>flash.warning.mail.reset.password.already.send</source>
                 <target>Vous avez déjà récemment demandé de recevoir un mail pour changer de mot de passe, verifiez votre messagerie et n'oubliez pas de regarder dans vos spams</target>

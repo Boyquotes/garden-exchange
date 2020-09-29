@@ -11,6 +11,7 @@ use App\Repository\GardenRepository;
 use App\Repository\PostRepository;
 use App\Repository\TagRepository;
 
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -26,10 +27,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class HomepageController extends AbstractController
 {
-    public function homepage(Request $request, GardenRepository $gardens, PostRepository $posts): Response
+    public function homepage(Request $request, LoggerInterface $logger, GardenRepository $gardens, PostRepository $posts): Response
     {
         $allGardens = $gardens->findAll();
-        //~ $allPosts = $posts->findAll();
         $encartPosts = $posts->findThreeFisrt();
         $introPost = $posts->findIntro();
         $nuiteesPost = $posts->findNuitees();
