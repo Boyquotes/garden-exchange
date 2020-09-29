@@ -29,7 +29,7 @@ class HomepageController extends AbstractController
 {
     public function homepage(Request $request, LoggerInterface $bigbLogger, GardenRepository $gardens, PostRepository $posts): Response
     {
-        $bigbLogger->info('One hit at home');
+        $bigbLogger->info('One hit at homepage');
         $allGardens = $gardens->findAll();
         $encartPosts = $posts->findThreeFisrt();
         $introPost = $posts->findIntro();
