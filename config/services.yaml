@@ -45,7 +45,7 @@ services:
 
     App\Logger\SessionRequestProcessor:
         tags:
-            - { name: monolog.processor }
+            - { name: monolog.processor, channel: bigb }
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
     App\Logger\ClientIpProcessor:
         tags:

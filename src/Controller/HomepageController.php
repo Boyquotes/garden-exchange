@@ -27,8 +27,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class HomepageController extends AbstractController
 {
-    public function homepage(Request $request, LoggerInterface $logger, GardenRepository $gardens, PostRepository $posts): Response
+    public function homepage(Request $request, LoggerInterface $bigbLogger, GardenRepository $gardens, PostRepository $posts): Response
     {
+        $bigbLogger->info('One hit at home');
         $allGardens = $gardens->findAll();
         $encartPosts = $posts->findThreeFisrt();
         $introPost = $posts->findIntro();
