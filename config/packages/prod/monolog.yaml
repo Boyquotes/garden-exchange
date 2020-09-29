@@ -1,5 +1,10 @@
 monolog:
     handlers:
+        bigb:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%-bigb.log"
+            level: debug
+            channels: [bigb]
         main:
             type: fingers_crossed
             action_level: error
@@ -24,3 +29,4 @@ monolog:
         #    handler: deprecation
         #    max_level: info
         #    channels: ["php"]
+    channels: ['bigb']

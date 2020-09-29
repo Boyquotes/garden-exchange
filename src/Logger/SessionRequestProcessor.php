@@ -19,7 +19,6 @@ class SessionRequestProcessor
         $this->tokenStorage = $tokenStorage;
         if($tokenStorage->getToken()){
             $this->user = $tokenStorage->getToken()->getUser();
-            dump($this->user);
         }
     }
 
