@@ -40,7 +40,7 @@ class SessionRequestProcessor
 
         $record['extra']['token'] = $this->sessionId.'-'.substr(uniqid('', true), -8);
 
-        if (null !== $this->user) {
+        if (null !== $this->user && $this->user instanceof User) {
             $record['extra']['user'] = $this->user->getUsername();
         }
 
