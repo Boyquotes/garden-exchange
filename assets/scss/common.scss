@@ -1,6 +1,7 @@
 /* Base   ------------------------------------------------------------------------- */
 $baseBody: #ffffff;
 $baseColorGe :    #303434;
+$baseColorBlueGe :    #597edd;
 $baseWeightGE : 600;
 $liHover: #F1F1F1;
 $fontGeneral: DejaVu Sans;
@@ -11,10 +12,10 @@ $coverHeight: 100vh;
 $vert : #027b68;
 
 a{
-    color: $baseColorGe;
+    color: $baseColorBlueGe;
 }
 a:hover, a:focus {
-    color: $baseColorGe;
+    color: $baseColorBlueGe;
 }
 #sidebar{
     margin: 4em 0;

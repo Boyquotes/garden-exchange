@@ -81,6 +81,25 @@ class Profile
      * @ORM\Column(type="datetime", nullable = true)
      */
     protected $updated;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable = true)
+     */
+    private $agreeTerms;
+    
+    /**
+     * @var datetime $agreeTermsCreated
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $agreeTermsCreated;
+
+    /**
+     * @var datetime $agreeTermsUpdated
+     * 
+     * @ORM\Column(type="datetime", nullable = true)
+     */
+    protected $agreeTermsUpdated;
 
     /**
      * @ORM\ManyToMany(targetEntity=CampingType::class, inversedBy="profiles")
@@ -211,6 +230,37 @@ class Profile
     public function setUpdated(\DateTime $updated): void
     {
         $this->updated = $updated;
+    }
+    
+    public function getAgreeTermsCreated()
+    {
+        return $this->agreeTermsCreated;
+    }
+
+    public function getAgreeTerms(): ?bool
+    {
+        return $this->agreeTerms;
+    }
+
+    public function setAgreeTerms(bool $agreeTerms): self
+    {
+        $this->agreeTerms = $agreeTerms;
+        return $this;
+    }
+
+    public function setAgreeTermsCreated(\DateTime $agreeTermsCreated): void
+    {
+        $this->agreeTermsCreated = $agreeTermsCreated;
+    }
+    
+    public function getAgreeTermsUpdated()
+    {
+        return $this->agreeTermsUpdated;
+    }
+
+    public function setAgreeTermsUpdated(\DateTime $agreeTermsUpdated): void
+    {
+        $this->agreeTermsUpdated = $agreeTermsUpdated;
     }
 
     /**

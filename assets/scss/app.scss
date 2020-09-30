@@ -648,6 +648,9 @@ form[name='simple_search'] .form-group{
 }
 
 /* Result   ------------------------------------------------------------------------- */
+.listings{
+    margin: 4em 0;
+}
 .carte-listings{
     position: sticky;
     right: 0;
@@ -925,3 +928,25 @@ gardensCarte{
     margin: 1em 0;
     float: right;
 }
+
+/* BLOG SHOW POST   ------------------------------------------------------------------------- */
+#blog_post_show #main, #blog_index #main {
+    margin-top: 5em;
+}
+
+/* FOOTER   ------------------------------------------------------------------------- */
+footer p {
+    font-size: .9em;
+}
+#footer-infos ul li{
+    list-style: none;
+}
+#footer-infos a{
+    color: #FFF;
+}
+
+/* SURCHARGE   ------------------------------------------------------------------------- */
+p, ul, ol {
+    font-size: 1em;
+}
+

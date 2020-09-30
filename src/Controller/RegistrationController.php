@@ -44,6 +44,8 @@ class RegistrationController extends AbstractController
                 );
                 $user->setRoles(['ROLE_CAMPER']);
                 $profile->setUser($user);
+                $profile->setAgreeTerms(true);
+                $profile->setAgreeTermsCreated(new \DateTime("now"));
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->persist($profile);
