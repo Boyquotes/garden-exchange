@@ -5,6 +5,7 @@ use App\Entity\Post;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
 class PostVoter extends Voter
 {
@@ -13,6 +14,13 @@ class PostVoter extends Voter
     public const DELETE = 'delete';
     public const EDIT = 'edit';
     public const SHOW = 'show';
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
 
     /**
      * {@inheritdoc}
@@ -29,6 +37,10 @@ class PostVoter extends Voter
     protected function voteOnAttribute($attribute, $post, TokenInterface $token): bool
     {
         $user = $token->getUser();
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
 
         // the user must be logged in; if not, deny permission
         if (!$user instanceof User) {
