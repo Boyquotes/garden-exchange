@@ -17,6 +17,7 @@ class ClientIpProcessor
     
     public function __invoke(array $record)
     {
+        //~ dump($_SERVER['HTTP_USER_AGENT']);
         
         //~ dump($this->securityToken->getToken()->getUser());
         //~ exit;
@@ -24,6 +25,7 @@ class ClientIpProcessor
         $record['extra']['request_ip'] = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unavailable';
         // client_ip will hold the request's actual origin address
         $record['extra']['client_ip']  = $this->cachedClientIp          ? $this->cachedClientIp   : 'unavailable';
+        $record['extra']['user_agent']  = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'user agent unavailable';
         
         // Return if we already know client's IP
         if ($record['extra']['client_ip'] !== 'unavailable') {
