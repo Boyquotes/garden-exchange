@@ -2,7 +2,7 @@ monolog:
     handlers:
         bigb:
             type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%-bigb.log"
+            path: "%kernel.logs_dir%/bigb-%kernel.environment%.log"
             level: debug
             channels: [bigb]
         main:
