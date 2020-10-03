@@ -2,6 +2,8 @@
 
 {% block body_id 'admin_post_index' %}
 
+{% block class_body %}col-md-8 col-md-offset-2{% endblock %}
+
 {% block main %}
     <h1>{{ 'title.post_list'|trans }}</h1>
     <a href="{{ path('admin_post_new') }}" class="btn btn-lg btn-success">
@@ -26,7 +28,7 @@
                 <td>{{ post.publishedAt|format_datetime('medium', 'short', '', 'UTC') }}</td>
                 <td class="text-right">
                     <div class="item-actions">
-                        <a href="{{ path('admin_post_show', {id: post.id}) }}" class="btn btn-sm btn-default">
+                        <a href="{{ path('blog_post', {slug: post.slug}) }}" class="btn btn-sm btn-default">
                             <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
                         </a>
 
