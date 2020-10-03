@@ -71,12 +71,8 @@ function initAjaxPost(){
             var id = $(this).attr('data-id')
             var token = $(this).attr('data-token')
             var classes = $(this).attr('data-classes')
-            console.log(element);
-            console.log(id);
             if(classes){
                 var classesTab = classes.split('|')
-                console.log(classes.split('|'));
-                console.log(classesTab[0]);
             }
             $.ajax({
               url: urlAction,
@@ -88,7 +84,6 @@ function initAjaxPost(){
                     $("."+element+id).removeClass(classesTab[0]);
                     $("."+element+id).addClass(classesTab[1]);
                 }
-                console.log(msg);
                 if( typeof msg.route == 'object' ){
                     $.each( msg.route, function( key, value ) {
                         $.ajax({
@@ -113,7 +108,6 @@ function initAjaxDelete(){
             var id = $(this).attr('data-id')
             var element = $(this).attr('data-element')
             var token = $(this).attr('data-token')
-            console.log('.'+element+'-'+id);
             $.ajax({
               url: urlAction,
               method: 'DELETE',
@@ -188,7 +182,6 @@ $(document).ready( function(){
         var $form = $(this);
         $form.submit(function(event){
             event.preventDefault();
-        console.log($form);
             var submit = $form.find('button[type=submit]')[0];
             $(submit).addClass("disabled");
             $(submit).attr("disabled","disabled");
@@ -198,7 +191,7 @@ $(document).ready( function(){
                     var $msg = $(msg);
                 })
                 .done(function(msg) {
-                    console.log('ok');
+
                 });
             });
     });
@@ -249,8 +242,6 @@ $(document).ready( function(){
     $('#main').find('.equipment_choice').each( function(){
         $(this).click(function () {
             var idEquipment = $(this).attr('id');
-            console.log(idEquipment);
-            console.log($('#garden_equipments option[value="'+idEquipment+'"]').prop( 'selected' ));
             if ( $('#garden_equipments option[value="'+idEquipment+'"]').prop( 'selected' ) == true )
             {
                 $('#garden_equipments option[value="'+idEquipment+'"]').removeAttr('selected');
@@ -266,8 +257,6 @@ $(document).ready( function(){
     $('#main').find('.campingType_choice').each( function(){
         $(this).click(function () {
             var idCampingType = $(this).attr('id');
-            console.log(idCampingType);
-            console.log($('#garden_campingTypes option[value="'+idCampingType+'"]').prop( 'selected' ));
             if ( $('#garden_campingTypes option[value="'+idCampingType+'"]').prop( 'selected' ) == true )
             {
                 $('#garden_campingTypes option[value="'+idCampingType+'"]').removeAttr('selected');
