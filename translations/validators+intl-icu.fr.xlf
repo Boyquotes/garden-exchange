@@ -44,6 +44,15 @@
                 <target>Votre mot de passe est trop long ({ limit } caractères maximum)</target>
             </trans-unit>
 
+            <trans-unit id="contact.too_short">
+                <source>contact.too_short</source>
+                <target>Le message est trop long ({ limit } caractères minimum)</target>
+            </trans-unit>
+            <trans-unit id="contact.too_long">
+                <source>contact.too_long</source>
+                <target>Le message est trop long ({ limit } caractères maximum)</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

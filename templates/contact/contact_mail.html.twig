@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'contact' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block class_body %}col-sm-12{% endblock %}
+
+{% block main %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+    <div class="formulaire-contact">
+        <div class="well">
+            {{ form_start(contactForm, {attr: {novalidate: 'novalidate', class:'form-contact'}}) }}
+                <legend><i class="fa fa-user" aria-hidden="true"></i>{{ 'user.contact'|trans }}</legend>
+                <div class="form-group">
+                    {{ form_label(contactForm.lastname) }}
+                    {{ form_help(contactForm.lastname) }}
+                    {{ form_widget(contactForm.lastname) }}
+                </div>
+                <div class="form-group has-error error-lastname">
+                    {{ form_errors(contactForm.lastname) }}
+                </div>                
+                {{ form_row(contactForm.firstname) }}
+                {{ form_row(contactForm.email) }}
+                {{ form_row(contactForm.content) }}
+
+                <button type="submit" class="{{ button_css|default("btn btn-primary") }} pull-right">{{ 'user.contact'|trans }}</button>
+            {{ form_end(contactForm) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block sidebar %}
+{% endblock %}
