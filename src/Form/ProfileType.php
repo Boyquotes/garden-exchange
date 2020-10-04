@@ -13,6 +13,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,8 +23,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProfileType extends AbstractType
 {
-    
-    
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->entityManager = $em;
@@ -60,7 +61,7 @@ class ProfileType extends AbstractType
                     return 'Monde';
                 },
             ])
-            ->add('telephone', IntegerType::class, [
+            ->add('telephone', TelType::class, [
                 'label' => 'label.telephone',
             ])
             ->add('campingTypes', EntityType::class, [
@@ -100,6 +101,7 @@ class ProfileType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Profile::class,
+            'validation_groups' => false,
         ]);
     }
 }

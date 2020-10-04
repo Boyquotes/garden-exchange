@@ -36,7 +36,7 @@ class Profile
     private $city;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $telephone;
 
@@ -157,12 +157,12 @@ class Profile
         return $this;
     }
 
-    public function getTelephone(): ?int
+    public function getTelephone()
     {
         return $this->telephone;
     }
 
-    public function setTelephone(?int $telephone): self
+    public function setTelephone($telephone): self
     {
         $this->telephone = $telephone;
 

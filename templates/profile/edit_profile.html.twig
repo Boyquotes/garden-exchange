@@ -17,26 +17,31 @@
             </div>
         {% endif %}
         {{ form_widget(form.profileImage) }}
+        
         {{ form_label(form.user.email) }}
         <div class="form-group has-error error-user-mail">
             {{ form_errors(form.user.email) }}
         </div>
         {{ form_widget(form.user.email) }}
+        
         {{ form_label(form.user.firstname) }}
         <div class="form-group has-error error-user-firstname">
             {{ form_errors(form.user.firstname) }}
         </div>
         {{ form_widget(form.user.firstname) }}
+        
         {{ form_label(form.user.lastname) }}
         <div class="form-group has-error error-profile-lastname">
             {{ form_errors(form.user.lastname) }}
         </div>
         {{ form_widget(form.user.lastname) }}
+        
         {{ form_label(form.profile.telephone) }}
         <div class="form-group has-error error-profile-telephone">
             {{ form_errors(form.profile.telephone) }}
         </div>
         {{ form_widget(form.profile.telephone) }}
+        
         {{ form_label(form.profile.langs) }}
         <div class="form-group has-error error-profile-langs">
             {{ form_errors(form.profile.langs) }}
