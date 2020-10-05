@@ -8,6 +8,8 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $lato-font-path: '~lato-font/fonts';
 
 @import "~bootswatch/flatly/variables";
+@import "~eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
+@import "bootstrap-tagsinput.scss";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 @import "~bootswatch/flatly/bootswatch";
 @import "~@fortawesome/fontawesome-free/css/all.css";
@@ -567,6 +569,169 @@ form[name='simple_search'] .btn-primary{
     margin: 6px 0 0 0;
 }
 
+/* Page: 'Backend post index'
+   ------------------------------------------------------------------------- */
+body#admin_post_index .item-actions {
+  white-space: nowrap
+}
+
+body#admin_post_index .item-actions a.btn + a.btn {
+  margin-left: 4px
+}
+
+/* Page: 'Backend post show'
+   ------------------------------------------------------------------------- */
+body#admin_post_show .post-tags .label-default {
+  background-color: #e9ecec;
+  color: #6D8283;
+  font-size: 16px;
+  margin-right: 10px;
+  padding: .4em 1em .5em;
+}
+body#admin_post_show .post-tags .label-default i {
+  color: #95A6A7;
+}
+
+#admin_garden_new h4, #admin_garden_edit h4{
+    font-size: 2em;
+    font-weight: 700;
+    margin: .5em 0 1em 0;
+}
+
+/* Add Garden   ------------------------------------------------------------------------- */
+.error-campingTypes{
+    display: none;
+}
+/* Show Garden   ------------------------------------------------------------------------- */
+.description-garden-listing{
+    word-wrap: anywhere;
+    word-wrap: break-word;
+}
+
+/* Photos   ------------------------------------------------------------------------- */
+
+#upload_garden_image_result > .thumb-image{
+    width: 200px;
+}
+#upload_garden_image_result > .thumb-image-mobile{
+    height: 100px;
+}
+
+/* Conversation   ------------------------------------------------------------------------- */
+#admin_conversation_new .garden-result{
+    width: 100%;
+}
+a.index-content-conversation{
+    width: 100%;
+}
+#admin_conversation_messages_list .conversation{
+    background: #ddd;
+}
+#admin_conversation_messages_list .conversation:hover{
+    background: #ddd;
+}
+.send-conversation, .send-message{
+    margin: 2em 0;
+}
+.conversation:hover{
+    background: #dadada;
+}
+.conversation{
+    display: flex;
+    background: #FFF;
+    padding: 2.5rem;
+}
+.conversation-profile-content{
+    display: flex;
+    width:90%;
+}
+.conversation-profile{
+    width: 100px;
+}
+.img-profile img{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+.conversation-content{
+    width: 90%;
+}
+.conversation-date{
+    width: 20%;
+    text-align: right;
+}
+/* Message   ------------------------------------------------------------------------- */
+.messages{
+    margin: 0;
+}
+#admin_conversation_messages_list .conversation{
+    width: 60%;
+}
+#admin_conversation_messages_list .conversation.user{
+    margin: 0 0 0 40%;
+    justify-content: space-between;
+}
+#admin_conversation_messages_list .first-photo{
+    width: 200px;
+}
+#admin_conversation_messages_list .messages .conversation{
+    background: #FFF;
+    width: 60%;
+}
+.messages .conversation-content{
+    background: #FFF;
+}
+.messages .conversation-date{
+    background: #FFF;
+}
+.message{
+    display: flex;
+    background: #FFF;
+    padding: 2.5rem;
+}
+.message-profile{
+    width: 100px;
+}
+
+/* User   ------------------------------------------------------------------------- */
+.users-list{
+    display: flex;
+    flex-direction: column;
+}
+.user-list:hover{
+    background: #dadada;
+}
+.user-list{
+    display: flex;
+    padding: 2.5rem;
+    background: #FFF;
+}
+
+/* Profil view   ------------------------------------------------------------------------- */
+.profile-view-photo-name{
+
+}
+.img-profile-view img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin: 0 7em 0 0;
+}
+.profile-view-name{
+    width: 60%;
+    margin: 0;
+    font-weight: 700;
+    font-size: 3em;
+}
+.profile-view-langs{
+    float: right;
+}
+.profile-view-description{
+    width: 80%;
+    margin: 4em auto;
+}
 
 /* Homepage   ------------------------------------------------------------------------- */
 #homepage .homedream-container{
@@ -649,7 +814,7 @@ form[name='simple_search'] .form-group{
 
 /* Result   ------------------------------------------------------------------------- */
 .listings{
-    margin: 4em 0;
+    margin: 0;
 }
 .carte-listings{
     position: sticky;

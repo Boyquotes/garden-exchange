@@ -71,6 +71,25 @@
     .profile-view-photo-name{
         flex-direction: column;
     }
+## ADMIN
+    #admin_garden_new h1, #admin_garden_edit h1{
+        text-align: center;
+    }
+    .superficie > input {
+        width: 50%;
+    }
+    .action-garden-edit{
+        justify-content: center;
+    }
+    .conversation {
+        flex-direction: column;
+    }
+    .conversation-profile-content{
+        flex-direction: column;
+    }
+    .conversation-date {
+        width: 100%;
+    }
 }
 @media only screen and (min-device-width: 768px) and (max-device-width: 1023px) {
     .is-hidden-mobile{
