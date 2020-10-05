@@ -5,9 +5,7 @@
       L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(carte);
-      var marker = L.marker([{{garden.latCity}}, {{garden.lngCity}}], {
-        draggable: 'true'
-      }).bindPopup("").addTo(carte);
+      var marker = L.marker([{{garden.latCity}}, {{garden.lngCity}}], {}).bindPopup("").addTo(carte);
     </script>
 {% elseif garden.lat is not null and garden.lng is not null%}
     <script>

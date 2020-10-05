@@ -46,7 +46,7 @@
 
             <trans-unit id="contact.too_short">
                 <source>contact.too_short</source>
-                <target>Le message est trop long ({ limit } caractères minimum)</target>
+                <target>Le message est trop court ({ limit } caractères minimum)</target>
             </trans-unit>
             <trans-unit id="contact.too_long">
                 <source>contact.too_long</source>

@@ -71,7 +71,10 @@
     .profile-view-photo-name{
         flex-direction: column;
     }
-## ADMIN
+    #contact input{
+        width: 100%;
+    }
+/* ADMIN ------------------*/
     #admin_garden_new h1, #admin_garden_edit h1{
         text-align: center;
     }

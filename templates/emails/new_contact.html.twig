@@ -1,12 +1,11 @@
-{% extends 'emails/layout.html.twig' %}
+{% extends 'emails/layout_admin.html.twig' %}
 
 {% block content %}
-    CONTACT
-    {{ content }}
-    <img src="{{ email.image('@images/logo-garden-exchange.png') }}" alt="Logo Garden Exchange">
-    <h1>{{ 'email.new.message'|trans }}</h1>
-
-    <p>{{ 'email.garden.near'|trans }}</p>
-    <p><a href="https://garden-exchange.org">Aller sur Garden Exchange</a></p>
+    <p>De : {{firstName}} {{lastName}}</p>
+    <p>Email : {{emailContact}}</p>
+    <p>Contenu :</p>
+    <p>{{ content }}</p>
+    <br />
+    <a href="https://garden-exchange.org/fr/admin">Aller sur Garden Exchange répondre</a></p>
 
 {% endblock %}

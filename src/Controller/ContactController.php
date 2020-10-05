@@ -30,16 +30,20 @@ class ContactController extends AbstractController
      */    
     public function contactMail(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
-        $form = $this->createForm(ContactType::class);
+        $newContact = new Contact();
+        $form = $this->createForm(ContactType::class, $newContact);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $firstName = $form->get('firstname')->getData();
             $lastName = $form->get('lastname')->getData();
             $email = $form->get('email')->getData();
             $content = $form->get('content')->getData();
+            
             // Stocker en bdd
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newContact);
+            $em->flush();
             
             // envoi du message
             $emailNewContact = (new TemplatedEmail())
@@ -49,11 +53,14 @@ class ContactController extends AbstractController
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
-                ->subject($translator->trans('email.new.message'))
+                ->subject($translator->trans('email.new.message.admin'))
                 ->htmlTemplate('emails/new_contact.html.twig')
                 // pass variables (name => value) to the template
                 ->context([
                     'username' => $firstName,
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
+                    'emailContact' => $email,
                     'content' => $content,
                 ]);
             try {
@@ -62,7 +69,8 @@ class ContactController extends AbstractController
                 // some error prevented the email sending; display an
                 // error message or try to resend the message
             }
-
+            $this->addFlash('success', 'contact.sended_successfully');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('contact/contact_mail.html.twig', [

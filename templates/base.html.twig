@@ -55,7 +55,7 @@
                         <div id="footer-copyright" class="col-md-2 col-md-offset-1">
                             <p>&copy; {{ 'now'|date('Y') }} - {{ 'nom.site'|trans }}</p>
                         </div>
-                        <div id="footer-infos" class="col-md-3 d-flex">
+                        <div id="footer-infos" class="col-md-5 d-flex">
                             <ul>
                                 <li><a href="{{ path('blog_post', {slug: 'conditions-generales-d-utilisation'} ) }}" >{{ 'footer.conditions.generales.utilisation'|trans }} d'Utilisation</a></li>
                                 <li><a href="{{ path('blog_post', {slug: 'donnees-personnelles'} ) }}" >{{ 'footer.private.data'|trans }}</a></li>
@@ -63,9 +63,10 @@
                             </ul>
                             <ul>
                                 <li><a href="{{ path('blog_index' ) }}">{{ 'footer.blog'|trans }}</a></li>
+                                <li><a href="{{ path('contact_new' ) }}">{{ 'footer.contact'|trans }}</a></li>
                             </ul>
                         </div>
-                        <div id="footer-resources" class="col-md-5 col-offset-1">
+                        <div id="footer-resources" class="col-md-3 col-offset-1">
                             <p>
                                 <a href="https://www.instagram.com/gardenexchanger" title="{{ 'instagram.community'|trans }}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
                                 <a href="https://fb.me/gardenexchange" title="{{ 'facebook.community'|trans }}"><i class="fa fa-facebook" aria-hidden="true"  target="_blank"></i></a>

@@ -40,7 +40,7 @@ class Contact
     /**
      * @var string
      *
-     * @ORM\Column(type="string", unique=true)
+     * @ORM\Column(type="string")
      * @Assert\Email()
      */
     private $email;
@@ -49,7 +49,6 @@ class Contact
      * @var string
      *
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message="contact.blank")
      * @Assert\Length(
      *     min=5,
      *     minMessage="contact.too_short",

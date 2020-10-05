@@ -234,6 +234,10 @@
                 <source>label.content</source>
                 <target>Contenu</target>
             </trans-unit>
+            <trans-unit id="label.message">
+                <source>label.message</source>
+                <target>Message</target>
+            </trans-unit>
             <trans-unit id="label.summary">
                 <source>label.summary</source>
                 <target>Résumé</target>
@@ -462,6 +466,10 @@
                 <source>user.register</source>
                 <target>S'inscrire</target>
             </trans-unit>
+            <trans-unit id="register">
+                <source>register</source>
+                <target>Rejoindre la communauté</target>
+            </trans-unit>
             <trans-unit id="homepage.register">
                 <source>homepage.register</source>
                 <target>S'inscrire</target>
@@ -585,6 +593,14 @@
             <trans-unit id="contact.garden.exchanger">
                 <source>contact.garden.exchanger</source>
                 <target>Contacter</target>
+            </trans-unit>
+            <trans-unit id="user.contact">
+                <source>user.contact</source>
+                <target>Contact</target>
+            </trans-unit>
+            <trans-unit id="user.contact.send">
+                <source>user.contact.send</source>
+                <target>Envoyer</target>
             </trans-unit>
             <trans-unit id="send.conversation.message">
                 <source>send.conversation.message</source>
@@ -775,6 +791,10 @@
                 <source>email.new.mail.notif</source>
                 <target>, il y a du nouveau sur Garden Exchange</target>
             </trans-unit>
+            <trans-unit id="email.new.mail.notif.admin">
+                <source>email.new.mail.notif.admin</source>
+                <target>, il y a du nouveau sur Garden Exchange</target>
+            </trans-unit>
             <trans-unit id="email.you.signed">
                 <source>email.you.signed</source>
                 <target><![CDATA[Vous etes maintenant inscris sur le site avec cet email: ]]></target>
@@ -810,6 +830,10 @@
             <trans-unit id="email.new.message">
                 <source>email.new.message</source>
                 <target>Vous avez un nouveau message</target>
+            </trans-unit>
+            <trans-unit id="email.new.message.admin">
+                <source>email.new.message.admin</source>
+                <target>Formulaire de Contact : Vous avez un nouveau message</target>
             </trans-unit>
             <trans-unit id="email.reset.password">
                 <source>email.reset.password</source>
@@ -854,6 +878,14 @@
             <trans-unit id="flash.warning.mail.reset.password.already.send">
                 <source>flash.warning.mail.reset.password.already.send</source>
                 <target>Vous avez déjà récemment demandé de recevoir un mail pour changer de mot de passe, verifiez votre messagerie et n'oubliez pas de regarder dans vos spams</target>
+            </trans-unit>
+            <trans-unit id="contact.sended_successfully">
+                <source>contact.sended_successfully</source>
+                <target>Votre message a bien été transmis</target>
+            </trans-unit>
+            <trans-unit id="footer.contact">
+                <source>footer.contact</source>
+                <target>Contactez-nous</target>
             </trans-unit>
         </body>
     </file>

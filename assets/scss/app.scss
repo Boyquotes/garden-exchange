@@ -149,7 +149,9 @@ footer #footer-resources i {
   margin-left: 0.5em;
   color: #fff;
 }
-
+#footer-infos ul{
+    width: 100%;
+}
 #sourceCodeModal h3 {
   font-size: 19px;
   margin-top: 0
@@ -490,6 +492,15 @@ body#blog_search .post-metadata {
   100% {
     transform: translate(24px, 0);
   }
+}
+
+.messages{
+    position: absolute;
+    z-index: 10000;
+    float: right;
+    right: 0;
+    width: 30%;
+    top: 70px;
 }
 
 /* Header   ------------------------------------------------------------------------- */
@@ -901,10 +912,6 @@ gardensCarte{
 #register .formulaire-registration .form-group.has-error{
     margin: 0 0 1em 0;
 }
-#register .formulaire-registration .form-group.has-error .list-unstyled{
-    margin: 0;
-    font-size: .5em;
-}
 .messages .form-group{
     margin: 0;
 }
@@ -1097,6 +1104,18 @@ gardensCarte{
 /* BLOG SHOW POST   ------------------------------------------------------------------------- */
 #blog_post_show #main, #blog_index #main {
     margin-top: 5em;
+}
+
+/* CONTACT   ------------------------------------------------------------------------- */
+.sendMail {
+    display: flex;
+    flex-direction: row-reverse;
+}
+#contact input{
+    width: 30%;
+}
+#contact input[type="email"]{
+    width: 60%;
 }
 
 /* FOOTER   ------------------------------------------------------------------------- */

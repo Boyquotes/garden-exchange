@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ContactType extends AbstractType
 {
@@ -18,16 +20,32 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
-                'help' => 'help.contact_content',
+                'label' => 'label.firstname',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('lastname', TextType::class, [
-                'help' => 'help.contact_content',
+                'label' => 'label.lastname',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('email', EmailType::class, [
-                'help' => 'help.contact_content',
+                'label' => 'label.email',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('content', TextareaType::class, [
-                'help' => 'help.contact_content',
+                'label' => 'label.message',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
         ;
     }
