@@ -26,7 +26,7 @@
                 {{ form_row(registrationForm.email) }}
                 {{ form_row(registrationForm.password) }}
                 <div class="form-group d-flex">
-                    {{ form_widget(registrationForm.agreeTerms) }}<span>{{ 'label.agreeTerms'|trans }}<a href="{{ asset('/uploads/documents/CGU-Garden-exchange.pdf') }}">{{ 'label.agreeTerms.cgu'|trans }}</a></span>
+                    {{ form_widget(registrationForm.agreeTerms) }}<span>{{ 'label.agreeTerms'|trans }}<a href="{{ asset('/uploads/documents/CGU-Garden-exchange.pdf') }}" target="_blank" >{{ 'label.agreeTerms.cgu'|trans }}</a></span>
                 </div>
 
                 <button type="submit" class="{{ button_css|default("btn btn-primary") }} pull-right">{{ 'user.register'|trans }}</button>

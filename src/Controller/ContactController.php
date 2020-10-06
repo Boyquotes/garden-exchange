@@ -48,8 +48,8 @@ class ContactController extends AbstractController
             // envoi du message
             $emailNewContact = (new TemplatedEmail())
                 ->from('share@garden-exchange.org')
-                ->to($email)
-                //->cc('cc@example.com')
+                ->to('share@garden-exchange.org')
+                //~ ->cc($email)
                 //->bcc('bcc@example.com')
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
