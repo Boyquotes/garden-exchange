@@ -10112,6 +10112,9 @@ p, ul, ol {
     height: 10vh;
     margin: 0;
   }
+  .messages {
+    width: 70%;
+  }
   #homepage .page-header h1 {
     margin: 3em 0 1em 0;
   }
@@ -10164,6 +10167,12 @@ p, ul, ol {
   }
   #contact input {
     width: 100%;
+  }
+  #contact input[type="email"] {
+    width: 100%;
+  }
+  #user_profile_info_edit #main, #garden_show .body-container {
+    margin: 2em 0 0 0;
   }
   /* ADMIN ------------------*/
   #admin_garden_new h1, #admin_garden_edit h1 {
