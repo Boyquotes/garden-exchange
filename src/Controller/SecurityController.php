@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class SecurityController extends AbstractController
 {
@@ -19,7 +20,15 @@ class SecurityController extends AbstractController
      */
     public function login(Request $request, Security $security, AuthenticationUtils $helper, TokenStorageInterface $securityToken): Response
     {
-        $request->getSession()->clear();
+        //~ $request->getSession()->clear();
+        $response = new Response($this->render('security/login.html.twig', [
+            // last email entered by the user (if any)
+            'last_username' => $helper->getLastUsername(),
+            // last authentication error (if any)
+            'error' => $helper->getLastAuthenticationError(),
+        ]));
+        //~ $response->headers->clearCookie('PHPSESSID');
+        //~ $response->headers->setCookie(new Cookie('PHPSESSID'));
         // if user is already logged in, don't display the login page again
         //~ if ($security->isGranted('ROLE_CAMPER')) {
             //~ return $this->redirectToRoute('admin_index');
@@ -31,12 +40,13 @@ class SecurityController extends AbstractController
         // browsed, to ensure that its locale is always the current one.
         $this->saveTargetPath($request->getSession(), 'main', $this->generateUrl('admin_index'));
 
-        return $this->render('security/login.html.twig', [
-            // last email entered by the user (if any)
-            'last_username' => $helper->getLastUsername(),
-            // last authentication error (if any)
-            'error' => $helper->getLastAuthenticationError(),
-        ]);
+        return $response->send();
+        //~ return $this->render('security/login.html.twig', [
+            //~ // last email entered by the user (if any)
+            //~ 'last_username' => $helper->getLastUsername(),
+            //~ // last authentication error (if any)
+            //~ 'error' => $helper->getLastAuthenticationError(),
+        //~ ]);
     }
 
     /**
