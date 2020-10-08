@@ -171,10 +171,8 @@ function initAjaxDelete() {
           _token: token
         }
       }).done(function (data) {
-        console.log(element + '-' + id);
         $('.' + element + '-' + id).hide();
         $('.loading').hide();
-        console.log('delete');
         $('.flash-messages').html('<div class="alert alert-dismissible alert-success fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Annonce mise a jour</div>');
         $('.flash-messages').show(300).delay(1000).fadeOut(800);
       });
@@ -243,8 +241,6 @@ $(document).ready(function () {
   });
 
   if ($('.flash-messages').html() != '') {
-    console.log('on ve delete');
-    console.log($('.flash-messages').html());
     $('.flash-messages').show(300).delay(1000).fadeOut(1000);
   }
 
@@ -342,7 +338,6 @@ $(document).ready(function () {
     //Get count of selected files
     var countFiles = $(this)[0].files.length;
     var imgPath = $(this)[0].value;
-    console.log($(this)[0].size);
     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
     var image_holder = $("#upload_garden_image_result");
     image_holder.empty();
@@ -351,8 +346,6 @@ $(document).ready(function () {
       if (typeof FileReader != "undefined") {
         //loop for each file selected for uploaded.
         for (var i = 0; i < countFiles; i++) {
-          console.log($(this)[0].files[i].size);
-
           if ($(this)[0].files[i].size > 2000000) {
             alert('Cette image ' + $(this)[0].files[i].name + ' ne pourra pas être envoyée vers nos serveurs car elle est supérieure à 2MB');
           } else {
