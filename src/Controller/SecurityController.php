@@ -18,10 +18,14 @@ class SecurityController extends AbstractController
      */
     public function login(Request $request, Security $security, AuthenticationUtils $helper): Response
     {
+        
+        $security->securityToken->setToken(null);
+        $request->getSession()->invalidate(1);
+        $request->getSession()->clear();
         // if user is already logged in, don't display the login page again
-        if ($security->isGranted('ROLE_CAMPER')) {
-            return $this->redirectToRoute('admin_index');
-        }
+        //~ if ($security->isGranted('ROLE_CAMPER')) {
+            //~ return $this->redirectToRoute('admin_index');
+        //~ }
 //~ dump($request->request->get('token'));
         // this statement solves an edge-case: if you change the locale in the login
         // page, after a successful login you are redirected to a page in the previous
