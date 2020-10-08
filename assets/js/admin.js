@@ -103,6 +103,9 @@ function initAjaxPost(){
 function initAjaxDelete(){
     $('#main').find('[data-delete]').each( function(){
         $(this).click( function(){
+            $('.loading-content').html("Suppression en cours");
+            $('.loading').show();
+            $('.loading').css('display', 'flex');
             var urlAction = $(this).attr('data-action')
             var id = $(this).attr('data-id')
             var element = $(this).attr('data-element')
@@ -113,8 +116,12 @@ function initAjaxDelete(){
               data: { _token: token }
             })
             .done(function( data ) {
-                  //$('.image'+id).hide();
+                console.log(element+'-'+id);
                   $('.'+element+'-'+id).hide();
+                  $('.loading').hide();
+                  console.log('delete');
+                  $('.flash-messages').html('<div class="alert alert-dismissible alert-success fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Annonce mise a jour</div>');
+                  $('.flash-messages').show( 300 ).delay( 1000 ).fadeOut( 800 );
             });
         });
     });
@@ -141,17 +148,14 @@ $(document).ready( function(){
             }
         });
         if(count > 0){
-                $('.loading').addClass('d-flex');
                 $('.loading').show();
+                $('.loading').css('display', 'flex');
                 window.scrollTo(100,0);
                 $('.form-add-garden').submit();
         };
     });
     
     $('#submit-edit-garden').on('click', function () {
-        $('.loading').addClass('d-flex');
-        $('.loading').show();
-        window.scrollTo(100,0);
         event.preventDefault();
         var count = 0;
         $('#main').find('.campingType_choice').each( function(){
@@ -161,14 +165,18 @@ $(document).ready( function(){
             if(count == 0){
                 $('.error-campingTypes').show();
                 window.scrollTo(100,0);
-                $('.loading').hide();
             }
             else{
                 $('.error-campingTypes').hide();
-                $('.form-edit-garden').submit();
-                $('.loading').hide();
             }
         });
+        if(count > 0){
+                $('.loading-content').html("Modification de l'annonce en cours");
+                $('.loading').show();
+                $('.loading').css('display', 'flex');
+                window.scrollTo(100,0);
+                $('.form-edit-garden').submit();
+        };
     });
     
 
@@ -177,6 +185,11 @@ $(document).ready( function(){
         $('.edit-garden').submit();
 
     });
+    if( $('.flash-messages').html() != '' ){
+        console.log('on ve delete');
+        console.log($('.flash-messages').html());
+        $('.flash-messages').show( 300 ).delay( 1000 ).fadeOut( 1000 );
+    }
     $('#main').find('.edit-gardenBAK').each(function(){
         var $form = $(this);
         $form.submit(function(event){
@@ -288,43 +301,47 @@ $(document).ready( function(){
     });
 
     $('#garden_gardenImages').change(function (event) {
-     //Get count of selected files
-     var countFiles = $(this)[0].files.length;
+        //Get count of selected files
+        var countFiles = $(this)[0].files.length;
 
-     var imgPath = $(this)[0].value;
-     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-     var image_holder = $("#upload_garden_image_result");
-     image_holder.empty();
+        var imgPath = $(this)[0].value;
+        console.log($(this)[0].size);
+        var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+        var image_holder = $("#upload_garden_image_result");
+        image_holder.empty();
 
-     if (extn == "png" || extn == "jpg" || extn == "jpeg") {
-         if (typeof (FileReader) != "undefined") {
+        if(extn == "png" || extn == "jpg" || extn == "jpeg"){
+            if (typeof (FileReader) != "undefined") {
 
-             //loop for each file selected for uploaded.
-             for (var i = 0; i < countFiles; i++) {
+                //loop for each file selected for uploaded.
+                for (var i = 0; i < countFiles; i++) {
+                    console.log($(this)[0].files[i].size);
+                    if($(this)[0].files[i].size > 2000000){
+                        alert('Cette image '+$(this)[0].files[i].name+' ne pourra pas être envoyée vers nos serveurs car elle est supérieure à 2MB');
+                    }
+                    else{
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $("<img />", {
+                                "src": e.target.result,
+                                    "class": "thumb-image is-hidden-mobile"
+                            }).appendTo(image_holder);
+                            $("<img />", {
+                                "src": e.target.result,
+                                    "class": "thumb-image-mobile is-hidden-desktop"
+                            }).appendTo(image_holder);
+                        }
 
-                 var reader = new FileReader();
-                 reader.onload = function (e) {
-                     $("<img />", {
-                         "src": e.target.result,
-                             "class": "thumb-image is-hidden-mobile"
-                     }).appendTo(image_holder);
-                     $("<img />", {
-                         "src": e.target.result,
-                             "class": "thumb-image-mobile is-hidden-desktop"
-                     }).appendTo(image_holder);
-                 }
-
-                 image_holder.show();
-                 reader.readAsDataURL($(this)[0].files[i]);
-             }
-
-         } else {
-             alert("This browser does not support FileReader.");
-         }
-     } else {
-         alert("Ce type de fichier n'est pas supporte, seulement jpg, jpeg, png");
-     }
-        
+                        image_holder.show();
+                        reader.readAsDataURL($(this)[0].files[i]);
+                    }
+                }
+            } else {
+                alert("This browser does not support FileReader.");
+            }
+        } else {
+            alert("Ce type de fichier n'est pas supporte, seulement jpg, jpeg, png");
+        }
     });
     
 });

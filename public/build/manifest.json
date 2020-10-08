@@ -43,5 +43,7 @@
   "build/images/glyphicons-halflings-regular.svg": "/build/images/glyphicons-halflings-regular.89889688.svg",
   "build/images/loading.gif": "/build/images/loading.240c1028.gif",
   "build/images/next.png": "/build/images/next.2338b015.png",
-  "build/images/previous.png": "/build/images/previous.da1dc770.png"
+  "build/images/previous.png": "/build/images/previous.da1dc770.png",
+  "build/vendors~app~login~search.js": "/build/vendors~app~login~search.js",
+  "build/vendors~app~search.js": "/build/vendors~app~search.js"
 }

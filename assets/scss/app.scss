@@ -429,7 +429,7 @@ body#blog_search .post-metadata {
     position: absolute;
     top: 0;
     background: #ccc;
-    opacity: .7;
+    opacity: .9;
     height: 10000vh;
     width: 100%;
     z-index: 100000;
@@ -442,7 +442,7 @@ body#blog_search .post-metadata {
   position: relative;
   width: 80px;
   height: 80px;
-  margin: 15em;
+  margin: 15em 0 0 0;
 }
 .lds-ellipsis div {
   position: absolute;
@@ -493,7 +493,11 @@ body#blog_search .post-metadata {
     transform: translate(24px, 0);
   }
 }
-
+.loading-content{
+    font-size: 3em;
+    color: white;
+    font-weight: 700;
+}
 .flash-messages{
     position: absolute;
     z-index: 10000;

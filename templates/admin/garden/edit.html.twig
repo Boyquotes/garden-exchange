@@ -5,6 +5,7 @@
 {% block class_body %}col-sm-8 col-sm-offset-2{% endblock %}
 
 {% block main %}
+    {{ include('default/_flash_messages.html.twig') }}
 
     <div class="action-garden-edit d-flex clear-wrap">
         <h1>{{ 'title.edit_garden'|trans({'%id%': garden.id}) }}</h1>
