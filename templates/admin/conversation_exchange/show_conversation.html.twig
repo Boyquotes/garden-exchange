@@ -37,7 +37,7 @@
 
     <div class="messages">
         {% for messageExchange in conversation_exchange.MessageExchanges %}
-            <div class="conversation {% if app.user == messageExchange.user %}user{% endif %}">
+            <div class="conversation{% if app.user == messageExchange.user %} user{% endif %}">
                 <div class="conversation-profile-content">
                     <div class="conversation-profile">
                     {% if messageExchange.user.profile.profileImage is not null %}
