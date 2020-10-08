@@ -9337,7 +9337,7 @@ body#blog_search .post-metadata {
   }
 }
 
-.messages {
+.flash-messages {
   position: absolute;
   z-index: 10000;
   float: right;
@@ -9515,7 +9515,11 @@ a.index-content-conversation {
 .conversation {
   display: flex;
   background: #FFF;
+  margin-top: 1em;
   padding: 2.5rem;
+  box-shadow: 0 3px 10px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+  border: 1px solid #e7e8e6;
 }
 
 .conversation-profile-content {
@@ -9553,7 +9557,7 @@ a.index-content-conversation {
 }
 
 #admin_conversation_messages_list .conversation.user {
-  margin: 0 0 0 40%;
+  margin: 1em 0 0 40%;
   justify-content: space-between;
 }
 

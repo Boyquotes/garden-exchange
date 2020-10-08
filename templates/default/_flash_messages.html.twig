@@ -15,7 +15,7 @@
    https://foshttpcachebundle.readthedocs.io/en/latest/features/helpers/flash-message.html
 #}
 {% if app.request.hasPreviousSession %}
-    <div class="messages">
+    <div class="flash-messages">
         {% for type, messages in app.flashes %}
             {% for message in messages %}
                 {# Bootstrap alert, see https://getbootstrap.com/docs/3.4/components/#alerts #}
