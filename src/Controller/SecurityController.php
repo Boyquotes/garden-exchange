@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class SecurityController extends AbstractController
 {
@@ -16,11 +17,8 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="security_login")
      */
-    public function login(Request $request, Security $security, AuthenticationUtils $helper): Response
+    public function login(Request $request, Security $security, AuthenticationUtils $helper, TokenStorageInterface $securityToken): Response
     {
-        
-        $security->securityToken->setToken(null);
-        $request->getSession()->invalidate(1);
         $request->getSession()->clear();
         // if user is already logged in, don't display the login page again
         //~ if ($security->isGranted('ROLE_CAMPER')) {
