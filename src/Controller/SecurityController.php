@@ -20,7 +20,7 @@ class SecurityController extends AbstractController
      */
     public function login(Request $request, Security $security, AuthenticationUtils $helper, TokenStorageInterface $securityToken): Response
     {
-        //~ $request->getSession()->clear();
+        $request->getSession()->clear();
         $response = new Response($this->render('security/login.html.twig', [
             // last email entered by the user (if any)
             'last_username' => $helper->getLastUsername(),
