@@ -5,7 +5,7 @@
 {% block class_body %}col-sm-12{% endblock %}
 
 {% block main %}
-    <h1>{{ 'title.users.list'|trans }}</h1>
+    <h1>{{ 'title.users.list'|trans }} ({{allCampers|length }})</h1>
     <div class="users-list">
         {% for camper in allCampers %}
             <div class="user-list user-{{camper.id}} jc-space-between">

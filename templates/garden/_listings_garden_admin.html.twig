@@ -1,10 +1,8 @@
 <div class="row">
     <div class="listings col-md-6">
-        {#
         <div class="page-header">
-            <h1>{{ allGardens|length }} {{ 'nb.result.listings'|trans|raw }}</h1>
+            <h4>{{ allGardens|length }} {{ 'nb.result.listings'|trans|raw }}</h1>
         </div>
-        #}
         
         <div class="gardens-listing-result jc-space-around">
             {% for garden in allGardens %}

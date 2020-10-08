@@ -10063,7 +10063,7 @@ gardensCarte {
   flex-direction: row-reverse;
 }
 
-#contact input {
+#contact .form-contact input {
   width: 30%;
 }
 

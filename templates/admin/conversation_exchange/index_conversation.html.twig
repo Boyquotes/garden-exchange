@@ -5,7 +5,7 @@
 {% block class_body %}col-md-10 col-md-offset-1{% endblock %}
 
 {% block main %}
-    <h1>{{ 'title.conversations.list'|trans }}</h1>
+    <h1>{{ 'title.conversations.list'|trans }} ({{conversation_exchanges|length}})</h1>
     {% if conversation_exchanges %}
         <div class="conversations-list">
             {% for conversation_exchange in conversation_exchanges %}
