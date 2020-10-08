@@ -21,24 +21,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_iterator__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_iterator__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var core_js_modules_es_array_last_index_of__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.array.last-index-of */ "./node_modules/core-js/modules/es.array.last-index-of.js");
 /* harmony import */ var core_js_modules_es_array_last_index_of__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_last_index_of__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.object.to-string */ "./node_modules/core-js/modules/es.object.to-string.js");
-/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
-/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
-/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
-/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
-/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var eonasdan_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! eonasdan-bootstrap-datetimepicker */ "./node_modules/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js");
-/* harmony import */ var eonasdan_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(eonasdan_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var typeahead_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! typeahead.js */ "./node_modules/typeahead.js/dist/typeahead.bundle.js");
-/* harmony import */ var typeahead_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(typeahead_js__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var bloodhound_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! bloodhound-js */ "./node_modules/bloodhound-js/index.js");
-/* harmony import */ var bloodhound_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(bloodhound_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var bootstrap_tagsinput__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! bootstrap-tagsinput */ "./node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.js");
-/* harmony import */ var bootstrap_tagsinput__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(bootstrap_tagsinput__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.function.name */ "./node_modules/core-js/modules/es.function.name.js");
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es.object.to-string */ "./node_modules/core-js/modules/es.object.to-string.js");
+/* harmony import */ var core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
+/* harmony import */ var core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es.string.iterator */ "./node_modules/core-js/modules/es.string.iterator.js");
+/* harmony import */ var core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/es.string.split */ "./node_modules/core-js/modules/es.string.split.js");
+/* harmony import */ var core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_split__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/web.dom-collections.iterator */ "./node_modules/core-js/modules/web.dom-collections.iterator.js");
+/* harmony import */ var core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var eonasdan_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! eonasdan-bootstrap-datetimepicker */ "./node_modules/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js");
+/* harmony import */ var eonasdan_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(eonasdan_bootstrap_datetimepicker__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var typeahead_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! typeahead.js */ "./node_modules/typeahead.js/dist/typeahead.bundle.js");
+/* harmony import */ var typeahead_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(typeahead_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var bloodhound_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! bloodhound-js */ "./node_modules/bloodhound-js/index.js");
+/* harmony import */ var bloodhound_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(bloodhound_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var bootstrap_tagsinput__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! bootstrap-tagsinput */ "./node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.js");
+/* harmony import */ var bootstrap_tagsinput__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(bootstrap_tagsinput__WEBPACK_IMPORTED_MODULE_15__);
+
 
 
 
@@ -78,10 +81,10 @@ $(function () {
   var $input = $('input[data-toggle="tagsinput"]');
 
   if ($input.length) {
-    var source = new bloodhound_js__WEBPACK_IMPORTED_MODULE_13___default.a({
+    var source = new bloodhound_js__WEBPACK_IMPORTED_MODULE_14___default.a({
       local: $input.data('tags'),
-      queryTokenizer: bloodhound_js__WEBPACK_IMPORTED_MODULE_13___default.a.tokenizers.whitespace,
-      datumTokenizer: bloodhound_js__WEBPACK_IMPORTED_MODULE_13___default.a.tokenizers.whitespace
+      queryTokenizer: bloodhound_js__WEBPACK_IMPORTED_MODULE_14___default.a.tokenizers.whitespace,
+      datumTokenizer: bloodhound_js__WEBPACK_IMPORTED_MODULE_14___default.a.tokenizers.whitespace
     });
     source.initialize();
     $input.tagsinput({
@@ -154,6 +157,9 @@ function initAjaxPost() {
 function initAjaxDelete() {
   $('#main').find('[data-delete]').each(function () {
     $(this).click(function () {
+      $('.loading-content').html("Suppression en cours");
+      $('.loading').show();
+      $('.loading').css('display', 'flex');
       var urlAction = $(this).attr('data-action');
       var id = $(this).attr('data-id');
       var element = $(this).attr('data-element');
@@ -165,8 +171,12 @@ function initAjaxDelete() {
           _token: token
         }
       }).done(function (data) {
-        //$('.image'+id).hide();
+        console.log(element + '-' + id);
         $('.' + element + '-' + id).hide();
+        $('.loading').hide();
+        console.log('delete');
+        $('.flash-messages').html('<div class="alert alert-dismissible alert-success fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Annonce mise a jour</div>');
+        $('.flash-messages').show(300).delay(1000).fadeOut(800);
       });
     });
   });
@@ -193,8 +203,8 @@ $(document).ready(function () {
     });
 
     if (count > 0) {
-      $('.loading').addClass('d-flex');
       $('.loading').show();
+      $('.loading').css('display', 'flex');
       window.scrollTo(100, 0);
       $('.form-add-garden').submit();
     }
@@ -202,9 +212,6 @@ $(document).ready(function () {
     ;
   });
   $('#submit-edit-garden').on('click', function () {
-    $('.loading').addClass('d-flex');
-    $('.loading').show();
-    window.scrollTo(100, 0);
     event.preventDefault();
     var count = 0;
     $('#main').find('.campingType_choice').each(function () {
@@ -215,18 +222,32 @@ $(document).ready(function () {
       if (count == 0) {
         $('.error-campingTypes').show();
         window.scrollTo(100, 0);
-        $('.loading').hide();
       } else {
         $('.error-campingTypes').hide();
-        $('.form-edit-garden').submit();
-        $('.loading').hide();
       }
     });
+
+    if (count > 0) {
+      $('.loading-content').html("Modification de l'annonce en cours");
+      $('.loading').show();
+      $('.loading').css('display', 'flex');
+      window.scrollTo(100, 0);
+      $('.form-edit-garden').submit();
+    }
+
+    ;
   });
   $('#main').find('#admin_garden_edit .publish-garden buttonBAK').on('click', function () {
     event.preventDefault();
     $('.edit-garden').submit();
   });
+
+  if ($('.flash-messages').html() != '') {
+    console.log('on ve delete');
+    console.log($('.flash-messages').html());
+    $('.flash-messages').show(300).delay(1000).fadeOut(1000);
+  }
+
   $('#main').find('.edit-gardenBAK').each(function () {
     var $form = $(this);
     $form.submit(function (event) {
@@ -321,6 +342,7 @@ $(document).ready(function () {
     //Get count of selected files
     var countFiles = $(this)[0].files.length;
     var imgPath = $(this)[0].value;
+    console.log($(this)[0].size);
     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
     var image_holder = $("#upload_garden_image_result");
     image_holder.empty();
@@ -329,21 +351,27 @@ $(document).ready(function () {
       if (typeof FileReader != "undefined") {
         //loop for each file selected for uploaded.
         for (var i = 0; i < countFiles; i++) {
-          var reader = new FileReader();
+          console.log($(this)[0].files[i].size);
 
-          reader.onload = function (e) {
-            $("<img />", {
-              "src": e.target.result,
-              "class": "thumb-image is-hidden-mobile"
-            }).appendTo(image_holder);
-            $("<img />", {
-              "src": e.target.result,
-              "class": "thumb-image-mobile is-hidden-desktop"
-            }).appendTo(image_holder);
-          };
+          if ($(this)[0].files[i].size > 2000000) {
+            alert('Cette image ' + $(this)[0].files[i].name + ' ne pourra pas être envoyée vers nos serveurs car elle est supérieure à 2MB');
+          } else {
+            var reader = new FileReader();
 
-          image_holder.show();
-          reader.readAsDataURL($(this)[0].files[i]);
+            reader.onload = function (e) {
+              $("<img />", {
+                "src": e.target.result,
+                "class": "thumb-image is-hidden-mobile"
+              }).appendTo(image_holder);
+              $("<img />", {
+                "src": e.target.result,
+                "class": "thumb-image-mobile is-hidden-desktop"
+              }).appendTo(image_holder);
+            };
+
+            image_holder.show();
+            reader.readAsDataURL($(this)[0].files[i]);
+          }
         }
       } else {
         alert("This browser does not support FileReader.");

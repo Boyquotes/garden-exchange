@@ -162,22 +162,27 @@
         <h4>{{ form_label(form.gardenImages) }}</h4>
         <div class="d-flex jc-space-evenly-no-wrap is-hidden-mobile">
             {% for image in garden.gardenImages %}
-                <div class="image{{image.id}}">
+                <div class="image-{{image.id}}">
                     <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
-                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
+                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
                 </div>
             {% endfor %}
         </div>
         <div class="d-flex jc-space-evenly is-hidden-desktop">
             {% for image in garden.gardenImages %}
-                <div class="image{{image.id}}">
+                <div class="image-{{image.id}}">
                     <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
-                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
+                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
                 </div>
             {% endfor %}
         </div>
-
-        {{ form_widget(form.gardenImages) }}
+        {% if garden.gardenImages|length < 5 %}
+            <h4>{{ form_label(form.gardenImages) }}</h4>
+            {{ form_help(form.gardenImages) }}
+            {{ form_widget(form.gardenImages) }}
+        {% else %}
+            Parfait, vous avez atteint les 5 photos(maximum) de votre jardin!
+        {% endif %}
     </div>
 </div>
 <div class="row">

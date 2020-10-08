@@ -15,8 +15,7 @@
    https://foshttpcachebundle.readthedocs.io/en/latest/features/helpers/flash-message.html
 #}
 {% if app.request.hasPreviousSession %}
-    <div class="flash-messages">
-        {% for type, messages in app.flashes %}
+    <div class="flash-messages">{% for type, messages in app.flashes %}
             {% for message in messages %}
                 {# Bootstrap alert, see https://getbootstrap.com/docs/3.4/components/#alerts #}
                 <div class="alert alert-dismissible alert-{{ type }} fade in" role="alert">
@@ -27,6 +26,5 @@
                     {{ message|trans }}
                 </div>
             {% endfor %}
-        {% endfor %}
-    </div>
+        {% endfor %}</div>
 {% endif %}

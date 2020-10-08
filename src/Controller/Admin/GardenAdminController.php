@@ -236,11 +236,9 @@ class GardenAdminController extends AbstractController
     {
         $form = $this->createForm(GardenType::class, $garden);
         $form->handleRequest($request);
-                    //~ dump($form);
-            //~ exit;
+
         if ($form->isSubmitted() && $form->isValid()) {
-            //~ dump('dfdf');
-            //~ exit;
+
             // On récupère les images transmises
             $images = $form->get('gardenImages')->getData();
             
