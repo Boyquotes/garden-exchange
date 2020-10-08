@@ -16,7 +16,7 @@
     </div>
     <div class="info-camp">
         <div class="titre-garden-listing">
-            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.city|truncate(3, false) }}</a>
+            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">{{ garden.city|truncate(30, false) }}</a>
         </div>
         <div class="campingTypes-garden-listing">
             {% for campingType in garden.campingTypes %}

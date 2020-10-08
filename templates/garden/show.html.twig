@@ -122,10 +122,11 @@
             </div>
         </div>
     {% endif %}
+    
     {% if (garden.lat is not null and garden.lng is not null) or (garden.latCity is not null and garden.lngCity is not null) %}
         <hr />
-        <div class="row localisation d-flex jc-center">
-            <h4>{{ 'localisation'|trans }}</h4
+        <div class="localisation d-flex jc-center">
+            <h4>{{ 'localisation'|trans }}</h4>
             <div class="d-flex jc-center col-md-12">
                 {{ include('maps/_map_garden_show.html.twig') }}
             </div>

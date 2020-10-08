@@ -25,31 +25,33 @@
                 {{ include('includes/_navbar_header_mobile.html.twig') }}
             </header>
         {% endblock %}
+        <div class="container body-container">
+            <section>
+                
+                {% block contact %}{% endblock %}
+                
+                {% block body %}
 
-        <div class="container-fluid body-container">
-            {% block contact %}{% endblock %}
-            {% block body %}
-
-                {% block admin %}
-                {% endblock %}
-
-                <div class="row">
-                    <div id="main" class="{% block class_body %}col-sm-9{% endblock %}">
-                        {{ include('default/_flash_messages.html.twig') }}
-
-                        {% block main %}{% endblock %}
-                    </div>
-
-
-                    {% block sidebar %}
+                    {% block admin %}
                     {% endblock %}
-                </div>
-            {% endblock %}
 
-        </div>
+                    <div class="row">
+                        <div id="main" class="{% block class_body %}col-sm-9{% endblock %}">
 
-        {% block footer %}
-            <footer>
+
+                            {% block main %}{% endblock %}
+                        </div>
+
+
+                        {% block sidebar %}
+                        {% endblock %}
+                    </div>
+                    
+                {% endblock %}
+            </section>
+                
+            {% block footer %}
+                <footer>
                 <div class="container-fluid">
                     <div class="row">
                         <div id="footer-copyright" class="col-md-2 col-md-offset-1">
@@ -74,9 +76,11 @@
                         </div>
                     </div>
                 </div>
-            </footer>
-        {% endblock %}
-
+                </footer>
+            {% endblock %}
+        
+        </div>
+        
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}

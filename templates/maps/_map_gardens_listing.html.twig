@@ -18,8 +18,9 @@
             {% endif %}
           {% endfor %}
             if (pointsList.length>0){
-                gardensCarte.fitBounds(pointsList); 
+                gardensCarte.fitBounds(pointsList);
             }
+            gardensCarte.setZoom(6);
         </script>
     {% else %}
         <script>
@@ -40,7 +41,8 @@
             {% endif %}
           {% endfor %}
             if (pointsList.length>0){
-                gardensCarte.fitBounds(pointsList); 
+                gardensCarte.fitBounds(pointsList);
             }
+            gardensCarte.setZoom(6);
         </script>
     {% endif %}
