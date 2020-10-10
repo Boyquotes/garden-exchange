@@ -53,6 +53,30 @@
             {% endfor %}
         </div>
 
+        <div class="homepage-photos col-sm-12 no-padding txt-center d-flex jc-space-around">
+                <div class="col-sm-4">
+                    <img src="{{ asset('/uploads/images/camping_ligth.jpg') }}" alt='tentes' />
+                </div>
+                <div class="col-sm-4">
+                    <img src="{{ asset('/uploads/images/motorhome_ligth.jpg') }}" alt='camping-car' />
+                </div>
+                <div class="col-sm-4">
+                    <img src="{{ asset('/uploads/images/fourgon_ligth.jpg') }}" alt='fourgon' />
+                </div>
+        </div>
+
+        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
+                <div class="col-sm-8">
+                    <p>Entrez dans l'économie collabortive du camping entre particulier grâce à cette offre de lancement :</p>
+                    <p>Jusqu'à <b>fin  2020</b>, l'abonnement d'<b>1 an</b> est offert, échangez votre jardin toute l'année 2021 gratuitement.</p>
+                    <p>
+                        <a href="{{ path('register') }}" class="btn btn-lg btn-success">
+                            {{ 'user.register'|trans }}
+                        </a>
+                    </p>
+                </div>
+        </div>
+
     </div>
 
 {% endblock %}

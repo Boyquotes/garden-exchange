@@ -811,6 +811,13 @@ a.index-content-conversation{
 .homepage-encart-content{
     padding: 0 0 1em 0;
 }
+.homepage-photos div{
+    height: 334px;
+    overflow: hidden;
+}
+.homepage-photos img{
+    width: 100%;
+}
 /* NavBar   ------------------------------------------------------------------------- */
 .navbar{
     padding: .5em 0;
