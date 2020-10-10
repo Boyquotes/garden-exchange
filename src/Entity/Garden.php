@@ -156,48 +156,48 @@ class Garden
         return $this->id;
     }
 
-    public function getDescription(): ?string
+    public function getDescription()
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription($description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getStreet(): ?string
+    public function getStreet()
     {
         return $this->street;
     }
 
-    public function setStreet(string $street): self
+    public function setStreet($street): self
     {
         $this->street = $street;
 
         return $this;
     }
 
-    public function getPostcode(): ?string
+    public function getPostcode()
     {
         return $this->postcode;
     }
 
-    public function setPostcode(string $postcode): self
+    public function setPostcode($postcode): self
     {
         $this->postcode = $postcode;
 
         return $this;
     }
 
-    public function getCity(): ?string
+    public function getCity()
     {
         return $this->city;
     }
 
-    public function setCity(string $city): self
+    public function setCity($city): self
     {
         $this->city = $city;
 

@@ -177,7 +177,6 @@
             {% endfor %}
         </div>
         {% if garden.gardenImages|length < 5 %}
-            <h4>{{ form_label(form.gardenImages) }}</h4>
             {{ form_help(form.gardenImages) }}
             {{ form_widget(form.gardenImages) }}
         {% else %}
