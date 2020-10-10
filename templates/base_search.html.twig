@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{% block title %}Garden Exchange{% endblock %}</title>
+        <link rel="alternate" type="application/rss+xml" title="{{ 'rss.title'|trans }}" href="{{ path('blog_rss') }}">
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <!-- Matomo -->
+    <script type="text/javascript">
+      var _paq = window._paq = window._paq || [];
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+        _paq.push(['trackSiteSearch',
+            // Search keyword searched for
+            "Montpellier",
+            // Search category selected in your search engine. If you do not need this, set to false
+            "garden",
+            // Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
+            0
+        ]);
+      (function() {
+        var u="//stats.garden-exchange.org/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+    </head>
+
+    <body id="{% block body_id %}{% endblock %}">
+        <div class='loading'>
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            <div class="loading-content"></div>
+        </div>
+        {% block header %}
+            <header>
+                {{ include('includes/_navbar_header.html.twig') }}
+                {{ include('includes/_navbar_header_mobile.html.twig') }}
+            </header>
+        {% endblock %}
+        <div class="container body-container">
+            <section>
+                
+                {% block contact %}{% endblock %}
+                
+                {% block body %}
+
+                    {% block admin %}
+                    {% endblock %}
+
+                    <div class="row">
+                        <div id="main" class="{% block class_body %}col-sm-9{% endblock %}">
+
+
+                            {% block main %}{% endblock %}
+                        </div>
+
+
+                        {% block sidebar %}
+                        {% endblock %}
+                    </div>
+                    
+                {% endblock %}
+            </section>
+                
+            {% block footer %}
+                <footer>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="footer-copyright" class="col-md-2 col-md-offset-1">
+                            <p>&copy; {{ 'now'|date('Y') }} - {{ 'nom.site'|trans }}</p>
+                        </div>
+                        <div id="footer-infos" class="col-md-5 d-flex">
+                            <ul>
+                                <li><a href="{{ asset('/uploads/documents/CGU-Garden-exchange.pdf') }}" >{{ 'footer.conditions.generales.utilisation'|trans }} d'Utilisation</a></li>
+                                <li><a href="{{ path('blog_post', {slug: 'mentions-legales'} ) }}" >{{ 'footer.legal.mention'|trans }}</a></li>
+                            </ul>
+                            <ul>
+                                <li><a href="{{ path('blog_index' ) }}">{{ 'footer.blog'|trans }}</a></li>
+                                <li><a href="{{ path('contact_new' ) }}">{{ 'footer.contact'|trans }}</a></li>
+                            </ul>
+                        </div>
+                        <div id="footer-resources" class="col-md-3 col-offset-1">
+                            <p>
+                                <a href="https://www.instagram.com/gardenexchanger" title="{{ 'instagram.community'|trans }}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                                <a href="https://fb.me/gardenexchange" title="{{ 'facebook.community'|trans }}"><i class="fa fa-facebook" aria-hidden="true"  target="_blank"></i></a>
+                                <a href="https://twitter.com/GardenExchanger" title="{{ 'twitter.community'|trans }}"><i class="fa fa-twitter" aria-hidden="true"  target="_blank"></i></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                </footer>
+            {% endblock %}
+        
+        </div>
+        
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+
+        {# it's not mandatory to set the timezone in localizeddate(). This is done to
+           avoid errors when the 'intl' PHP extension is not available and the application
+           is forced to use the limited "intl polyfill", which only supports UTC and GMT #}
+        <!-- Page rendered on {{ 'now'|format_datetime('long', 'long', '', 'UTC') }} -->
+    </body>
+</html>
