@@ -29,6 +29,7 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 ### ge
-/public/uploads/
+/public/uploads/gardens
+/public/uploads/profiles
 /stats/
 ###
