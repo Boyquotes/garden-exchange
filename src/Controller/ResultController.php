@@ -33,20 +33,23 @@ class ResultController extends AbstractController
     {
         $allGardens = $gardens->findAllGardensEnabled();
         $langs = $countries->findAllCountriesEnabled();
-
+        $where = '';
+        
         $form = $this->createForm(SimpleSearchType::class);
         $form->handleRequest($request);
-
+dump($form);
+dump($request->get('where'));
+//~ exit;
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $where = $form->get('where')->getData();
-            return $this->redirectToRoute('garden_results');
+            $where = $request->get('where');
         }
 
         return $this->render('results/gardens.html.twig', [
             'allGardens' => $allGardens,
             'langs' => $langs,
             'searchForm' => $form->createView(),
+            'where' => $where,
         ]);
     }
 

@@ -41,7 +41,7 @@ class HomepageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $where = $form->get('where')->getData();
-            return $this->redirectToRoute('garden_results');
+            return $this->redirectToRoute('garden_results', array('where' => $where));
         }
 
         return $this->render('default/homepage.html.twig', [

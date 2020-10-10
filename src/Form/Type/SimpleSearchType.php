@@ -25,6 +25,7 @@ class SimpleSearchType extends AbstractType
         $builder
             ->add('where', TextType::class, array(
                 'label' => false,
+                'mapped' => false,
                 'attr' => array(
                     'placeholder' => 'label.search.where',
                 )

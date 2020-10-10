@@ -18,11 +18,11 @@
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
         _paq.push(['trackSiteSearch',
             // Search keyword searched for
-            "Montpellier",
+            "{{ where }}",
             // Search category selected in your search engine. If you do not need this, set to false
             "garden",
             // Number of results on the Search results page. Zero indicates a 'No Result Search Keyword'. Set to false if you don't know
-            0
+            {{ allGardens|length }}
         ]);
       (function() {
         var u="//stats.garden-exchange.org/";
