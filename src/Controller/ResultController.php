@@ -37,9 +37,7 @@ class ResultController extends AbstractController
         
         $form = $this->createForm(SimpleSearchType::class);
         $form->handleRequest($request);
-dump($form);
-dump($request->get('where'));
-//~ exit;
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $where = $request->get('where');
