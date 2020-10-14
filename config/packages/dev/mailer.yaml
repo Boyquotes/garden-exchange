@@ -1,7 +1,7 @@
-#framework:
-    #mailer:
+framework:
+    mailer:
         # this disables delivery of messages entirely
         # dsn: 'null://null'
         # envoi tous les mails vers une seule adresse
-        #envelope:
-        #    recipients: ['nicolas@montpellibre.fr']
+        envelope:
+            recipients: ['nicolas@montpellibre.fr']

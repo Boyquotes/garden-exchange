@@ -781,11 +781,31 @@
             
             <trans-unit id="email.inscription">
                 <source>email.inscription</source>
-                <target>Nouvelle inscription</target>
+                <target>Vous faites maintenant parti de la communauté Garden Exchange.</target>
             </trans-unit>
             <trans-unit id="email.welcome">
                 <source>email.welcome</source>
-                <target>Bienvenue</target>
+                <target>Bienvenue </target>
+            </trans-unit>
+            <trans-unit id="email.welcome.community">
+                <source>email.welcome.community</source>
+                <target>dans la communaute Garden Exchange </target>
+            </trans-unit>
+            <trans-unit id="email.welcome.next.step">
+                <source>email.welcome.next.step</source>
+                <target>Plus que quelques efforts avant de partir dans un jardin formidable :</target>
+            </trans-unit>
+            <trans-unit id="email.welcome.next.step.1">
+                <source>email.welcome.next.step.1</source>
+                <target>- faire ou finir votre annonce la plus detaillée possible</target>
+            </trans-unit>
+            <trans-unit id="email.welcome.next.step.2">
+                <source>email.welcome.next.step.2</source>
+                <target>- trouver un jardin sympa et dialoguer avec leur propriétaire</target>
+            </trans-unit>
+            <trans-unit id="email.welcome.next.step.3">
+                <source>email.welcome.next.step.3</source>
+                <target>Une fois l'echange validé, vous n'avez plus qu'à préparer vos valises.</target>
             </trans-unit>
             <trans-unit id="email.new.mail.notif">
                 <source>email.new.mail.notif</source>
