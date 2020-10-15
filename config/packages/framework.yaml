@@ -8,10 +8,8 @@ framework:
     # Remove or comment this section to explicitly disable session support.
     session:
         cookie_lifetime: 864000
-        handler_id: session.handler.native_file
-        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-        cookie_domain: ".garden-exchange.org"
-        name: "garden-exchange_DUCSSID-1"
+        gc_maxlifetime: 864000
+        handler_id: null
         cookie_secure: auto
         cookie_samesite: lax
 
