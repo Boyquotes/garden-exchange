@@ -907,6 +907,14 @@
                 <source>footer.contact</source>
                 <target>Contactez-nous</target>
             </trans-unit>
+            <trans-unit id="page.login.title">
+                <source>page.login.title</source>
+                <target>S'inscrire</target>
+            </trans-unit>
+            <trans-unit id="page.blog.title">
+                <source>page.blog.title</source>
+                <target>Blog</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
