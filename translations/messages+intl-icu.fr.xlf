@@ -915,6 +915,22 @@
                 <source>page.blog.title</source>
                 <target>Blog</target>
             </trans-unit>
+            <trans-unit id="verified.member">
+                <source>verified.member</source>
+                <target>Membre verifié</target>
+            </trans-unit>
+            <trans-unit id="verified.email.member">
+                <source>verified.email.member</source>
+                <target>Email verifié</target>
+            </trans-unit>
+            <trans-unit id="verified.phone.member">
+                <source>verified.phone.member</source>
+                <target>Téléphone verifié</target>
+            </trans-unit>
+            <trans-unit id="verified.identity.member">
+                <source>verified.identity.member</source>
+                <target>Identité verifié</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

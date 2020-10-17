@@ -9879,6 +9879,10 @@ gardensCarte {
   z-index: 1000;
 }
 
+.contact > div {
+  margin: 0 0 1em 0;
+}
+
 /* Choices  ------------------------------------------------------------------------- */
 .equipment_choice > img, .campingType_choice > img, .rule_choice img {
   opacity: .1;
