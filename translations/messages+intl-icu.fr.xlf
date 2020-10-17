@@ -917,19 +917,19 @@
             </trans-unit>
             <trans-unit id="verified.member">
                 <source>verified.member</source>
-                <target>Membre verifié</target>
+                <target>Membre</target>
             </trans-unit>
             <trans-unit id="verified.email.member">
                 <source>verified.email.member</source>
-                <target>Email verifié</target>
+                <target>Email vérifié</target>
             </trans-unit>
             <trans-unit id="verified.phone.member">
                 <source>verified.phone.member</source>
-                <target>Téléphone verifié</target>
+                <target>Téléphone vérifié</target>
             </trans-unit>
             <trans-unit id="verified.identity.member">
                 <source>verified.identity.member</source>
-                <target>Identité verifié</target>
+                <target>Identité vérifié</target>
             </trans-unit>
         </body>
     </file>
