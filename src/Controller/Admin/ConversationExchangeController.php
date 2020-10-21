@@ -122,8 +122,14 @@ class ConversationExchangeController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($messageExchange);
             $entityManager->flush();
-            
-            $email = $user->getEmail();
+
+            if( $conversationExchange->getHost()->getId() == $user->getId() ){
+                $email = $conversationExchange->getCamper()->getEmail();
+            }
+            else{
+                $email = $conversationExchange->getHost()->getEmail();
+            }
+
             $emailNewMessage = (new TemplatedEmail())
                 ->from('share@garden-exchange.org')
                 ->to($email)

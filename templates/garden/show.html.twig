@@ -18,11 +18,19 @@
 
 {% block contact %}
     <div class="contact">
-        <div class='contact-show d-flex'>
-            <a href="{{ path('conversation_exchange_new', {'userId': garden.user.id, 'gardenId':garden.id}) }}" class="btn btn-lg btn-success">
-                <div><i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }} {{ garden.user.firstname }}</div>
-            </a>
-        </div>
+        {% if app.user == garden.user %}
+            <div class='contact-show d-flex'>
+                <a href="{{ path('admin_garden_edit', {'id':garden.id}) }}" class="btn btn-lg btn-success">
+                    <div><i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}</div>
+                </a>
+            </div>
+        {% else %}
+            <div class='contact-show d-flex'>
+                <a href="{{ path('conversation_exchange_new', {'userId': garden.user.id, 'gardenId':garden.id}) }}" class="btn btn-lg btn-success">
+                    <div><i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }} {{ garden.user.firstname }}</div>
+                </a>
+            </div>
+        {% endif %}
         <div class="contact-profile d-flex">
             <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}" class="btn btn-lg btn-warning">
                 <div><i class="fa fa-user" aria-hidden="true"></i> {{ 'see.profile'|trans }}</div>
