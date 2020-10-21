@@ -9,7 +9,10 @@ framework:
     session:
         cookie_lifetime: 864000
         gc_maxlifetime: 864000
-        handler_id: null
+        gc_probability: null
+        # handler_id: session.handler.native_file
+        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        #save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
         cookie_secure: auto
         cookie_samesite: lax
 

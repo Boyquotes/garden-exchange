@@ -50,3 +50,6 @@ services:
     App\Logger\ClientIpProcessor:
         tags:
             - { name: monolog.processor }
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            - '%env(DATABASE_URL)%'

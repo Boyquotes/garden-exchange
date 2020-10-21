@@ -1,0 +1,32 @@
+Options -Indexes
+
+RewriteEngine on
+RewriteBase /
+
+#RewriteCond %{HTTP_HOST} stats.garden-exchange.org
+#RewriteRule (.*) https://stats.garden-exchange.org/%{REQUEST_URI} [R=301,L]
+
+#RewriteCond %{HTTP_HOST} ^stats.garden-exchange.org$
+#RewriteRule ^s(.*)$ https://stats.garden-exchange.org [R=301,L]
+#RewriteRule ^s(.*)$ https://stats.garden-exchange.org [R,L]
+#RewriteRule (.*)$ https://google.com [R,L]
+
+RewriteCond %{HTTP_HOST} ^garden-exchange.org$
+RewriteRule ^(.*)$ https://garden-exchange.org/$1 [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^www.garden-exchange.org$
+RewriteRule ^(.*)$ https://garden-exchange.org/$1 [R=301,L]
+
+#RewriteRule ^w(.*)$ https://garden-exchange.org/$1 [R,L]
+
+
+#RewriteCond %{HTTP_HOST} ^stats.garden-exchange.org
+#RewriteRule ^/?(.*) https://stats.garden-exchange.org/$1
+#RewriteRule ^s(.*)$ https://stats.garden-exchange.org/ [R,L]
+
+#RewriteCond %{REQUEST_URI} !^/public/
+#RewriteRule ^(.*)$ /public/$1 [L]
+
+#php_value session.cookie_lifetime 604800 
+#php_value session.gc_maxlifetime 604800
+#php_value session.save_path /homez.1003/gardeny/www
