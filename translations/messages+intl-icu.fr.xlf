@@ -546,6 +546,10 @@
                 <source>action.offline_garden</source>
                 <target>Dépublier ce jardin</target>
             </trans-unit>
+            <trans-unit id="annonce.offline">
+                <source>annonce.offline</source>
+                <target>L'annonce n'est pas encore validée</target>
+            </trans-unit>
             <trans-unit id="nb.char.description.mandatory.for.publication">
                 <source>nb.char.description.mandatory.for.publication</source>
                 <target>La description du jardin fait moins de 50 caracteres</target>
@@ -829,7 +833,7 @@
             </trans-unit>
             <trans-unit id="email.the.garden">
                 <source>email.the.garden</source>
-                <target>Votre annonce a été créee, vous serez averti une fois qu'elle sera publié en ligne par notre équipe</target>
+                <target>Votre annonce a bien été créee, vous pouvez maintenant proposer des échanges aux autres membres !</target>
             </trans-unit>
             <trans-unit id="email.garden.near">
                 <source>email.garden.near</source>
@@ -915,6 +919,10 @@
                 <source>page.blog.title</source>
                 <target>Blog</target>
             </trans-unit>
+            <trans-unit id="new.member">
+                <source>new.member</source>
+                <target>Nouveau Membre</target>
+            </trans-unit>
             <trans-unit id="verified.member">
                 <source>verified.member</source>
                 <target>Membre</target>
@@ -930,6 +938,22 @@
             <trans-unit id="verified.identity.member">
                 <source>verified.identity.member</source>
                 <target>Identité vérifié</target>
+            </trans-unit>
+            <trans-unit id="not.verified.email.member">
+                <source>not.verified.email.member</source>
+                <target>Email non vérifié</target>
+            </trans-unit>
+            <trans-unit id="not.verified.phone.member">
+                <source>not.verified.phone.member</source>
+                <target>Téléphone non vérifié</target>
+            </trans-unit>
+            <trans-unit id="not.verified.identity.member">
+                <source>not.verified.identity.member</source>
+                <target>Identité non vérifié</target>
+            </trans-unit>
+            <trans-unit id="edit.garden">
+                <source>edit.garden</source>
+                <target>Gerer cette annonce et la mettre en ligne</target>
             </trans-unit>
         </body>
     </file>

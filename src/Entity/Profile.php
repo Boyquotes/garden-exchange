@@ -111,6 +111,21 @@ class Profile
      */
     private $langs = [];
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $emailVerified;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $phoneVerified;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $identityVerified;
+
     public function __construct()
     {
         $this->campingTypes = new ArrayCollection();
@@ -201,6 +216,42 @@ class Profile
     public function setProfileImage(string $profileImage): self
     {
         $this->profileImage = $profileImage;
+
+        return $this;
+    }
+    
+    public function getEmailVerified(): ?string
+    {
+        return $this->emailVerified;
+    }
+
+    public function setEmailVerified(string $emailVerified): self
+    {
+        $this->emailVerified = $emailVerified;
+
+        return $this;
+    }
+    
+    public function getPhoneVerified(): ?string
+    {
+        return $this->phoneVerified;
+    }
+
+    public function setPhoneVerified(string $phoneVerified): self
+    {
+        $this->phoneVerified = $phoneVerified;
+
+        return $this;
+    }
+
+    public function getIdentityVerified(): ?string
+    {
+        return $this->identityVerified;
+    }
+
+    public function setIdentityVerified(string $identityVerified): self
+    {
+        $this->identityVerified = $identityVerified;
 
         return $this;
     }
