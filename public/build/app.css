@@ -10154,6 +10154,12 @@ p, ul, ol {
   .homepage-encart div.step {
     width: 100%;
   }
+  .homepage-photos div {
+    height: 270px;
+  }
+  .homepage-intro, .homepage-photos {
+    padding: 1em 0 0 0;
+  }
   #register .well, #login .well {
     flex-grow: 1;
     margin: 1em 0 1em 0;
@@ -10195,7 +10201,7 @@ p, ul, ol {
   #contact input[type="email"] {
     width: 100%;
   }
-  #user_profile_info_edit #main, #garden_show .body-container {
+  #user_profile_info_edit #main, #admin_garden_new #main, #admin_conversation_new #main, #admin_post_index #main, #admin_users_index #main, #garden_show .body-container {
     margin: 2em 0 0 0;
   }
   /* ADMIN ------------------*/
@@ -10204,6 +10210,9 @@ p, ul, ol {
   }
   .superficie > input {
     width: 50%;
+  }
+  .publish-garden button {
+    margin: 1em 0;
   }
   .action-garden-edit {
     justify-content: center;
@@ -10219,16 +10228,25 @@ p, ul, ol {
   }
 }
 
-@media only screen and (min-device-width: 768px) and (max-device-width: 1023px) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1199px) {
   .is-hidden-mobile {
     display: none;
   }
   .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background: transparent;
   }
+  .homepage-intro {
+    padding: 1em 0em;
+  }
+  .homepage-encart {
+    padding: 1em 0;
+  }
+  .homepage-photos div {
+    height: 200px;
+  }
 }
 
-@media only screen and (min-device-width: 1024px) {
+@media only screen and (min-device-width: 1200px) {
   .is-hidden-desktop {
     display: none;
   }
