@@ -10127,6 +10127,9 @@ p, ul, ol {
   .is-hidden-mobile {
     display: none;
   }
+  .is-hidden-tablet {
+    display: none !important;
+  }
   .body-container {
     margin: 0 0 0 0;
   }
@@ -10241,6 +10244,12 @@ p, ul, ol {
   .is-hidden-mobile {
     display: none;
   }
+  .is-hidden-tablet {
+    display: none !important;
+  }
+  ul.navbar-right {
+    font-size: .7em;
+  }
   .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background: transparent;
   }
@@ -10253,10 +10262,16 @@ p, ul, ol {
   .homepage-photos div {
     height: 200px;
   }
+  .contact {
+    position: static;
+  }
 }
 
 @media only screen and (min-device-width: 1200px) {
   .is-hidden-desktop {
+    display: none;
+  }
+  .is-hidden-tablet {
     display: none;
   }
 }
