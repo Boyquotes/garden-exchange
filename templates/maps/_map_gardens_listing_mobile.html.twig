@@ -11,7 +11,7 @@
         </script>
     {% else %}
         <script>
-          var gardensCarteMobile = L.map('gardensCarteMobile');
+          var gardensCarteMobile = L.map('gardensCarteMobile', 10);
           L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '©️ OpenStreetMap contributors'
           }).addTo(gardensCarteMobile);
