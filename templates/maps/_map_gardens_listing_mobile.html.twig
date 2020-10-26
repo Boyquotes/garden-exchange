@@ -11,7 +11,7 @@
         </script>
     {% else %}
         <script>
-          var gardensCarteMobile = L.map('gardensCarteMobile', 10);
+          var gardensCarteMobile = L.map('gardensCarteMobile').setView(['45.2017559','4.1466014'],5);
           L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '©️ OpenStreetMap contributors'
           }).addTo(gardensCarteMobile);
@@ -27,7 +27,7 @@
                 pointsListMobile.push(geolocMobile);
             {% endif %}
           {% endfor %}
-            if (pointsListMobile.length>0){
+            if (pointsListMobile.length>1){
                 gardensCarteMobile.fitBounds(pointsListMobile); 
             }
         </script>

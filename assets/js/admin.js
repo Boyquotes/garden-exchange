@@ -76,12 +76,37 @@ function initAjaxPost(){
                 var classesTab = classes.split('|')
             }
             if(recup){
-                console.log('ici');
                 $.ajax({
                   url: urlAction,
                   method: 'POST',
                   data: { _token: token,
                            recupData: $(this).prev("."+recup).val()
+                  }
+                })
+                .done(function( msg ) {
+                    if(classes){
+                        $("."+element+id).removeClass(classesTab[0]);
+                        $("."+element+id).addClass(classesTab[1]);
+                    }
+                    if( typeof msg.route == 'object' ){
+                        $.each( msg.route, function( key, value ) {
+                            $.ajax({
+                              url: value,
+                              method: 'POST'
+                            })
+                            .done(function(data) {
+                                $(key).html(data);
+                                initAjaxPost();
+                            });
+                        });
+                    }
+                });
+            }
+            else{
+                $.ajax({
+                  url: urlAction,
+                  method: 'POST',
+                  data: { _token: token,
                   }
                 })
                 .done(function( msg ) {
