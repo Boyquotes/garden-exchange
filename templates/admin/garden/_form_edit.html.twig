@@ -162,9 +162,11 @@
         <h4>{{ form_label(form.gardenImages) }}</h4>
         <div class="d-flex jc-space-evenly-no-wrap is-hidden-mobile">
             {% for image in garden.gardenImages %}
-                <div class="image-{{image.id}}">
+                <div class="image-{{image.id}} image-upload">
                     <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
-                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
+                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.delete'|trans }}</a>
+                    <div class="legend-image">{{ image.libelle }}</div>
+                    <input type="text" class="recup-input" /><a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_legend_image', {gardenImageId: image.id})}}" data-post data-recup="recup-input" data-token="{{ csrf_token('legend' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.legend.image'|trans }}</a>
                 </div>
             {% endfor %}
         </div>
@@ -172,7 +174,9 @@
             {% for image in garden.gardenImages %}
                 <div class="image-{{image.id}}">
                     <img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}" width="150">
-                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">Supprimer</a>
+                    <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_delete_image', {gardenImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.delete'|trans }}</a>
+                    <div class="legend-image">{{ image.libelle }}</div>
+                    <input type="text" class="recup-input" /><a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('garden_legend_image', {gardenImageId: image.id})}}" data-post data-recup="recup-input" data-token="{{ csrf_token('legend' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.legend.image'|trans }}</a>
                 </div>
             {% endfor %}
         </div>

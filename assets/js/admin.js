@@ -70,32 +70,39 @@ function initAjaxPost(){
             var id = $(this).attr('data-id')
             var token = $(this).attr('data-token')
             var classes = $(this).attr('data-classes')
+            var recup = $(this).attr('data-recup')
+            console.log(recup);
             if(classes){
                 var classesTab = classes.split('|')
             }
-            $.ajax({
-              url: urlAction,
-              method: 'POST',
-              data: { _token: token }
-            })
-            .done(function( msg ) {
-                if(classes){
-                    $("."+element+id).removeClass(classesTab[0]);
-                    $("."+element+id).addClass(classesTab[1]);
-                }
-                if( typeof msg.route == 'object' ){
-                    $.each( msg.route, function( key, value ) {
-                        $.ajax({
-                          url: value,
-                          method: 'POST'
-                        })
-                        .done(function(data) {
-                            $(key).html(data);
-                            initAjaxPost();
+            if(recup){
+                console.log('ici');
+                $.ajax({
+                  url: urlAction,
+                  method: 'POST',
+                  data: { _token: token,
+                           recupData: $(this).prev("."+recup).val()
+                  }
+                })
+                .done(function( msg ) {
+                    if(classes){
+                        $("."+element+id).removeClass(classesTab[0]);
+                        $("."+element+id).addClass(classesTab[1]);
+                    }
+                    if( typeof msg.route == 'object' ){
+                        $.each( msg.route, function( key, value ) {
+                            $.ajax({
+                              url: value,
+                              method: 'POST'
+                            })
+                            .done(function(data) {
+                                $(key).html(data);
+                                initAjaxPost();
+                            });
                         });
-                    });
-                }
-            });
+                    }
+                });
+            }
         });
     });
 }

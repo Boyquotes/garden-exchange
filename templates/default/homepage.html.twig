@@ -33,51 +33,6 @@
         <hr />
 
         <div class="homepage-encart col-sm-12 no-padding txt-center d-flex jc-space-around">
-            {% for post in encartPosts %}
-                <div class="col-sm-3 step">
-                    <div class="homepage-encart-title">
-                        {{ post.title }}
-                    </div>
-                    <div class="homepage-encart-content">
-                        {{ post.content|raw }}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
-            {% for post in nuiteesPost %}
-                <div class="col-sm-8">
-                    {{ post.content|raw }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="homepage-photos col-sm-12 no-padding txt-center d-flex jc-space-around">
-                <div class="col-sm-4">
-                    <img src="{{ asset('/uploads/images/camping_ligth.jpg') }}" alt='tentes' />
-                </div>
-                <div class="col-sm-4">
-                    <img src="{{ asset('/uploads/images/motorhome_ligth.jpg') }}" alt='camping-car' />
-                </div>
-                <div class="col-sm-4">
-                    <img src="{{ asset('/uploads/images/fourgon_ligth.jpg') }}" alt='fourgon' />
-                </div>
-        </div>
-
-        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
-                <div class="col-sm-8">
-                    <p>Entrez dans l'économie collaborative du camping entre particuliers grâce à cette offre de lancement :</p>
-                    <p>L'abonnement d'<b>1 an</b> est offert, échangez votre jardin toute l'année 2021 gratuitement.</p>
-                    <p>
-                        <a href="{{ path('register') }}" class="btn btn-lg btn-success">
-                            {{ 'user.register'|trans }}
-                        </a>
-                    </p>
-                </div>
-        </div>
-
-        <div class="homepage-encart col-sm-12 no-padding txt-center d-flex jc-space-around">
                 <div class="col-sm-3 step">
                     <div class="homepage-encart-title">
                         Tranquille
@@ -101,6 +56,63 @@
                     <div class="homepage-encart-content">
                         <p>L'abonnement annuel vous donne accès a un nombre d'échanges illimité, sans aucun coût supplémentaire.</p>
                     </div>
+                </div>
+        </div>
+
+        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
+                <div class="col-sm-8">
+                    <p>
+                        <a href="{{ path('register') }}" class="btn btn-lg btn-success">
+                            {{ 'user.register'|trans }}
+                        </a>
+                    </p>
+                </div>
+        </div>
+
+        <div class="homepage-photos col-sm-12 no-padding txt-center d-flex jc-space-around">
+                <div class="col-sm-4">
+                    <img src="{{ asset('/uploads/images/camping_ligth.jpg') }}" alt='tentes' />
+                </div>
+                <div class="col-sm-4">
+                    <img src="{{ asset('/uploads/images/motorhome_ligth.jpg') }}" alt='camping-car' />
+                </div>
+                <div class="col-sm-4">
+                    <img src="{{ asset('/uploads/images/fourgon_ligth.jpg') }}" alt='fourgon' />
+                </div>
+        </div>
+        <p>
+        <hr />
+        </p>
+        <div class="homepage-encart col-sm-12 no-padding txt-center d-flex jc-space-around">
+            {% for post in encartPosts %}
+                <div class="col-sm-3 step">
+                    <div class="homepage-encart-title">
+                        {{ post.title }}
+                    </div>
+                    <div class="homepage-encart-content">
+                        {{ post.content|raw }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
+            {% for post in nuiteesPost %}
+                <div class="col-sm-8">
+                    {{ post.content|raw }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
+                <div class="col-sm-8">
+                    <p>Entrez dans l'économie collaborative du camping entre particuliers grâce à cette offre de lancement :</p>
+                    <p>L'abonnement d'<b>1 an</b> est offert, échangez votre jardin toute l'année 2021 gratuitement.</p>
+                    <p>
+                        <a href="{{ path('register') }}" class="btn btn-lg btn-success">
+                            {{ 'user.want.register'|trans }}
+                        </a>
+                    </p>
                 </div>
         </div>
 

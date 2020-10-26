@@ -56,7 +56,7 @@
                     {% for image in garden.gardenImages %}
                         {% if loop.index == 1 %}
                             <div class="image{{image.id}} first-photo col-md-12">
-                                <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
+                                <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox" title="{{ image.libelle }}" data-caption="{{ image.libelle }}"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -72,7 +72,7 @@
             {% for image in garden.gardenImages %}
                 {% if loop.index > 1 and  loop.index < 6%}
                     <div class="image{{image.id}}">
-                        <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
+                        <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox" title="{{ image.libelle }}" data-caption="{{ image.libelle }}"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
                     </div>
                 {% endif %}
             {% endfor %}

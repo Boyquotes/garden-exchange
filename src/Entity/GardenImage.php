@@ -23,6 +23,11 @@ class GardenImage
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -51,6 +56,18 @@ class GardenImage
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): self
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }

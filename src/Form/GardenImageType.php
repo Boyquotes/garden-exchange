@@ -32,7 +32,10 @@ class GardenImageType extends AbstractType
                 'mapped' => false,
                 'required' => false
             ])
-
+            ->add('libelle', null, [
+                'attr' => [],
+                'label' => 'label.libelle',
+            ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 /** @var Garden */
                 $garden = $event->getData();

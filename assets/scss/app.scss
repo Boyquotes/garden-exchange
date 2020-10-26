@@ -625,6 +625,12 @@ body#admin_post_show .post-tags .label-default i {
 
 /* Photos   ------------------------------------------------------------------------- */
 
+.image-upload{
+    text-align: left;
+}
+.image-upload input{
+    margin: .5em 0;
+}
 #upload_garden_image_result > .thumb-image{
     width: 200px;
 }
@@ -815,6 +821,7 @@ a.index-content-conversation{
 .homepage-photos div{
     height: 334px;
     overflow: hidden;
+    margin-bottom: 2em;
 }
 .homepage-photos img{
     width: 100%;

@@ -55,5 +55,25 @@ class GardenImageController extends AbstractController
             return new JsonResponse(['error' => 'Token Invalid'], 400);
         }
     }
+    
+    /**
+     * @Route("/{gardenImageId}/legend", name="garden_legend_image", methods={"POST"})
+     * @ParamConverter("gardenImage", options={"mapping": {"gardenImageId" : "id"}})
+     */
+    public function legendGardenImage(Request $request, GardenImage $gardenImage){
+        $token = $request->request->get('_token');
+        $recupData = $request->request->get('recupData');
+
+        if($this->isCsrfTokenValid('legend'.$gardenImage->getId(), $token)){
+            $gardenImage->setLibelle($recupData);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
+        }
+    }
 
 }

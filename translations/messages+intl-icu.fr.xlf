@@ -466,6 +466,10 @@
                 <source>user.register</source>
                 <target>S'inscrire</target>
             </trans-unit>
+            <trans-unit id="user.want.register">
+                <source>user.want.register</source>
+                <target>Je veux m'inscrire</target>
+            </trans-unit>
             <trans-unit id="register">
                 <source>register</source>
                 <target>Rejoindre la communauté</target>
@@ -953,7 +957,15 @@
             </trans-unit>
             <trans-unit id="edit.garden">
                 <source>edit.garden</source>
-                <target>Gerer cette annonce et la mettre en ligne</target>
+                <target>Gérer cette annonce et la mettre en ligne</target>
+            </trans-unit>
+            <trans-unit id="action.delete">
+                <source>action.delete</source>
+                <target>Supprimer</target>
+            </trans-unit>
+            <trans-unit id="action.legend.image">
+                <source>action.legend.image</source>
+                <target>Sauvegarder cette légende</target>
             </trans-unit>
         </body>
     </file>
