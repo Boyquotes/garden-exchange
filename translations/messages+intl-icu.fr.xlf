@@ -981,7 +981,7 @@
             </trans-unit>
             <trans-unit id="before_leave_no_garden_modal">
                 <source>before_leave_no_garden_modal</source>
-                <target>Avant de quitter ce site, inscrivez votre jardin et faites grandir la communauté. ( et cela vous prendra moins de 5 minutes )</target>
+                <target>Avant de quitter ce site, inscrivez votre jardin en moins de 5 minutes.</target>
             </trans-unit>
         </body>
     </file>
