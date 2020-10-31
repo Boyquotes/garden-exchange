@@ -4,6 +4,8 @@
 
 {% block body %}
     
+    {{ include('includes/modals/search/search_join_modal.html.twig') }}
+    
     <div class="row">
         <div class="carte-listings col-md-6 is-hidden-desktop">
             {{ include('maps/_map_gardens_listing_mobile.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
@@ -26,5 +28,4 @@
             {{ include('maps/_map_gardens_listing.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
         </div>
     </div>
-
 {% endblock %}

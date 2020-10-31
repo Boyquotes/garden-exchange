@@ -110,5 +110,7 @@ $(document).ready( function(){
         });
     });
     
+    $('#joinModal').modal('show');
+    
     
 });

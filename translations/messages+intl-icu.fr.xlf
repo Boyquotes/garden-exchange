@@ -967,6 +967,22 @@
                 <source>action.legend.image</source>
                 <target>Sauvegarder cette légende</target>
             </trans-unit>
+            <trans-unit id="close">
+                <source>close</source>
+                <target>Fermer</target>
+            </trans-unit>
+            <trans-unit id="no_garden_near_modal">
+                <source>no_garden_near_modal</source>
+                <target>Pas encore de jardin dans le secteur...flûte!</target>
+            </trans-unit>
+            <trans-unit id="solution_no_garden_modal">
+                <source>solution_no_garden_modal</source>
+                <target>Mais nous avons une solution !</target>
+            </trans-unit>
+            <trans-unit id="before_leave_no_garden_modal">
+                <source>before_leave_no_garden_modal</source>
+                <target>Avant de quitter ce site, inscrivez votre jardin et faites grandir la communauté.</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
