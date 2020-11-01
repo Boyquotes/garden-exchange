@@ -9724,6 +9724,11 @@ a.index-content-conversation {
   width: 100%;
 }
 
+.homepage-video {
+  font-size: 1.5em;
+  padding: 0 0 0 0;
+}
+
 /* NavBar   ------------------------------------------------------------------------- */
 .navbar {
   padding: .5em 0;

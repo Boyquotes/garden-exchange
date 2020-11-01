@@ -478,10 +478,6 @@
                 <source>homepage.register</source>
                 <target>S'inscrire</target>
             </trans-unit>
-            <trans-unit id="menu.register.garden">
-                <source>menu.register.garden</source>
-                <target>Ajoutez votre jardin</target>
-            </trans-unit>
             <trans-unit id="menu.garden_list">
                 <source>menu.garden_list</source>
                 <target>Vos jardins</target>
