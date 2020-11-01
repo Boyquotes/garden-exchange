@@ -38,7 +38,7 @@ class BlogController extends AbstractController
         //~ $authorPosts = $posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
         $authorPosts = $posts->findAll();
 
-        return $this->render('admin/blog/index.html.twig', ['posts' => $authorPosts]);
+        return $this->render('admin/blog/index_blog_admin.html.twig', ['posts' => $authorPosts]);
     }
 
     /**
