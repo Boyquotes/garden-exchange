@@ -71,32 +71,7 @@
             </section>
                 
             {% block footer %}
-                <footer>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div id="footer-copyright" class="col-md-2 col-md-offset-1">
-                            <p>&copy; {{ 'now'|date('Y') }} - {{ 'nom.site'|trans }}</p>
-                        </div>
-                        <div id="footer-infos" class="col-md-5 d-flex">
-                            <ul>
-                                <li><a href="{{ asset('/uploads/documents/CGU-Garden-exchange.pdf') }}" >{{ 'footer.conditions.generales.utilisation'|trans }}</a></li>
-                                <li><a href="{{ path('blog_post', {slug: 'mentions-legales'} ) }}" >{{ 'footer.legal.mention'|trans }}</a></li>
-                            </ul>
-                            <ul>
-                                <li><a href="{{ path('blog_index' ) }}">{{ 'footer.blog'|trans }}</a></li>
-                                <li><a href="{{ path('contact_new' ) }}">{{ 'footer.contact'|trans }}</a></li>
-                            </ul>
-                        </div>
-                        <div id="footer-resources" class="col-md-3 col-offset-1">
-                            <p>
-                                <a href="https://www.instagram.com/gardenexchanger" title="{{ 'instagram.community'|trans }}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                                <a href="https://fb.me/gardenexchange" title="{{ 'facebook.community'|trans }}"><i class="fa fa-facebook" aria-hidden="true"  target="_blank"></i></a>
-                                <a href="https://twitter.com/GardenExchanger" title="{{ 'twitter.community'|trans }}"><i class="fa fa-twitter" aria-hidden="true"  target="_blank"></i></a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                </footer>
+                {{ include('includes/_footer.html.twig') }}
             {% endblock %}
         
         </div>

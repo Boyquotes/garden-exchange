@@ -891,6 +891,10 @@
                 <source>footer.blog</source>
                 <target>Blog</target>
             </trans-unit>
+            <trans-unit id="footer.aboutus">
+                <source>footer.aboutus</source>
+                <target>A propos</target>
+            </trans-unit>
             <trans-unit id="footer.conditions.generales.utilisation">
                 <source>footer.conditions.generales.utilisation</source>
                 <target>Conditions Générales d'Utilisation</target>
