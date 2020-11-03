@@ -830,6 +830,9 @@ a.index-content-conversation{
     font-size: 1.5em;
     padding: 0 0 0 0;
 }
+.central-links{
+    margin: 3em 0 0 0;
+}
 /* NavBar   ------------------------------------------------------------------------- */
 .navbar{
     padding: .5em 0;
@@ -1165,6 +1168,13 @@ footer p {
 }
 #joinModal .modal-body{
     font-size: 1.1em;
+}
+.modal-video-add-garden{
+    margin: 2em 0;
+}
+
+#joinModal .btn-secondary:hover{
+    background: #BBB;
 }
 /* SURCHARGE   ------------------------------------------------------------------------- */
 p, ul, ol {

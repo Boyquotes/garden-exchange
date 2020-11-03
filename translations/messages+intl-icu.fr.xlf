@@ -478,6 +478,10 @@
                 <source>homepage.register</source>
                 <target>S'inscrire</target>
             </trans-unit>
+            <trans-unit id="menu.register.garden">
+                <source>menu.register.garden</source>
+                <target>Ajoutez votre jardin</target>
+            </trans-unit>
             <trans-unit id="menu.garden_list">
                 <source>menu.garden_list</source>
                 <target>Vos jardins</target>
@@ -981,7 +985,15 @@
             </trans-unit>
             <trans-unit id="before_leave_no_garden_modal">
                 <source>before_leave_no_garden_modal</source>
-                <target>Avant de quitter ce site, inscrivez votre jardin en moins de 5 minutes.</target>
+                <target>Avant de quitter ce site, inscrivez votre jardin en 30 secondes :</target>
+            </trans-unit>
+            <trans-unit id="see.gardens">
+                <source>see.gardens</source>
+                <target>Voir tous les jardins</target>
+            </trans-unit>
+            <trans-unit id="create.account">
+                <source>create.account</source>
+                <target>Se créer un compte</target>
             </trans-unit>
         </body>
     </file>

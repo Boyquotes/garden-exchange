@@ -139,6 +139,16 @@
         </div>
     {% endif %}
     
+    {% if garden.area|length > 0 %}
+        <hr />
+        <div class="row rules d-flex jc-center">
+            <h4>{{ 'label.area'|trans }}</h4>
+            <div class="d-flex jc-center col-md-12">
+                {{ garden.area }} m2
+            </div>
+        </div>
+    {% endif %}
+    
     {% if (garden.lat is not null and garden.lng is not null) or (garden.latCity is not null and garden.lngCity is not null) %}
         <hr />
         <div class="localisation jc-center">

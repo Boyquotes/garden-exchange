@@ -39,6 +39,9 @@
     .homepage-search{
         width: 80%;
     }
+    .homepage-central-links div{
+        margin: 2em 0 0 0;
+    }
     .homepage-encart div.step{
         width: 100%;
     }
@@ -127,6 +130,9 @@
     }
     .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
         background: transparent;
+    }
+    .homepage-central-links{
+        margin: 2em 0 0 0;
     }
     .homepage-intro {
         padding: 1em 0em;

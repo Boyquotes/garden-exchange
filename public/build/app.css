@@ -9729,6 +9729,10 @@ a.index-content-conversation {
   padding: 0 0 0 0;
 }
 
+.central-links {
+  margin: 3em 0 0 0;
+}
+
 /* NavBar   ------------------------------------------------------------------------- */
 .navbar {
   padding: .5em 0;
@@ -10131,6 +10135,14 @@ footer p {
   font-size: 1.1em;
 }
 
+.modal-video-add-garden {
+  margin: 2em 0;
+}
+
+#joinModal .btn-secondary:hover {
+  background: #BBB;
+}
+
 /* SURCHARGE   ------------------------------------------------------------------------- */
 p, ul, ol {
   font-size: 1em;
@@ -10176,6 +10188,9 @@ p, ul, ol {
   }
   .homepage-search {
     width: 80%;
+  }
+  .homepage-central-links div {
+    margin: 2em 0 0 0;
   }
   .homepage-encart div.step {
     width: 100%;
@@ -10266,6 +10281,9 @@ p, ul, ol {
   }
   .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background: transparent;
+  }
+  .homepage-central-links {
+    margin: 2em 0 0 0;
   }
   .homepage-intro {
     padding: 1em 0em;

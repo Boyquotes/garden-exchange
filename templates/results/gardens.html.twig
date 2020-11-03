@@ -3,8 +3,9 @@
 {% block body_id 'results' %}
 
 {% block body %}
-    
-    {{ include('includes/modals/search/search_join_modal.html.twig') }}
+    {% if app.request.get('noModal') is null %}
+        {{ include('includes/modals/search/search_join_modal.html.twig') }}
+    {% endif %}
     
     <div class="row">
         <div class="carte-listings col-md-6 is-hidden-desktop">
@@ -22,6 +23,12 @@
                     {{ include('garden/_garden_result.html.twig') }}
                 {% endfor %}
             </div>
+        </div>
+        <div>
+            {{ 'before_leave_no_garden_modal'|trans }}
+            <p class="d-flex txt-center jc-center modal-video-add-garden">
+                <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
+            </p>
         </div>
 
         <div class="carte-listings col-md-6 is-hidden-mobile">

@@ -6,10 +6,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title" id="joinModalLabel">{{ 'no_garden_near_modal'|trans }} {{ 'solution_no_garden_modal'|trans }}</h4>
+        <h4 class="modal-title" id="joinModalLabel">{{ 'no_garden_near_modal'|trans }}</h4>
       </div>
       <div class="modal-body">
         {{ 'before_leave_no_garden_modal'|trans }}
+        <p class="d-flex txt-center jc-center modal-video-add-garden">
+            <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
+        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
