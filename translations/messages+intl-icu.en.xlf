@@ -451,15 +451,11 @@
             </trans-unit>
             <trans-unit id="info.change_password">
                 <source>info.change_password</source>
-                <target>Apres le changement de votre mot de passe, vous devrez vous reconnecter.</target>
+                <target>After changing your password, you will be logged out of the application.</target>
             </trans-unit>
             <trans-unit id="user.reset_password_help">
                 <source>user.reset_password_help</source>
                 <target>We’ll email you a link to reset your password</target>
-            </trans-unit>
-            <trans-unit id="info.change_password">
-                <source>info.change_password</source>
-                <target>After changing your password, you will be logged out of the application.</target>
             </trans-unit>
             <trans-unit id="user.no_account.register">
                 <source>user.no_account.register</source>

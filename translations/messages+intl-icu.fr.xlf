@@ -457,10 +457,6 @@
                 <source>user.reset_password_help</source>
                 <target>Nous allons vous envoyer un mail pour changer de mot de passe</target>
             </trans-unit>
-            <trans-unit id="info.change_password">
-                <source>info.change_password</source>
-                <target>After changing your password, you will be logged out of the application.</target>
-            </trans-unit>
             <trans-unit id="user.no_account.register">
                 <source>user.no_account.register</source>
                 <target>Pas encore membre? Créez votre compte</target>
@@ -704,10 +700,6 @@
             <trans-unit id="send.reset.password.email">
                 <source>send.reset.password.email</source>
                 <target>Envoyer</target>
-            </trans-unit>
-            <trans-unit id="reset.password.title">
-                <source>reset.password.title</source>
-                <target>Mot de passe oublié ?</target>
             </trans-unit>
             <trans-unit id="reset.password.title">
                 <source>reset.password.title</source>
