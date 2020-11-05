@@ -10,8 +10,11 @@
       </div>
       <div class="modal-body">
         {{ 'before_leave_no_garden_modal'|trans }}
-        <p class="d-flex txt-center jc-center modal-video-add-garden">
+        <p class="d-flex txt-center jc-center modal-video-add-garden is-hidden-mobile">
             <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
+        </p>
+        <p class="d-flex txt-center jc-center modal-video-add-garden is-hidden-desktop">
+            <video  width="370" height="200" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
         </p>
       </div>
       <div class="modal-footer">

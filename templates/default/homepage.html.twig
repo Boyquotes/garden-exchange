@@ -129,9 +129,15 @@
         </div>
         
         <div class="homepage-video col-sm-12 no-padding txt-center d-flex jc-space-around">
-                <div class="col-sm-8">
+                <div class="col-sm-8 is-hidden-mobile">
                     <p>L'inscription ne prend que quelques minutes :</p>
                         <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
+                    </p>
+                    <a href="{{ path('admin_garden_new') }}" class="piwik_link btn btn-lg btn-success"> {{ 'menu.register.garden'|trans }}</a>
+                </div>
+                <div class="col-sm-8 is-hidden-desktop">
+                    <p>L'inscription ne prend que quelques minutes :</p>
+                        <video  width="400" height="222" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
                     </p>
                     <a href="{{ path('admin_garden_new') }}" class="piwik_link btn btn-lg btn-success"> {{ 'menu.register.garden'|trans }}</a>
                 </div>
