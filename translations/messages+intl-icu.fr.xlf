@@ -14,10 +14,6 @@
                 <source>not_available</source>
                 <target>Indisponible</target>
             </trans-unit>
-            <trans-unit id="mit_license">
-                <source>mit_license</source>
-                <target>Licence MIT</target>
-            </trans-unit>
 
             <trans-unit id="http_error.name">
                 <source>http_error.name</source>
@@ -145,13 +141,13 @@
                 <source>label.cancel</source>
                 <target>Annuler</target>
             </trans-unit>
-            <trans-unit id="label.create_post">
-                <source>label.create_post</source>
-                <target>Créer un article</target>
-            </trans-unit>
             <trans-unit id="action.create_post">
                 <source>action.create_post</source>
                 <target>Créer un nouvel article</target>
+            </trans-unit>
+            <trans-unit id="label.create_post">
+                <source>label.create_post</source>
+                <target>Créer un article</target>
             </trans-unit>
             <trans-unit id="label.save_and_create_new">
                 <source>label.save_and_create_new</source>
@@ -376,7 +372,10 @@
                 <source>paginator.next</source>
                 <target>Suivant</target>
             </trans-unit>
-            
+            <trans-unit id="paginator.current">
+                <source>paginator.current</source>
+                <target>(current)</target>
+            </trans-unit>
             
             <trans-unit id="menu.post">
                 <source>menu.post</source>
@@ -457,6 +456,10 @@
             <trans-unit id="user.reset_password_help">
                 <source>user.reset_password_help</source>
                 <target>Nous allons vous envoyer un mail pour changer de mot de passe</target>
+            </trans-unit>
+            <trans-unit id="info.change_password">
+                <source>info.change_password</source>
+                <target>After changing your password, you will be logged out of the application.</target>
             </trans-unit>
             <trans-unit id="user.no_account.register">
                 <source>user.no_account.register</source>
@@ -694,9 +697,17 @@
                 <source>help.reset.password</source>
                 <target>Vous allez recevoir un mail vous permettant de changer de mot de passe.</target>
             </trans-unit>
+            <trans-unit id="localisation">
+                <source>localisation</source>
+                <target>Localisation</target>
+            </trans-unit>
             <trans-unit id="send.reset.password.email">
                 <source>send.reset.password.email</source>
                 <target>Envoyer</target>
+            </trans-unit>
+            <trans-unit id="reset.password.title">
+                <source>reset.password.title</source>
+                <target>Mot de passe oublié ?</target>
             </trans-unit>
             <trans-unit id="reset.password.title">
                 <source>reset.password.title</source>
@@ -722,6 +733,7 @@
                 <source>reset.password.email.send.ok</source>
                 <target>Demande de renouvellement de mot de passe envoyée</target>
             </trans-unit>
+            
             <trans-unit id="no.annonce.warning">
                 <source>no.annonce.warning</source>
                 <target>Vous n'avez pas encore crée d'annonce</target>
