@@ -22,13 +22,22 @@ class SecurityController extends AbstractController
         if ($security->isGranted('ROLE_CAMPER')) {
             return $this->redirectToRoute('admin_index');
         }
+        
+        $referer = $request->get('_target_path');
+
+        
 //~ dump($request->request->get('token'));
         // this statement solves an edge-case: if you change the locale in the login
         // page, after a successful login you are redirected to a page in the previous
         // locale. This code regenerates the referrer URL whenever the login page is
         // browsed, to ensure that its locale is always the current one.
-        $this->saveTargetPath($request->getSession(), 'main', $this->generateUrl('admin_index'));
-
+        if($referer){
+            $this->saveTargetPath($request->getSession(), 'main', $referer);
+        }
+        else{
+            $this->saveTargetPath($request->getSession(), 'main', $this->generateUrl('admin_index'));
+        }
+        
         return $this->render('security/login.html.twig', [
             // last email entered by the user (if any)
             'last_username' => $helper->getLastUsername(),

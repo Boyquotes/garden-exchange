@@ -1,0 +1,15 @@
+{% extends 'emails/layout_email.html.twig' %}
+
+{% block content %}
+
+    <img src="{{ email.image('@images/logo-garden-exchange.png') }}" alt="Logo Garden Exchange">
+    <h1>{{ 'mail.confirmation.explication.confirm.email'|trans }}</h1>
+
+    <p>
+        <a href="{{ signedUrl|raw }}">{{ 'mail.confirm.email'|trans }}</a>
+    </p>
+    <p>
+         {{ 'mail.verification.expire.link'|trans }} {{ expiresAt|date('g') }} {{ 'hours'|trans }}.
+    </p>
+
+{% endblock %}

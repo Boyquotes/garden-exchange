@@ -728,7 +728,7 @@
             
             <trans-unit id="no.annonce.warning">
                 <source>no.annonce.warning</source>
-                <target>Vous n'avez pas encore crée d'annonce</target>
+                <target>Vous n'avez pas encore créée d'annonce</target>
             </trans-unit>
             <trans-unit id="no.conversations">
                 <source>no.conversations</source>
@@ -998,6 +998,26 @@
             <trans-unit id="create.account">
                 <source>create.account</source>
                 <target>Se créer un compte</target>
+            </trans-unit>
+            <trans-unit id="mail.confirm.subject">
+                <source>mail.confirm.subject</source>
+                <target>Devenir un membre verifié. Votre adresse email doit etre validée.</target>
+            </trans-unit>
+            <trans-unit id="mail.verification.email.user">
+                <source>mail.verification.email.user</source>
+                <target>Votre adresse email est maintenant verifié.</target>
+            </trans-unit>
+            <trans-unit id="mail.verification.confirm.email">
+                <source>mail.confirm.email</source>
+                <target>Confirmez votre email.</target>
+            </trans-unit>
+            <trans-unit id="mail.verification.expire.link">
+                <source>mail.verification.expire.link</source>
+                <target>Ce lien expire dans </target>
+            </trans-unit>
+            <trans-unit id="mail.confirmation.explication.confirm.email">
+                <source>mail.confirmation.explication.confirm.email</source>
+                <target>Merci de confirmer votre email en cliquant sur le lien ci-dessous :</target>
             </trans-unit>
         </body>
     </file>

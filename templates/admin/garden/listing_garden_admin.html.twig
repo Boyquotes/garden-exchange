@@ -5,6 +5,8 @@
 {% block class_body %}col-sm-12{% endblock %}
 
 {% block main %}
+    {{ include('default/_flash_messages.html.twig') }}
+    
     {% if is_granted('ROLE_ADMIN') %}
         {{ include('garden/_listings_garden_admin.html.twig') }}
     {% else %}

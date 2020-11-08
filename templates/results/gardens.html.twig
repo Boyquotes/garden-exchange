@@ -23,19 +23,26 @@
                     {{ include('garden/_garden_result.html.twig') }}
                 {% endfor %}
             </div>
-        </div>
-        <div>
-            {{ 'before_leave_no_garden_modal'|trans }}
-            <p class="d-flex txt-center jc-center modal-video-add-garden is-hidden-mobile">
-                <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
-            </p>
-            <p class="d-flex txt-center jc-center modal-video-add-garden is-hidden-desktop">
-                <video  width="400" height="222" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
-            </p>
+            <div class="row">
+                <div>
+                    <div class="txt-center">
+                        {{ 'before_leave_no_garden_modal'|trans }}
+                        <p class="d-flex txt-center jc-center modal-video-add-garden">
+                            <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
+                        </p>
+                        <a href="{{ path('register') }}" class="btn btn-lg btn-success">
+                            {{ 'action.add.garden'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+>>>>>>> verifyMail
         </div>
 
         <div class="carte-listings col-md-6 is-hidden-mobile">
             {{ include('maps/_map_gardens_listing.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
         </div>
     </div>
+    
 {% endblock %}

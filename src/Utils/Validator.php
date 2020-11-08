@@ -7,17 +7,17 @@ use function Symfony\Component\String\u;
 class Validator
 {
 
-    public function validatePassword(?string $plainPassword): string
+    public function validatePassword(?string $password): string
     {
-        if (empty($plainPassword)) {
+        if (empty($password)) {
             throw new InvalidArgumentException('The password can not be empty.');
         }
 
-        if (u($plainPassword)->trim()->length() < 6) {
+        if (u($password)->trim()->length() < 6) {
             throw new InvalidArgumentException('The password must be at least 6 characters long.');
         }
 
-        return $plainPassword;
+        return $password;
     }
 
     public function validateEmail(?string $email): string

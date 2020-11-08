@@ -1,4 +1,8 @@
 <div class="row">
+    {% if app.user.profile.emailVerified == false %}
+        Email a verifier
+    {% endif %}
+
         {% if allGardens %}
         <h1>{{ 'title.garden_list'|trans }}</h1>
         <div><a href="{{ path('admin_garden_new') }}" class="btn btn-success">{{'garden.new.another.one'|trans}}</a></div>
@@ -50,7 +54,6 @@
         <div class="carte-listings col-md-6">
             {{ include('maps/_map_gardens_listing.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
         </div>
-
     {% else %}
         <div class="col-md-10 col-md-offset-1">
             <h1>{{ 'title.garden_list'|trans }}</h1>

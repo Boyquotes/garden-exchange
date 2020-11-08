@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\Table(name="user")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface, \Serializable
 {
@@ -66,7 +67,6 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="password.blank")
      * @Assert\Length(
      *     min=6,
      *     minMessage="password.too_short",
@@ -136,6 +136,11 @@ class User implements UserInterface, \Serializable
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="author", cascade={"remove"})
      */
     private $posts;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
 
     public function __construct()
     {
@@ -446,6 +451,18 @@ class User implements UserInterface, \Serializable
                 $conversationCamperExchange->setCamper(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
