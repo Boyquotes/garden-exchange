@@ -10,6 +10,7 @@
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
+
     <div class="formulaire-registration">
         <div class="well">
             {{ form_start(registrationForm, {attr: {novalidate: 'novalidate', class:'form-add-user'}}) }}
@@ -33,8 +34,4 @@
             {{ form_end(registrationForm) }}
         </div>
     </div>
-{% endblock %}
-
-
-{% block sidebar %}
 {% endblock %}

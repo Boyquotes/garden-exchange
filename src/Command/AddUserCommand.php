@@ -146,13 +146,13 @@ class AddUserCommand extends Command
         $stopwatch->start('add-user-command');
 
         $username = $input->getArgument('username');
-        $plainPassword = $input->getArgument('password');
+        $password = $input->getArgument('password');
         $email = $input->getArgument('email');
         $fullName = $input->getArgument('full-name');
         $isAdmin = $input->getOption('admin');
 
         // make sure to validate the user data is correct
-        $this->validateUserData($username, $plainPassword, $email, $fullName);
+        $this->validateUserData($username, $password, $email, $fullName);
 
         // create the user and encode its password
         $user = new User();
@@ -162,7 +162,7 @@ class AddUserCommand extends Command
         $user->setRoles([$isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER']);
 
         // See https://symfony.com/doc/current/security.html#c-encoding-passwords
-        $encodedPassword = $this->passwordEncoder->encodePassword($user, $plainPassword);
+        $encodedPassword = $this->passwordEncoder->encodePassword($user, $password);
         $user->setPassword($encodedPassword);
 
         $this->entityManager->persist($user);
@@ -178,7 +178,7 @@ class AddUserCommand extends Command
         return 0;
     }
 
-    private function validateUserData($username, $plainPassword, $email, $fullName): void
+    private function validateUserData($username, $password, $email, $fullName): void
     {
         // first check if a user with the same username already exists.
         $existingUser = $this->users->findOneBy(['username' => $username]);
@@ -188,7 +188,7 @@ class AddUserCommand extends Command
         }
 
         // validate password and email if is not this input means interactive.
-        $this->validator->validatePassword($plainPassword);
+        $this->validator->validatePassword($password);
         $this->validator->validateEmail($email);
         $this->validator->validateFullName($fullName);
 
