@@ -1,0 +1,17 @@
+{
+  "name": "api-platform/api-pack",
+  "type": "symfony-pack",
+  "license": "MIT",
+  "description": "A pack for API Platform",
+  "require": {
+    "api-platform/core": "*",
+    "nelmio/cors-bundle": "*",
+    "symfony/asset": "*",
+    "symfony/expression-language": "*",
+    "symfony/orm-pack": "*",
+    "symfony/security-bundle": "*",
+    "symfony/serializer-pack": "*",
+    "symfony/twig-bundle": "*",
+    "symfony/validator": "*"
+  }
+}
