@@ -9,14 +9,17 @@
     <div class="users-list">
         {% for camper in allCampers %}
             <div class="user-list user-{{camper.id}} jc-space-between">
-                    <div class="img-profile">
+                    <div class="img-profile col-md-1">
                         #{{ camper.id }}<img src="{{ asset('/uploads/profiles/'~camper.profile.profileImage) }}" alt='{{ camper.firstname }}' />
                     </div>
-                    <div class="name-profile"><a href="{{ path('user_profile_info_view', {profileId: camper.profile.id}) }}">{{ camper.fullname }}</a></div>
-                    <div class="mail-profile">{{ camper.email }}</div>
-                    <div class="date-user">{{ camper.created|date('d-m-Y h:i') }}{% if camper.updated is not null %} / {{ camper.updated|date('d-m-Y h:i') }}{% endif %}</div>
-                    <div class="date-profile">{{ camper.profile.created|date('d-m-Y h:i') }}{% if camper.profile.updated is not null %} / {{ camper.profile.updated|date('d-m-Y h:i') }}{% endif %}</div>
-                    <div class="action-profile">
+                    <div class="name-profile col-md-2"><a href="{{ path('user_profile_info_view', {profileId: camper.profile.id}) }}">{{ camper.fullname }}</a></div>
+                    <div class="mail-profile col-md-2">{{ camper.email }}</div>
+                    <div class="date-user col-md-2">{{ camper.created|date('d-m-Y h:i') }}{% if camper.updated is not null %} / {{ camper.updated|date('d-m-Y h:i') }}{% endif %}</div>
+                    <div class="date-profile col-md-2">{{ camper.profile.created|date('d-m-Y h:i') }}{% if camper.profile.updated is not null %} / {{ camper.profile.updated|date('d-m-Y h:i') }}{% endif %}</div>
+                    <div class="img-profile col-md-1">
+                        {{ camper.verified }}
+                    </div>
+                    <div class="action-profile  col-md-2">
                         {% if 'ROLE_ADMIN' in camper.roles %}
                             ADMIN
                         {% elseif 'ROLE_SUPER_ADMIN' in camper.roles %}

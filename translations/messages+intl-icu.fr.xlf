@@ -679,7 +679,7 @@
             </trans-unit>
             <trans-unit id="help.garden.photo">
                 <source>help.garden.photo</source>
-                <target><![CDATA[Ajoutez jusqu'à 5 photos. Pensez à prendre différents points de vues pour que votre hôte voit au mieux l'emplacement et l'environnement autour. Pour que votre annonce soit publiée, vous devez envoyer au minumum 2 photos (max 2MB par image).]]></target>
+                <target><![CDATA[Ajoutez jusqu'à 5 photos. Pensez à prendre différents points de vues pour que votre hôte voit au mieux l'emplacement et l'environnement autour.]]></target>
             </trans-unit>
             <trans-unit id="help.garden.photo.2">
                 <source>help.garden.photo.2</source>

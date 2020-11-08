@@ -2,7 +2,7 @@
     <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-sm btn-warning">
         <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
     </a>
-    <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}"" class="btn btn-sm btn-success">{{ 'see.profile'|trans }} ( {{ garden.user.lastname }} )</a>
+    <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}"" class="btn btn-sm btn-success">{{ 'see.profile'|trans }} ( {{ garden.user.fullname }} )</a>
     <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">
         <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
     </a>
@@ -20,9 +20,6 @@
                 <i class="fa fa-times" aria-hidden="true"></i> {{ 'garden_incomplete'|trans }}
             </a>
             <div>{{ 'garden.incomplete.because'|trans }}</div>
-            {% if garden.gardenImages|length < 2 %}
-                <div class="helperPublish">{{ 'nb.photos.mandatory.for.publication'|trans }}</div>
-            {% endif %}
             {% if garden.description|length < 50 %}
                 <div class="helperPublish">{{ 'nb.char.description.mandatory.for.publication'|trans }}</div>
             {% endif %}

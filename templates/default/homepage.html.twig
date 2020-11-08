@@ -109,14 +109,6 @@
         </div>
 
         <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
-            {% for post in nuiteesPost %}
-                <div class="col-sm-8">
-                    {{ post.content|raw }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
                 <div class="col-sm-8">
                     <p>Entrez dans l'économie collaborative du camping entre particuliers grâce à cette offre de lancement :</p>
                     <p>L'abonnement d'<b>1 an</b> est offert, échangez votre jardin toute l'année 2021 gratuitement.(Pas besoin de CB donc)</p>
@@ -133,14 +125,20 @@
                     <p>L'inscription ne prend que quelques minutes :</p>
                         <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
                     </p>
-                    <a href="{{ path('admin_garden_new') }}" class="piwik_link btn btn-lg btn-success"> {{ 'menu.register.garden'|trans }}</a>
                 </div>
                 <div class="col-sm-8 is-hidden-desktop">
                     <p>L'inscription ne prend que quelques minutes :</p>
                         <video  width="400" height="222" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
                     </p>
-                    <a href="{{ path('admin_garden_new') }}" class="piwik_link btn btn-lg btn-success"> {{ 'menu.register.garden'|trans }}</a>
                 </div>
+        </div>
+
+        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
+            {% for post in nuiteesPost %}
+                <div class="col-sm-8">
+                    {{ post.content|raw }}
+                </div>
+            {% endfor %}
         </div>
 
     </div>
