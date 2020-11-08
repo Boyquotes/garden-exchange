@@ -67,15 +67,40 @@ class RegistrationController extends AbstractController
                 $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
                 $this->get('security.token_storage')->setToken($token);
 
+                $emailRegistration = (new TemplatedEmail())
+                    ->from('share@garden-exchange.org')
+                    ->to($email)
+                    //->cc('cc@example.com')
+                    ->bcc('share@garden-exchange.org')
+                    //->replyTo('fabien@example.com')
+                    //->priority(Email::PRIORITY_HIGH)
+                    ->subject($translator->trans('email.inscription'))
+                    // path of the Twig template to render
+                    ->htmlTemplate('emails/signup.html.twig')
+
+                    // pass variables (name => value) to the template
+                    ->context([
+                        'expiration_date' => new \DateTime('+7 days'),
+                        'username' => $user->getUsername(),
+                    ]);
+
+                try {
+                    $mailer->send($emailRegistration);
+                } catch (TransportExceptionInterface $e) {
+                    // some error prevented the email sending; display an
+                    // error message or try to resend the message
+                }
+
                 // generate a signed url and email it to the user
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
                         ->from(new Address('verify@garden-exchange.org', 'Garden Exchange'))
                         ->to($user->getEmail())
+                        ->bcc('share@garden-exchange.org')
                         ->subject($translator->trans('mail.confirm.subject'))
                         ->htmlTemplate('registration/confirmation_email.html.twig')
                 );
-            // do anything else you need here, like send an email
+
             }
             return $this->redirectToRoute('admin_index');
         }
