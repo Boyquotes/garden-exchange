@@ -11,7 +11,7 @@
             <i class="fa fa-times" aria-hidden="true"></i> {{ 'action.offline_garden'|trans }}
         </a>
     {% else %}
-        {% if garden.gardenImages|length >= 2 and garden.description|length > 50 %}
+        {% if garden.description|length > 50 %}
             <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('publish_garden', {id: garden.id}) }}" data-post data-element="garden" data-classes="btn-success|btn-danger" data-token="{{ csrf_token('publish' ~ garden.id )}}" class="btn btn-sm btn-success garden{{garden.id}}">
                 <i class="fa fa-power-off" aria-hidden="true"></i> {{ 'action.publish_garden'|trans }}
             </a>
@@ -28,5 +28,5 @@
             {% endif %}
         {% endif %}
     {% endif %}
-    <a href="javascript:void(0);" data-id="{{ garden.id }}" data-element="garden" data-action="{{ path('admin_garden_delete', {id: garden.id})}}" data-delete data-token="{{ csrf_token('delete' ~ garden.id )}}" class="btn btn-sm btn-danger">Supprimer</a>
+    <a href="#" id="deleteGardenModal" class="btn btn-sm btn-danger" data-action="{{ path('admin_garden_delete_modal', {id: garden.id})}}">Supprimer</a>
 </div>

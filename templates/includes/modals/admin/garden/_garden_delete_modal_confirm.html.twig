@@ -1,0 +1,15 @@
+<!-- Modal Content-->
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" id="joinModalLabel">{{ 'no_garden_near_modal'|trans }}</h4>
+  </div>
+  <div class="modal-body">
+    {{ 'before_leave_no_garden_modal'|trans }}
+    <p>ICIIIIII</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans }}</button>
+    <a href="javascript:void(0);" data-id="{{ garden.id }}" data-element="garden" data-action="{{ path('admin_garden_delete', {id: garden.id})}}" data-delete data-token="{{ csrf_token('delete' ~ garden.id )}}" class="btn btn-sm btn-danger">{{ 'garden.delete'|trans }}</a>
+  </div>

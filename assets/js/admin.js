@@ -132,9 +132,10 @@ function initAjaxPost(){
     });
 }
 
-function initAjaxDelete(){
-    $('#main').find('[data-delete]').each( function(){
+function initAjaxDelete($element = '#main'){
+    $($element).find('[data-delete]').each( function(){
         $(this).click( function(){
+            $('#baseModal').modal('hide');
             $('.loading-content').html("Suppression en cours");
             $('.loading').show();
             $('.loading').css('display', 'flex');
@@ -150,7 +151,7 @@ function initAjaxDelete(){
             .done(function( data ) {
                   $('.'+element+'-'+id).hide();
                   $('.loading').hide();
-                  $('.flash-messages').html('<div class="alert alert-dismissible alert-success fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Annonce mise a jour</div>');
+                  $('.flash-messages').html('<div class="alert alert-dismissible alert-success fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Annonce supprimée</div>');
                   $('.flash-messages').show( 300 ).delay( 1000 ).fadeOut( 800 );
             });
         });
@@ -368,6 +369,76 @@ $(document).ready( function(){
         } else {
             alert("Ce type de fichier n'est pas supporte, seulement jpg, jpeg, png");
         }
+    });
+    
+    $('#post_postImages').change(function (event) {
+        //Get count of selected files
+        var countFiles = $(this)[0].files.length;
+
+        var imgPath = $(this)[0].value;
+        var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+        var image_holder = $("#upload_post_image_result");
+        image_holder.empty();
+
+        if(extn == "png" || extn == "jpg" || extn == "jpeg"){
+            if (typeof (FileReader) != "undefined") {
+
+                //loop for each file selected for uploaded.
+                for (var i = 0; i < countFiles; i++) {
+                    if($(this)[0].files[i].size > 2000000){
+                        alert('Cette image '+$(this)[0].files[i].name+' ne pourra pas être envoyée vers nos serveurs car elle est supérieure à 2MB');
+                    }
+                    else{
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $("<img />", {
+                                "src": e.target.result,
+                                    "class": "thumb-image is-hidden-mobile"
+                            }).appendTo(image_holder);
+                            $("<img />", {
+                                "src": e.target.result,
+                                    "class": "thumb-image-mobile is-hidden-desktop"
+                            }).appendTo(image_holder);
+                        }
+
+                        image_holder.show();
+                        reader.readAsDataURL($(this)[0].files[i]);
+                    }
+                }
+            } else {
+                alert("This browser does not support FileReader.");
+            }
+        } else {
+            alert("Ce type de fichier n'est pas supporte, seulement jpg, jpeg, png");
+        }
+    });
+    
+    $('.item-actions').find('#deleteGardenModal').click(function () {
+        // requete ajax
+        var urlAction = $(this).attr('data-action');
+        $.ajax({
+          url: urlAction,
+          method: 'GET'
+        })
+        .done(function(data) {
+            $('.modal-content').html(data);
+            initAjaxDelete('.modal-footer');
+        });
+        $('#baseModal').modal('show');
+    });
+    
+    $('.action-profile').find('#deleteCamperModal').click(function () {
+        // requete ajax
+        var urlAction = $(this).attr('data-action');
+        $.ajax({
+          url: urlAction,
+          method: 'GET'
+        })
+        .done(function(data) {
+            $('.modal-content').html(data);
+            initAjaxDelete('.modal-footer');
+        });
+        $('#baseModal').modal('show');
     });
     
 });

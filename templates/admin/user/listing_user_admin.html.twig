@@ -8,6 +8,24 @@
     <h1>{{ 'title.users.list'|trans }} ({{allCampers|length }})</h1>
     <div class="users-list">
         {% for camper in allCampers %}
+            {% if camper.gardens|length == 1 %}
+                {% for garden in camper.gardens %}
+                    <a href="{{ path('admin_garden_show', {id: garden.id}) }}" >
+                        Voir le jardin
+                    </a>
+                {% endfor %}
+            {% endif %}
+            {% if camper.gardens|length > 0 %}
+                <ul>
+                    {% for garden in camper.gardens %}
+                        <li>
+                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}" >
+                                Voir le jardin
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <div class="user-list user-{{camper.id}} jc-space-between">
                     <div class="img-profile col-md-1">
                         #{{ camper.id }}<img src="{{ asset('/uploads/profiles/'~camper.profile.profileImage) }}" alt='{{ camper.firstname }}' />
@@ -17,7 +35,9 @@
                     <div class="date-user col-md-2">{{ camper.created|date('d-m-Y h:i') }}{% if camper.updated is not null %} / {{ camper.updated|date('d-m-Y h:i') }}{% endif %}</div>
                     <div class="date-profile col-md-2">{{ camper.profile.created|date('d-m-Y h:i') }}{% if camper.profile.updated is not null %} / {{ camper.profile.updated|date('d-m-Y h:i') }}{% endif %}</div>
                     <div class="img-profile col-md-1">
-                        {{ camper.verified }}
+                        {% if camper.verified %}
+                            {{ 'camper.link.verified'|trans }}
+                        {% endif %}
                     </div>
                     <div class="action-profile  col-md-2">
                         {% if 'ROLE_ADMIN' in camper.roles %}
@@ -27,6 +47,9 @@
                         {% endif %}
                     <div class="impersonate-profile"><a href="{{ path('admin_garden_index') }}?_switch_user={{ camper.email }}" class="btn btn-sm btn-warning">{{ 'impersonate'|trans }}</a></div>
                     <a href="{{ path('user_profile_info', {profileId:camper.profile.id}) }}"" class="btn btn-sm btn-success">Profil</a>
+                    <a href="#" id="deleteCamperModal" class="btn btn-sm btn-danger" data-action="{{ path('admin_user_delete_modal', {id: camper.id})}}">
+                        Supprimer
+                    </a>
                     <a href="javascript:void(0);" data-id="{{ camper.id }}" data-element="user" data-action="{{ path('admin_user_delete', {id: camper.id})}}" data-delete data-token="{{ csrf_token('delete' ~ camper.id )}}" class="btn btn-sm btn-danger">Supprimer</a>
                     </div>
             </div>

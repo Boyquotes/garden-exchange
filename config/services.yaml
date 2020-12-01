@@ -10,6 +10,7 @@ parameters:
     app.notifications.email_sender: anonymous@example.com
     garden_images_directory: '%kernel.project_dir%/public/uploads/gardens/'
     profile_images_directory: '%kernel.project_dir%/public/uploads/profiles/'
+    post_images_directory: '%kernel.project_dir%/public/uploads/posts/'
     
 services:
     # default configuration for services in *this* file

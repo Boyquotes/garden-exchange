@@ -2,9 +2,11 @@
 namespace App\Form;
 
 use App\Entity\Post;
+use App\Entity\PostImage;
 use App\Form\Type\DateTimePickerType;
 use App\Form\Type\TagsInputType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -50,6 +52,14 @@ class PostType extends AbstractType
                 'attr' => ['rows' => 20],
                 'help' => 'help.post_content',
                 'label' => 'label.content',
+            ])
+            ->add('postImages', FileType::class,[
+                'attr' => ['class' => 'inputfile', 'placeholder' => 'label.addPhotos'],
+                'label' => 'label.photos',
+                'help' => 'help.post.photo',
+                'multiple' => true,
+                'mapped' => false,
+                'required' => false
             ])
             ->add('publishedAt', DateTimePickerType::class, [
                 'label' => 'label.published_at',

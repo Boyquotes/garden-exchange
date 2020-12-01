@@ -71,5 +71,18 @@ class UserAdminController extends AbstractController
             return new JsonResponse(['error' => 'Token Invalid'], 400);
         }
     }
+    /**
+     * Deletes a User Modal.
+     *
+     * @Route("/{id}/delete/modal", methods="GET", name="admin_user_delete_modal")
+     * @ParamConverter("user", options={"mapping": {"id" : "id"}})
+     * @IsGranted("delete", subject="user", message="User can only be deleted by admin.")
+     */
+    public function deleteUserModal(Request $request, User $user): Response
+    {
+        return $this->render('includes/modals/admin/camper/_camper_delete_modal_confirm.html.twig', [
+            'camper' => $user,
+        ]);
+    }
 
 }

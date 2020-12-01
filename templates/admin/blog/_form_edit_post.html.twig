@@ -1,0 +1,75 @@
+{#
+    By default, forms enable client-side validation. This means that you can't
+    test the server-side validation errors from the browser. To temporarily
+    disable this validation, add the 'novalidate' attribute:
+
+    {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+#}
+
+{% if show_confirmation|default(false) %}
+    {% set attr = {'data-confirmation': 'true'} %}
+    {{ include('blog/_delete_post_confirmation.html.twig') }}
+{% endif %}
+
+{{ form_start(form, {attr: attr|default({})}) }}
+    {# form_widget(form) #}
+
+    <div class="row">
+        {{ form_row(form.title) }}
+    </div>
+    <div class="row">
+        {{ form_row(form.summary) }}
+    </div>
+    <div class="row">
+        {{ form_row(form.content) }}
+    </div>
+    <div class="row">
+        {{ form_row(form.publishedAt) }}
+    </div>
+    <div class="row">
+        {{ form_row(form.tags) }}
+    </div>
+
+    <hr />
+    
+    <div class="d-flex jc-space-evenly-no-wrap is-hidden-mobile">
+        {% for image in post.postImages %}
+            <div class="image-{{image.id}} image-upload">
+                <img src="{{ asset('/uploads/posts/'~image.name) }}" alt="{{ image.name }}" width="150">
+                <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('post_delete_image', {postImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.delete'|trans }}</a>
+                <div class="legend-image">{{ image.libelle }}</div>
+                <input type="text" class="recup-input" /><a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('post_legend_image', {postImageId: image.id})}}" data-post data-recup="recup-input" data-token="{{ csrf_token('legend' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.legend.image'|trans }}</a>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="d-flex jc-space-evenly is-hidden-desktop">
+        {% for image in post.postImages %}
+            <div class="image-{{image.id}}">
+                <img src="{{ asset('/uploads/posts/'~image.name) }}" alt="{{ image.name }}" width="150">
+                <a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('post_delete_image', {postImageId: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.delete'|trans }}</a>
+                <div class="legend-image">{{ image.libelle }}</div>
+                <input type="text" class="recup-input" /><a href="javascript:void(0);" data-id="{{ image.id }}" data-element="image" data-action="{{ path('post_legend_image', {postImageId: image.id})}}" data-post data-recup="recup-input" data-token="{{ csrf_token('legend' ~ image.id )}}" class="btn btn-sm btn-primary">{{ 'action.legend.image'|trans }}</a>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div id='upload_post_image_result' class="d-flex jc-space-evenly"></div>
+    </div>
+    <div class="row d-flex jc-center">
+        <div class="col-md-6 txt-center">
+            <h4>{{ form_label(form.postImages) }}</h4>
+            {{ form_help(form.postImages) }}
+            {{ form_widget(form.postImages) }}
+        </div>
+    </div>
+
+    <button type="submit" class="{{ button_css|default("btn btn-primary") }}">
+        <i class="fa fa-save" aria-hidden="true"></i> {{ button_label|default('label.create_post'|trans) }}
+    </button>
+
+    {% if include_back_to_home_link|default(false) %}
+        <a href="{{ path('admin_post_index') }}" class="btn btn-link">
+            <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'action.back_to_list'|trans }}
+        </a>
+    {% endif %}
+{{ form_end(form) }}

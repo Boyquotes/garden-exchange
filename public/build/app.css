@@ -9501,6 +9501,14 @@ body#admin_post_show .post-tags .label-default i {
   height: 100px;
 }
 
+#upload_post_image_result > .thumb-image {
+  width: 200px;
+}
+
+#upload_post_image_result > .thumb-image-mobile {
+  height: 100px;
+}
+
 /* Conversation   ------------------------------------------------------------------------- */
 #admin_conversation_new .garden-result {
   width: 100%;
@@ -10094,6 +10102,12 @@ gardensCarte {
   float: right;
 }
 
+/* BLOG EDIT POST   ------------------------------------------------------------------------- */
+.action-post-edit {
+  width: 20%;
+  margin-left: 5rem;
+}
+
 /* BLOG SHOW POST   ------------------------------------------------------------------------- */
 #blog_post_show #main, #blog_index #main {
   margin-top: 5em;
@@ -10126,12 +10140,12 @@ footer p {
   color: #FFF;
 }
 
-/* MODAL   ------------------------------------------------------------------------- */
-#joinModal {
+/* MODALS      ------------------------------------------------------------------------- */
+#baseModal, #joinModal {
   margin-top: 8em;
 }
 
-#joinModal .modal-body {
+#baseModal .modal-body, #joinModal .modal-body {
   font-size: 1.1em;
 }
 

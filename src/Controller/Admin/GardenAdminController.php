@@ -289,10 +289,24 @@ class GardenAdminController extends AbstractController
             $em->remove($garden);
             $em->flush();
 
-            return new JsonResponse(['success' => 1]);
+            return new JsonResponse(['action' => 'deleteGarden', 'success' => 1]);
         }else{
             return new JsonResponse(['error' => 'Token Invalid'], 400);
         }
+    }
+    
+    /**
+     * Deletes a Garden Modal.
+     *
+     * @Route("/{id}/delete/modal", methods="GET", name="admin_garden_delete_modal")
+     * @ParamConverter("garden", options={"mapping": {"id" : "id"}})
+     * @IsGranted("delete", subject="garden")
+     */
+    public function deleteGardenModal(Request $request, Garden $garden): Response
+    {
+        return $this->render('includes/modals/admin/garden/_garden_delete_modal_confirm.html.twig', [
+            'garden' => $garden,
+        ]);
     }
 
     /**

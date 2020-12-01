@@ -101,11 +101,17 @@ class Post
      */
     private $tags;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PostImage::class, mappedBy="post", orphanRemoval=true, cascade={"persist"}, fetch="EAGER")
+     */
+    private $postImages;
+
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->postImages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -209,4 +215,36 @@ class Post
     {
         return $this->tags;
     }
+    
+    /**
+     * @return Collection|PostImage[]
+     */
+    public function getPostImages(): Collection
+    {
+        return $this->postImages;
+    }
+
+    public function addPostImage(PostImage $postImage): self
+    {
+        if (!$this->postImages->contains($postImage)) {
+            $this->postImages[] = $postImage;
+            $postImage->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostImage(PostImage $postImage): self
+    {
+        if ($this->postImages->contains($postImage)) {
+            $this->postImages->removeElement($postImage);
+            // set the owning side to null (unless already changed)
+            if ($postImage->getPost() === $this) {
+                $postImage->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+    
 }

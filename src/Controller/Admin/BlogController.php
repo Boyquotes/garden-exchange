@@ -2,14 +2,21 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Post;
+use App\Entity\PostImage;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -66,6 +73,27 @@ class BlogController extends AbstractController
         // However, we explicitly add it to improve code readability.
         // See https://symfony.com/doc/current/forms.html#processing-forms
         if ($form->isSubmitted() && $form->isValid()) {
+            // On récupère les images transmises
+            $images = $form->get('postImages')->getData();
+            
+            // On boucle sur les images
+            foreach($images as $image){
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()).'.'.$image->guessExtension();
+                
+                // On copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('post_images_directory'),
+                    $fichier
+                );
+                
+                // On crée l'image dans la base de données
+                $img = new PostImage();
+                $img->setName($fichier);
+                $img->setCreatedAt(new \DateTime("now"));
+                $post->addPostImage($img);
+            }
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
@@ -117,6 +145,27 @@ class BlogController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // On récupère les images transmises
+            $images = $form->get('postImages')->getData();
+            
+            // On boucle sur les images
+            foreach($images as $image){
+                // On génère un nouveau nom de fichier
+                $fichier = md5(uniqid()).'.'.$image->guessExtension();
+                
+                // On copie le fichier dans le dossier uploads
+                $image->move(
+                    $this->getParameter('post_images_directory'),
+                    $fichier
+                );
+                
+                // On crée l'image dans la base de données
+                $img = new PostImage();
+                $img->setName($fichier);
+                $img->setCreatedAt(new \DateTime("now"));
+                $post->addPostImage($img);
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'post.updated_successfully');
@@ -155,4 +204,46 @@ class BlogController extends AbstractController
 
         return $this->redirectToRoute('admin_post_index');
     }
+    
+    /**
+     * @Route("/{postImageId}/delete", name="post_delete_image", methods={"DELETE"})
+     * @ParamConverter("postImage", options={"mapping": {"postImageId" : "id"}})
+     */
+    public function deletePostImage(Request $request, PostImage $postImage){
+        $token = $request->request->get('_token');
+
+        if($this->isCsrfTokenValid('delete'.$postImage->getId(), $token)){
+            $name = $postImage->getName();
+            unlink($this->getParameter('post_images_directory').'/'.$name);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($postImage);
+            $em->flush();
+
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
+        }
+    }
+    
+    /**
+     * @Route("/{postImageId}/legend", name="post_legend_image", methods={"POST"})
+     * @ParamConverter("postImage", options={"mapping": {"postImageId" : "id"}})
+     */
+    public function legendPostImage(Request $request, PostImage $postImage){
+        $token = $request->request->get('_token');
+        $recupData = $request->request->get('recupData');
+
+        if($this->isCsrfTokenValid('legend'.$postImage->getId(), $token)){
+            $postImage->setLibelle($recupData);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            return new JsonResponse(['success' => 1]);
+        }else{
+            return new JsonResponse(['error' => 'Token Invalid'], 400);
+        }
+    }
+    
 }

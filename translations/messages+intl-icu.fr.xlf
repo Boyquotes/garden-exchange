@@ -1019,6 +1019,10 @@
                 <source>mail.confirmation.explication.confirm.email</source>
                 <target>Merci de confirmer votre email en cliquant sur le lien ci-dessous :</target>
             </trans-unit>
+            <trans-unit id="camper.link.verified">
+                <source>camper.link.verified</source>
+                <target>Lien verifié</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
