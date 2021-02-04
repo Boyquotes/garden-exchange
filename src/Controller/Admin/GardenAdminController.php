@@ -96,6 +96,9 @@ class GardenAdminController extends AbstractController
         // However, we explicitly add it to improve code readability.
         // See https://symfony.com/doc/current/forms.html#processing-forms
         if ($form->isSubmitted() && $form->isValid()) {
+            dump($form);
+
+
             $garden->setUser($user);
 
             //~ Geocode de l'adresse
@@ -125,7 +128,7 @@ class GardenAdminController extends AbstractController
             $url = 'https://nominatim.openstreetmap.org/?' . http_build_query($data);
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mettre ici un user-agent adéquat');
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0');
             $geopos = curl_exec($ch);
             curl_close($ch);
 
@@ -147,7 +150,7 @@ class GardenAdminController extends AbstractController
             $url = 'https://nominatim.openstreetmap.org/?' . http_build_query($data);
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Mettre ici un user-agent adéquat');
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0');
             $geopos = curl_exec($ch);
             curl_close($ch);
 
@@ -166,7 +169,8 @@ class GardenAdminController extends AbstractController
 
             // On récupère les images transmises
             $images = $form->get('gardenImages')->getData();
-            
+            dump($images);
+            exit;
             // On boucle sur les images
             foreach($images as $image){
                 // On génère un nouveau nom de fichier

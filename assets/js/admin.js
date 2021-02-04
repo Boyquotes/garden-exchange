@@ -71,7 +71,6 @@ function initAjaxPost(){
             var token = $(this).attr('data-token')
             var classes = $(this).attr('data-classes')
             var recup = $(this).attr('data-recup')
-            console.log(recup);
             if(classes){
                 var classesTab = classes.split('|')
             }

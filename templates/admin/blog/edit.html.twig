@@ -5,7 +5,8 @@
 {% block class_body %}col-md-10 col-md-offset-1{% endblock %}
 
 {% block main %}
-
+    {{ include('default/_flash_messages.html.twig') }}
+    
     <div class="d-flex clear-wrap">
         <h1>{{ 'title.edit_post'|trans({'%id%': post.id}) }}</h1>
         <a href="{{ path('admin_post_show', {id: post.id}) }}" class="btn btn-lg btn-block btn-success action-post-edit">

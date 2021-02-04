@@ -280,10 +280,23 @@ body#blog_index #main p {
   margin-bottom: 0.5em
 }
 
+body#blog_index #main {
+    display: flex;
+}
+body#blog_index #main article {
+    width: 30%;
+    margin-right: 2em;
+    box-shadow: 0 3px 10px 4px rgba(0,0,0,0.06);
+    border-radius: 6px;
+    border: 1px solid #e7e8e6;
+}
 body#blog_index article.post {
   margin-bottom: 3em;
 }
 
+body#blog_index .post h2{
+    margin: 1rem 0 .5rem 0;
+}
 body#blog_index .post-metadata {
   font-size: 16px;
   margin-bottom: 8px;
@@ -1145,10 +1158,23 @@ gardensCarte{
     width: 20%;
     margin-left: 5rem;
 }
+.bootstrap-tagsinput{
+    font-size: 1rem;
+}
 
 /* BLOG SHOW POST   ------------------------------------------------------------------------- */
 #blog_post_show #main, #blog_index #main {
     margin-top: 5em;
+}
+#blog_post_show .post-image {
+    width: 30%;
+    margin: 0 3rem 2rem 0;
+}
+.blog-post-show-content{
+    display: flex;
+}
+.post-image img{
+    width: 100%;
 }
 
 /* CONTACT   ------------------------------------------------------------------------- */

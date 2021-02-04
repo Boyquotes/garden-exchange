@@ -8,26 +8,37 @@
     <div class="row">
         <div id="main" class="col-sm-8 col-md-offset-2">
         {% block main %}
-            <h1>{{ post.title }}</h1>
+            
+            <div class="blog-post-show-content">
+                <div class="post-image">
+                    {% for postImage in post.postImages %}
+                        {% if loop.last %}
+                            <img src="{{ asset('/uploads/posts/'~postImage.name) }}" />
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div>
+                    <h1>{{ post.title }}</h1>
+                    <p class="post-metadata">
+                        <span class="metadata"><i class="fa fa-calendar"></i> {{ post.publishedAt|format_datetime('medium', 'none', '', 'UTC') }}</span>
+                    </p>
 
-            <p class="post-metadata">
-                <span class="metadata"><i class="fa fa-calendar"></i> {{ post.publishedAt|format_datetime('medium', 'none', '', 'UTC') }}</span>
-            </p>
+                    {{ post.content|markdown_to_html|sanitize_html }}
 
-            {{ post.content|markdown_to_html|sanitize_html }}
-
-            {% if app.user is null %}
-                <a href="{{ path('register') }}" class="btn btn-lg btn-success">
-                    <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'user.no_account.register'|trans }}
-                </a>
-            {% else %}
-                <a href="{{ path('garden_results') }}" class="btn btn-lg btn-success">
-                    <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'Trouver un échange'|trans }}
-                </a>
-            {% endif %}
-
-            {# include('blog/_post_tags.html.twig') #}
-
+                    {# include('blog/_post_tags.html.twig') #}
+                </div>
+            </div>
+            <div>
+                {% if app.user is null %}
+                    <a href="{{ path('register') }}" class="btn btn-lg btn-success">
+                        <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'user.no_account.register'|trans }}
+                    </a>
+                {% else %}
+                    <a href="{{ path('garden_results') }}" class="btn btn-lg btn-success">
+                        <i class="fa fa-list-alt" aria-hidden="true"></i> {{ 'Trouver un échange'|trans }}
+                    </a>
+                {% endif %}
+            </div>
         {% endblock %}
         </div>
     </div>

@@ -5,11 +5,20 @@
 {% block body_id 'blog_index' %}
 
 {% block body %}
+
     <div class="row">
-        <div id="main" class="col-sm-8 col-md-offset-2">
+        <div id="main" class="col-sm-8 col-md-offset-2 clear-wrap">
         {% block main %}
             {% for post in paginator.results %}
                 <article class="post">
+                    <div class="post-image">
+                        {% for postImage in post.postImages %}
+                            {% if loop.last %}
+                                <img src="{{ asset('/uploads/posts/'~postImage.name) }}" />
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
                     <h2>
                         <a href="{{ path('blog_post', {slug: post.slug}) }}">
                             {{ post.title }}
