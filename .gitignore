@@ -31,5 +31,6 @@ yarn-error.log
 ### ge
 /public/uploads/gardens
 /public/uploads/profiles
+/public/uploads/posts
 /stats/
 ###
