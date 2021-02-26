@@ -58,8 +58,11 @@ class AppExtension extends AbstractExtension
     }
     
     public function truncate($string, $nbCut, $cutLastWord = true ): string
-    {
-        return u($string)->truncate($nbCut, '…', $cutLastWord);
+    {   
+        if($string){
+            return u($string)->truncate($nbCut, '…', $cutLastWord);
+        }
+        return '...';
     }
 
 

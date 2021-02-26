@@ -9,6 +9,9 @@ import 'bootstrap-sass/assets/javascripts/bootstrap/dropdown.js';
 import 'bootstrap-sass/assets/javascripts/bootstrap/modal.js';
 import 'jquery'
 
+// create global $ and jQuery variables
+global.$ = global.jQuery = $;
+
 // loads the code syntax highlighting library
 import './highlight.js';
 
@@ -17,7 +20,7 @@ import './doclinks.js';
 
 
 import './jquery.lightbox.min.js';
-
+import './dropzone.js';
 
 
 $(document).ready( function(){

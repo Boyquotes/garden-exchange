@@ -30,7 +30,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 /**
  *
  * @Route("/admin/garden")
@@ -77,27 +76,73 @@ class GardenAdminController extends AbstractController
     public function new(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
         $garden = new Garden();
-        $user = $this->getUser();
-        $gps = false;
-        //~ $equipments = $garden->getEquipments();
-        //~ $equipments = $this->entityManager->getRepository('AppBundle:Equipment')->findAll();
-        //~ $equipments= $this->getDoctrine()->getRepository(Equipment::class)->findAll();
-        //~ dump($equipments);
-        //~ $garden->setAuthor($this->getUser());
+        $garden->setUser($this->getUser());
+        $garden->setEnabled(0);
+        $garden->setStatus('added');
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($garden);
+        $em->flush();
+        
+        $form = $this->createForm(GardenType::class, $garden, [ 'action' => $this->generateUrl('admin_garden_save', array("gardenId" => $garden->getId() )) ]);
 
-        // See https://symfony.com/doc/current/form/multiple_buttons.html
+        return $this->render('admin/garden/new.html.twig', [
+            'garden' => $garden,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Displays a form to edit an existing Garden entity.
+     *
+     * @Route("/{id<\d+>}/edit", methods="GET|POST", name="admin_garden_edit")
+     * @IsGranted("edit", subject="garden", message="Gardens can only be edited by their authors.")
+     */
+    public function edit(Request $request, Garden $garden): Response
+    {
         $form = $this->createForm(GardenType::class, $garden);
-
-
         $form->handleRequest($request);
 
-        // the isSubmitted() method is completely optional because the other
-        // isValid() method already checks whether the form is submitted.
-        // However, we explicitly add it to improve code readability.
-        // See https://symfony.com/doc/current/forms.html#processing-forms
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'garden.updated_successfully');
+
+            return $this->redirectToRoute('admin_garden_edit', ['id' => $garden->getId(), 'garden' => $garden]);
+        }
+
+        return $this->render('admin/garden/edit.html.twig', [
+            'garden' => $garden,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Save a new Garden entity.
+     *
+     * @Route("/save/{gardenId}", methods="GET|POST", name="admin_garden_save")
+     * @ParamConverter("garden", options={"mapping": {"gardenId" : "id"}})
+     *
+     * NOTE: the Method annotation is optional, but it's a recommended practice
+     * to constraint the HTTP methods each controller responds to (by default
+     * it responds to all methods).
+     */
+    public function save(Request $request, MailerInterface $mailer, TranslatorInterface $translator, Garden $garden): Response
+    {
+        dump($request);
+        dump($garden);
+        //~ exit;
+        $user = $this->getUser();
+        $gps = false;
+
+        $form = $this->createForm(GardenType::class, $garden);
+
+        $form->handleRequest($request);
+        //~ dump($form);
+        //~ exit;
         if ($form->isSubmitted() && $form->isValid()) {
             dump($form);
-
 
             $garden->setUser($user);
 
@@ -106,17 +151,6 @@ class GardenAdminController extends AbstractController
             $postcode = $form->get('postcode')->getData();
             $city = $form->get('city')->getData();
             $country = $form->get('country')->getData();
-            //~ dump($street);
-            //~ dump($postcode);
-            //~ dump($city);
-            //~ dump($country);
-            //~ $data = array(
-              //~ 'street'     => '26 rue des kermes',
-              //~ 'postalcode' => $postcode,
-              //~ 'city'       => $city,
-              //~ 'country'    => $country,
-              //~ 'format'     => 'json',
-            //~ );
             
             $data = array(
               'street'     => '',
@@ -164,39 +198,15 @@ class GardenAdminController extends AbstractController
             }
 
             if(!$gps){
+                $garden->setStatus('draft');
                 $garden->setEnabled(0);
             }
-
-            // On récupère les images transmises
-            $images = $form->get('gardenImages')->getData();
-            dump($images);
-            exit;
-            // On boucle sur les images
-            foreach($images as $image){
-                // On génère un nouveau nom de fichier
-                $fichier = md5(uniqid()).'.'.$image->guessExtension();
-                
-                // On copie le fichier dans le dossier uploads
-                $image->move(
-                    $this->getParameter('garden_images_directory'),
-                    $fichier
-                );
-                
-                // On crée l'image dans la base de données
-                $img = new GardenImage();
-                $img->setName($fichier);
-                $img->setCreatedAt(new \DateTime("now"));
-                $garden->addGardenImage($img);
+            else{
+                $garden->setStatus('online');
             }
-
             $em = $this->getDoctrine()->getManager();
-            $em->persist($garden);
             $em->flush();
-
-            // Flash messages are used to notify the user about the result of the
-            // actions. They are deleted automatically from the session as soon
-            // as they are accessed.
-            // See https://symfony.com/doc/current/controller.html#flash-messages
+    
             $this->addFlash('success', 'garden.created.successfully');
             
             $email = $user->getEmail();
@@ -225,53 +235,6 @@ class GardenAdminController extends AbstractController
         }
 
         return $this->render('admin/garden/new.html.twig', [
-            'garden' => $garden,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * Displays a form to edit an existing Garden entity.
-     *
-     * @Route("/{id<\d+>}/edit", methods="GET|POST", name="admin_garden_edit")
-     * @IsGranted("edit", subject="garden", message="Gardens can only be edited by their authors.")
-     */
-    public function edit(Request $request, Garden $garden): Response
-    {
-        $form = $this->createForm(GardenType::class, $garden);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // On récupère les images transmises
-            $images = $form->get('gardenImages')->getData();
-            
-            // On boucle sur les images
-            foreach($images as $image){
-                // On génère un nouveau nom de fichier
-                $fichier = md5(uniqid()).'.'.$image->guessExtension();
-                
-                // On copie le fichier dans le dossier uploads
-                $image->move(
-                    $this->getParameter('garden_images_directory'),
-                    $fichier
-                );
-                
-                // On crée l'image dans la base de données
-                $img = new GardenImage();
-                $img->setName($fichier);
-                $img->setCreatedAt(new \DateTime("now"));
-                $garden->addGardenImage($img);
-            }
-
-            $this->getDoctrine()->getManager()->flush();
-
-            $this->addFlash('success', 'garden.updated_successfully');
-
-            return $this->redirectToRoute('admin_garden_edit', ['id' => $garden->getId(), 'garden' => $garden]);
-        }
-
-        return $this->render('admin/garden/edit.html.twig', [
             'garden' => $garden,
             'form' => $form->createView(),
         ]);

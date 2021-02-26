@@ -24,7 +24,7 @@
                     </div>
                     <div class="info-camp">
                         <div class="titre-garden-listing">
-                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">#{{ garden.id }} | {{ garden.street }} | {{ garden.postcode }} | {{ garden.city }} | {{ garden.country.langFR }}</a>
+                            <a href="{{ path('admin_garden_show', {id: garden.id}) }}">#{{ garden.id }} | {{ garden.street }} | {{ garden.postcode }} | {{ garden.city }} | {% if  garden.country is not null %}{{garden.country.langFR}}{% else %}NoWhere{% endif %} }}</a>
                         </div>
                         <div class="garden-online">
                             {% if garden.enabled %}

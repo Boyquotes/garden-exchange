@@ -19,3 +19,60 @@
 {% block sidebar %}
     {{ parent() }}
 {% endblock %}
+
+{% block cutom_javascripts %}
+    <script>
+        $(document).ready( function(){
+            var previewNode = document.querySelector("#template");
+            previewNode.id = "";
+            var previewTemplate = previewNode.parentNode.innerHTML;
+            previewNode.parentNode.removeChild(previewNode);
+            var uploader = $("#uploadFiles").dropzone({
+                //autoDiscover : false,
+                url: "{{ path('garden_upload_image', {'gardenId':garden.id}) }}",
+                createImageThumbnails: true,
+                maxThumbnailFilesize: 4,
+                thumbnailWidth: 200,
+                //thumbnailHeight: 600,
+                parallelUploads: 5,
+                timeout: 300000,
+                autoProcessQueue: true,
+                autoQueue: true,
+                previewTemplate: previewTemplate,
+                previewsContainer: "#previews",
+                acceptedFiles: "image/*"
+            });
+            
+            var uploader = uploader[0].dropzone;
+            uploader.on("addedfile", function (file) {
+                /*
+                //Get the file count
+                var count = modalUploader.files.length; // Hookup the start button
+
+                if(file.size > 15000000){
+                    $('.erreur-upload-size').show();
+                    modalUploader.removeFile(file);
+                }
+
+                file.previewElement.querySelector(".start").onclick = function () {
+                  modalUploader.enqueueFile(file);
+                }; //Set the new file count
+
+                $('#modal-uploader-file-count').html(count);
+                */
+            });
+            
+            uploader.on("sending", function (file, xhr, formData) {
+                // Show the total progress bar when upload starts
+                //document.querySelector("#total-progress").style.opacity = "1"; // And disable the start button
+                
+                tokenGarden = $('#garden__token').val();
+                formData.append("tokenGarden", tokenGarden);
+                //gardenID = $('#gardenID').val();
+                //formData.append("tokenGarden", tokenGarden);
+            });
+            
+            
+        });
+    </script>
+{% endblock %}

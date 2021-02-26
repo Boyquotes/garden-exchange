@@ -679,11 +679,7 @@
             </trans-unit>
             <trans-unit id="help.garden.photo">
                 <source>help.garden.photo</source>
-                <target><![CDATA[Ajoutez jusqu'à 5 photos. Pensez à prendre différents points de vues pour que votre hôte voit au mieux l'emplacement et l'environnement autour. Pour que votre annonce soit publiée, vous devez envoyer au minumum 2 photos (max 2MB par image).]]></target>
-            </trans-unit>
-            <trans-unit id="help.garden.photo.2">
-                <source>help.garden.photo.2</source>
-                <target><![CDATA[Pour que votre annonce soit publiée, vous devez envoyer au minumum 2 photos (max 2MB par image).]]></target>
+                <target><![CDATA[Ajoutez jusqu'à 10 photos. Pensez à prendre différents points de vues pour que votre hôte voit au mieux l'emplacement et l'environnement autour (max 10MB par image).]]></target>
             </trans-unit>
             <trans-unit id="garden.not.geolocalised.for.publication">
                 <source>garden.not.geolocalised.for.publication</source>
@@ -919,6 +915,10 @@
                 <source>contact.sended_successfully</source>
                 <target>Votre message a bien été transmis</target>
             </trans-unit>
+            <trans-unit id="contact.spam_detected">
+                <source>contact.spam_detected</source>
+                <target>Votre message ne doit pas contenir de lien commencant par http://</target>
+            </trans-unit>
             <trans-unit id="footer.contact">
                 <source>footer.contact</source>
                 <target>Contactez-nous</target>
@@ -998,6 +998,10 @@
             <trans-unit id="create.account">
                 <source>create.account</source>
                 <target>Se créer un compte</target>
+            </trans-unit>
+            <trans-unit id="mail.confirm.subject">
+                <source>mail.confirm.subject</source>
+                <target>Become a verified member. Your email adress must be validate.</target>
             </trans-unit>
             <trans-unit id="mail.verification.email.user">
                 <source>mail.verification.email.user</source>

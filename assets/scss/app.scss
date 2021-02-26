@@ -387,20 +387,11 @@ body#blog_search .post-metadata {
 
 /* Button: Input File
    ------------------------------------------------------------------------- */
-.inputfile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-}
-.inputfile + label {
+.inputUpload {
     color: #f1e5e6;
     background-color: #f8a800;
     max-width: 100%;
     font-size: 2rem;
-    /* 20px */
     font-weight: 700;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -410,30 +401,8 @@ body#blog_search .post-metadata {
     padding: 0.625rem 1.25rem;
     margin: 1em 0 2em 0;
 }
-.inputfile:focus + label,
-.inputfile.has-focus + label {
-    cursor: pointer; /* "hand" cursor */
-    outline: 1px dotted #000;
-    outline: -webkit-focus-ring-color auto 5px;
-    background-color: #722040;
-}
-.inputfile:focus + label,
-.inputfile + label:hover {
-    background-color: red;
-}
-.inputfile + label * {
-    /* pointer-events: none; */
-    /* in case of FastClick lib use */
-}
-.inputfile + label svg {
-    width: 1em;
-    height: 1em;
-    vertical-align: middle;
-    fill: currentColor;
-    margin-top: -0.25em;
-    /* 4px */
-    margin-right: 0.25em;
-    /* 4px */
+.inputUpload:hover {
+    background-color: #f68600;
 }
 
 /* Loading   ------------------------------------------------------------------------- */
@@ -641,14 +610,12 @@ body#admin_post_show .post-tags .label-default i {
 .image-upload{
     text-align: left;
 }
+.image-upload > img{
+    height: 150px;
+    object-fit: contain;
+}
 .image-upload input{
     margin: .5em 0;
-}
-#upload_garden_image_result > .thumb-image{
-    width: 200px;
-}
-#upload_garden_image_result > .thumb-image-mobile{
-    height: 100px;
 }
 #upload_post_image_result > .thumb-image{
     width: 200px;
@@ -846,6 +813,7 @@ a.index-content-conversation{
     width: 100%;
 }
 .homepage-video{
+    background: rgba(0, 0, 0, 0.2);
     font-size: 1.5em;
     padding: 0 0 0 0;
 }

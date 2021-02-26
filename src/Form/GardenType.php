@@ -65,16 +65,21 @@ class GardenType extends AbstractType
                         'min' => 50,
                         'max' => 10000,
                     ]),
+                    new NotBlank(),
                 ],
             ])
             ->add('street', null, [
                 'label' => 'label.street',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('area', null, [
                 'help' => 'help.garden_area',
                 'label' => 'label.area',
                 'constraints' => [
                     new Positive(),
+                    new NotBlank(),
                 ],
             ])
             ->add('postcode', null, [
@@ -87,6 +92,9 @@ class GardenType extends AbstractType
             ->add('city', null, [
                 'attr' => [],
                 'label' => 'label.city',
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
             ->add('lat', HiddenType::class, [
                 'attr' => [],
@@ -139,14 +147,6 @@ class GardenType extends AbstractType
                 },
             ])
             
-            ->add('gardenImages', FileType::class,[
-                'attr' => ['class' => 'inputfile', 'placeholder' => 'label.addPhotos'],
-                'label' => 'label.photos',
-                'help' => 'help.garden.photo',
-                'multiple' => true,
-                'mapped' => false,
-                'required' => false
-            ])
             ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 /** @var Garden */
                 $garden = $event->getData();

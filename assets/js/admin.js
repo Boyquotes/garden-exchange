@@ -328,48 +328,6 @@ $(document).ready( function(){
         });
     });
 
-    $('#garden_gardenImages').change(function (event) {
-        //Get count of selected files
-        var countFiles = $(this)[0].files.length;
-
-        var imgPath = $(this)[0].value;
-        var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-        var image_holder = $("#upload_garden_image_result");
-        image_holder.empty();
-
-        if(extn == "png" || extn == "jpg" || extn == "jpeg"){
-            if (typeof (FileReader) != "undefined") {
-
-                //loop for each file selected for uploaded.
-                for (var i = 0; i < countFiles; i++) {
-                    if($(this)[0].files[i].size > 2000000){
-                        alert('Cette image '+$(this)[0].files[i].name+' ne pourra pas être envoyée vers nos serveurs car elle est supérieure à 2MB');
-                    }
-                    else{
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            $("<img />", {
-                                "src": e.target.result,
-                                    "class": "thumb-image is-hidden-mobile"
-                            }).appendTo(image_holder);
-                            $("<img />", {
-                                "src": e.target.result,
-                                    "class": "thumb-image-mobile is-hidden-desktop"
-                            }).appendTo(image_holder);
-                        }
-
-                        image_holder.show();
-                        reader.readAsDataURL($(this)[0].files[i]);
-                    }
-                }
-            } else {
-                alert("This browser does not support FileReader.");
-            }
-        } else {
-            alert("Ce type de fichier n'est pas supporte, seulement jpg, jpeg, png");
-        }
-    });
-    
     $('#post_postImages').change(function (event) {
         //Get count of selected files
         var countFiles = $(this)[0].files.length;

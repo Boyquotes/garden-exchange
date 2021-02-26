@@ -157,4 +157,4 @@ $(function () {
 
 /***/ })
 
-},[["./assets/js/search.js","runtime","vendors~admin~app~login~search","vendors~admin~app~search","vendors~admin~search","vendors~search"]]]);
+},[["./assets/js/search.js","runtime","vendors~admin~app~login~search","vendors~admin~app~search","vendors~search"]]]);

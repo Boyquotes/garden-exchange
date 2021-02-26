@@ -27,12 +27,12 @@ class Garden
     private $id;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable = true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable = true)
      */
     private $street;
 
@@ -42,7 +42,7 @@ class Garden
     private $postcode;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable = true)
      */
     private $city;
 
@@ -119,7 +119,7 @@ class Garden
 
     /**
      * @ORM\ManyToOne(targetEntity=Country::class, inversedBy="gardens")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $country;
 
@@ -129,7 +129,7 @@ class Garden
     private $campingTypes;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable = true)
      */
     private $area;
 
@@ -142,6 +142,14 @@ class Garden
      * @ORM\ManyToMany(targetEntity=Rule::class, inversedBy="gardens")
      */
     private $rules;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=100, nullable=true)
+     */
+    private $status;
 
     public function __construct()
     {
@@ -470,6 +478,24 @@ class Garden
             $this->rules->removeElement($rule);
         }
 
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return GroupItem
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
         return $this;
     }
     
