@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block contact %}
-    <div class="contact">
+    <div class="contact is-hidden-mobile">
         {% if app.user == garden.user %}
             <div class='contact-show d-flex'>
                 <a href="{{ path('admin_garden_edit', {'id':garden.id}) }}" class="btn btn-lg btn-success">
@@ -45,6 +45,36 @@
             </a>
         </div>
     </div>
+
+    <div class="contact is-hidden-desktop">
+        {% if app.user == garden.user %}
+            <div class='contact-show'>
+                <a href="{{ path('admin_garden_edit', {'id':garden.id}) }}" class="btn btn-lg btn-success">
+                    <div><i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}</div>
+                </a>
+            </div>
+        {% else %}
+            <div class='contact-show'>
+                <a href="{{ path('conversation_exchange_new', {'userId': garden.user.id, 'gardenId':garden.id}) }}" class="btn btn-lg btn-success">
+                    <div><i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }} {{ garden.user.firstname }}</div>
+                </a>
+            </div>
+        {% endif %}
+        <div class="contact-profile">
+            <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}" class="btn btn-lg btn-warning">
+                <div><i class="fa fa-user" aria-hidden="true"></i> {{ 'see.profile'|trans }}</div>
+            </a>
+        </div>
+        <div class="contact-verified">
+            <a href="#" class="btn btn-lg btn-warning">
+                <div>{% if ( garden.user.profile.emailVerified or garden.user.profile.phoneVerified or garden.user.profile.identityVerified) is not empty%}<span>{{ 'verified.member'|trans }}{% else %}{{ 'new.member'|trans }}{% endif %} :</span></div>
+                <div>{% if garden.user.profile.emailVerified %}{{ 'verified.email.member'|trans }}{% else %}{{ 'not.verified.email.member'|trans }}{% endif %}</div>
+                <div>{% if garden.user.profile.phoneVerified %}{{ 'verified.phone.member'|trans }}{% else %}{{ 'not.verified.phone.member'|trans }}{% endif %}</div>
+                <div>{% if garden.user.profile.identityVerified %}{{ 'verified.identity.member'|trans }}{% else %}{{ 'not.verified.identity.member'|trans }}{% endif %}</div>
+            </a>
+        </div>
+    </div>
+    
 {% endblock %}
 
 {% block main %}
@@ -68,9 +98,9 @@
             </div>
             <div class="title-garden"><h1>{{ garden.city }}{% if is_granted('ROLE_ADMIN') %}(#{{ garden.id }}){% endif %}</h1></div>
         </div>
-        <div class="d-flex other-photos is-hidden-mobile col-md-6">
+        <div class="d-flex other-photos col-md-6">
             {% for image in garden.gardenImages %}
-                {% if loop.index > 1 and  loop.index < 6%}
+                {% if loop.index > 1 and  loop.index < 11%}
                     <div class="image{{image.id}}">
                         <a href="{{ absolute_url(asset('/uploads/gardens/'~image.name)) }}" rel="lightbox" title="{{ image.libelle }}" data-caption="{{ image.libelle }}"><img src="{{ asset('/uploads/gardens/'~image.name) }}" alt="{{ image.name }}"></a>
                     </div>
@@ -148,7 +178,7 @@
             </div>
         </div>
     {% endif %}
-    
+
     {% if (garden.lat is not null and garden.lng is not null) or (garden.latCity is not null and garden.lngCity is not null) %}
         <hr />
         <div class="localisation jc-center">

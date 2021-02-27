@@ -8693,7 +8693,7 @@ body {
 .body-container {
   position: relative;
   width: 100%;
-  margin: 6vh 0 0 0;
+  margin: 4em 0 0 0;
   overflow-wrap: anywhere;
 }
 
@@ -9490,6 +9490,11 @@ body#admin_post_show .post-tags .label-default i {
   height: 100px;
 }
 
+.recup-input {
+  width: 40%;
+  margin: .5em 1em 1.5em 0;
+}
+
 /* Conversation   ------------------------------------------------------------------------- */
 #admin_conversation_new .garden-result {
   width: 100%;
@@ -9992,6 +9997,11 @@ gardensCarte {
   width: 100%;
 }
 
+.other-photos {
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
 .other-photos img:first {
   margin: 0;
 }
@@ -10001,7 +10011,7 @@ gardensCarte {
 }
 
 .other-photos div {
-  justify-content: space-around;
+  margin: .2em;
 }
 
 .description-garden {
@@ -10235,9 +10245,14 @@ p, ul, ol {
   }
   .contact {
     position: relative;
+    display: flex;
     margin: 0 0 1em 0;
     top: 0;
-    top: 0;
+    right: 0;
+    flex-wrap: wrap;
+  }
+  .contact.is-hidden-mobile {
+    display: none;
   }
   .campingType_choice, .equipment_choice, .rule_choice {
     margin: 0 .5em;

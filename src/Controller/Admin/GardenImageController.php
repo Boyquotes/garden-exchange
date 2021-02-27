@@ -43,10 +43,7 @@ class GardenImageController extends AbstractController
      */
     public function uploadGardenImage(Request $request, Garden $garden){
         $token = $request->request->get('tokenGarden');
-dump($garden);
-//~ dump($request);
-//~ dump($token);
-dump($request->request->get('tokenGarden'));
+
         $response = array(
             'status' => 'error',
             'filename' => 'Erreur',
@@ -55,30 +52,20 @@ dump($request->request->get('tokenGarden'));
         
         $media = $request->files->get('file');
         
-        dump($media->guessExtension());
-
-
-//~ dump($media);
-//~ dump($media->getClientOriginalName()[1]);
-        
         $filename = $media->getClientOriginalName();
-        $filename_token = $token."__".$filename;
+        $randTitre = rand(10000, 19000);
+        $filename_rand_token = $token."_".$randTitre."__".$filename;
         $contentFile = file_get_contents($media->getPathname());
-
-       //~ $fichier = new File($filename, false);
-       //~ dump($fichier);
-       //~ $extension = $fichier->getExtension();
-       //~ dump($extension);
 
         // move media file in uploads directory
         $media->move(
             $this->getParameter('garden_images_directory'),
-            $filename_token
+            $filename_rand_token
         );
 
         // insert media in database
         $img = new GardenImage();
-        $img->setName($filename_token);
+        $img->setName($filename_rand_token);
         $img->setGarden($garden);
         $img->setCreatedAt(new \DateTime("now"));
 

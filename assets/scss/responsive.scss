@@ -72,9 +72,14 @@
     }
     .contact {
         position: relative;
+        display: flex;
         margin: 0 0 1em 0;
         top: 0;
-        top: 0;
+        right: 0;
+        flex-wrap: wrap;
+    }
+    .contact.is-hidden-mobile{
+        display: none;
     }
     .campingType_choice, .equipment_choice, .rule_choice {
         margin: 0 .5em;

@@ -623,6 +623,10 @@ body#admin_post_show .post-tags .label-default i {
 #upload_post_image_result > .thumb-image-mobile{
     height: 100px;
 }
+.recup-input{
+    width: 40%;
+    margin: .5em 1em 1.5em 0;
+}
 
 /* Conversation   ------------------------------------------------------------------------- */
 #admin_conversation_new .garden-result{
@@ -1044,7 +1048,8 @@ gardensCarte{
     width: 100%;
 }
 .other-photos{
-
+    justify-content: space-around;
+    flex-wrap: wrap;
 }
 .other-photos img:first{
     margin: 0;
@@ -1053,7 +1058,7 @@ gardensCarte{
     height: 100px;
 }
 .other-photos div{
-    justify-content: space-around;
+    margin: .2em;
 }
 .description-garden{
     word-wrap: anywhere;

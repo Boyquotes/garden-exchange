@@ -130,7 +130,7 @@ class GardenAdminController extends AbstractController
      */
     public function save(Request $request, MailerInterface $mailer, TranslatorInterface $translator, Garden $garden): Response
     {
-        dump($request);
+        //~ dump($request);
         dump($garden);
         //~ exit;
         $user = $this->getUser();

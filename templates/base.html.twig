@@ -50,26 +50,19 @@
             {{ include('includes/modals/base_modal.html.twig') }}
 
             <section>
-                
                 {% block contact %}{% endblock %}
                 
                 {% block body %}
-
                     {% block admin %}
                     {% endblock %}
 
                     <div class="row">
                         <div id="main" class="{% block class_body %}col-sm-9{% endblock %}">
-
-
                             {% block main %}{% endblock %}
                         </div>
-
-
                         {% block sidebar %}
                         {% endblock %}
                     </div>
-                    
                 {% endblock %}
             </section>
                 
