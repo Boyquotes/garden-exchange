@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -12,15 +14,16 @@
 
 namespace PhpCsFixer\Fixer\PhpUnit;
 
-use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpCsFixer\DocBlock\Line;
+use PhpCsFixer\Fixer\AbstractPhpUnitFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -30,22 +33,22 @@ use PhpCsFixer\Utils;
 /**
  * @author Filippo Tessarotto <zoeslam@gmail.com>
  */
-final class PhpUnitMethodCasingFixer extends AbstractFixer implements ConfigurableFixerInterface
+final class PhpUnitMethodCasingFixer extends AbstractPhpUnitFixer implements ConfigurableFixerInterface
 {
     /**
      * @internal
      */
-    const CAMEL_CASE = 'camel_case';
+    public const CAMEL_CASE = 'camel_case';
 
     /**
      * @internal
      */
-    const SNAKE_CASE = 'snake_case';
+    public const SNAKE_CASE = 'snake_case';
 
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'Enforce camel (or snake) case for PHPUnit test methods, following configuration.',
@@ -76,7 +79,7 @@ class MyTest extends \\PhpUnit\\FrameWork\\TestCase
      *
      * Must run after PhpUnitTestAnnotationFixer.
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 0;
     }
@@ -84,26 +87,7 @@ class MyTest extends \\PhpUnit\\FrameWork\\TestCase
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isAllTokenKindsFound([T_CLASS, T_FUNCTION]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
-    {
-        $phpUnitTestCaseIndicator = new PhpUnitTestCaseIndicator();
-        foreach ($phpUnitTestCaseIndicator->findPhpUnitClasses($tokens) as $indexes) {
-            $this->applyCasing($tokens, $indexes[0], $indexes[1]);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function createConfigurationDefinition()
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('case', 'Apply camel or snake case to test methods'))
@@ -114,10 +98,9 @@ class MyTest extends \\PhpUnit\\FrameWork\\TestCase
     }
 
     /**
-     * @param int $startIndex
-     * @param int $endIndex
+     * {@inheritdoc}
      */
-    private function applyCasing(Tokens $tokens, $startIndex, $endIndex)
+    protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($index = $endIndex - 1; $index > $startIndex; --$index) {
             if (!$this->isTestMethod($tokens, $index)) {
@@ -133,37 +116,34 @@ class MyTest extends \\PhpUnit\\FrameWork\\TestCase
             }
 
             $docBlockIndex = $this->getDocBlockIndex($tokens, $index);
-            if ($this->hasDocBlock($tokens, $index)) {
+
+            if ($this->isPHPDoc($tokens, $docBlockIndex)) {
                 $this->updateDocBlock($tokens, $docBlockIndex);
             }
         }
     }
 
-    /**
-     * @param string $functionName
-     *
-     * @return string
-     */
-    private function updateMethodCasing($functionName)
+    private function updateMethodCasing(string $functionName): string
     {
+        $parts = explode('::', $functionName);
+
+        $functionNamePart = array_pop($parts);
+
         if (self::CAMEL_CASE === $this->configuration['case']) {
-            $newFunctionName = $functionName;
-            $newFunctionName = ucwords($newFunctionName, '_');
-            $newFunctionName = str_replace('_', '', $newFunctionName);
-            $newFunctionName = lcfirst($newFunctionName);
+            $newFunctionNamePart = $functionNamePart;
+            $newFunctionNamePart = ucwords($newFunctionNamePart, '_');
+            $newFunctionNamePart = str_replace('_', '', $newFunctionNamePart);
+            $newFunctionNamePart = lcfirst($newFunctionNamePart);
         } else {
-            $newFunctionName = Utils::camelCaseToUnderscore($functionName);
+            $newFunctionNamePart = Utils::camelCaseToUnderscore($functionNamePart);
         }
 
-        return $newFunctionName;
+        $parts[] = $newFunctionNamePart;
+
+        return implode('::', $parts);
     }
 
-    /**
-     * @param int $index
-     *
-     * @return bool
-     */
-    private function isTestMethod(Tokens $tokens, $index)
+    private function isTestMethod(Tokens $tokens, int $index): bool
     {
         // Check if we are dealing with a (non abstract, non lambda) function
         if (!$this->isMethod($tokens, $index)) {
@@ -177,73 +157,28 @@ class MyTest extends \\PhpUnit\\FrameWork\\TestCase
         if ($this->startsWith('test', $functionName)) {
             return true;
         }
-        // If the function doesn't have test in its name, and no doc block, it's not a test
-        if (!$this->hasDocBlock($tokens, $index)) {
-            return false;
-        }
 
         $docBlockIndex = $this->getDocBlockIndex($tokens, $index);
-        $doc = $tokens[$docBlockIndex]->getContent();
-        if (false === strpos($doc, '@test')) {
-            return false;
-        }
 
-        return true;
+        return
+            $this->isPHPDoc($tokens, $docBlockIndex) // If the function doesn't have test in its name, and no doc block, it's not a test
+            && false !== strpos($tokens[$docBlockIndex]->getContent(), '@test')
+        ;
     }
 
-    /**
-     * @param int $index
-     *
-     * @return bool
-     */
-    private function isMethod(Tokens $tokens, $index)
+    private function isMethod(Tokens $tokens, int $index): bool
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
 
         return $tokens[$index]->isGivenKind(T_FUNCTION) && !$tokensAnalyzer->isLambda($index);
     }
 
-    /**
-     * @param string $needle
-     * @param string $haystack
-     *
-     * @return bool
-     */
-    private function startsWith($needle, $haystack)
+    private function startsWith(string $needle, string $haystack): bool
     {
         return substr($haystack, 0, \strlen($needle)) === $needle;
     }
 
-    /**
-     * @param int $index
-     *
-     * @return bool
-     */
-    private function hasDocBlock(Tokens $tokens, $index)
-    {
-        $docBlockIndex = $this->getDocBlockIndex($tokens, $index);
-
-        return $tokens[$docBlockIndex]->isGivenKind(T_DOC_COMMENT);
-    }
-
-    /**
-     * @param int $index
-     *
-     * @return int
-     */
-    private function getDocBlockIndex(Tokens $tokens, $index)
-    {
-        do {
-            $index = $tokens->getPrevNonWhitespace($index);
-        } while ($tokens[$index]->isGivenKind([T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FINAL, T_ABSTRACT, T_COMMENT]));
-
-        return $index;
-    }
-
-    /**
-     * @param int $docBlockIndex
-     */
-    private function updateDocBlock(Tokens $tokens, $docBlockIndex)
+    private function updateDocBlock(Tokens $tokens, int $docBlockIndex): void
     {
         $doc = new DocBlock($tokens[$docBlockIndex]->getContent());
         $lines = $doc->getLines();

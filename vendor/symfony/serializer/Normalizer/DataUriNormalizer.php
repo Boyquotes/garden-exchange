@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
  */
 class DataUriNormalizer implements NormalizerInterface, DenormalizerInterface, CacheableSupportsMethodInterface
 {
-    private static $supportedTypes = [
+    private const SUPPORTED_TYPES = [
         \SplFileInfo::class => true,
         \SplFileObject::class => true,
         File::class => true,
@@ -47,6 +47,8 @@ class DataUriNormalizer implements NormalizerInterface, DenormalizerInterface, C
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
     public function normalize($object, string $format = null, array $context = [])
     {
@@ -88,6 +90,8 @@ class DataUriNormalizer implements NormalizerInterface, DenormalizerInterface, C
      *
      * @throws InvalidArgumentException
      * @throws NotNormalizableValueException
+     *
+     * @return \SplFileInfo
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
@@ -120,7 +124,7 @@ class DataUriNormalizer implements NormalizerInterface, DenormalizerInterface, C
      */
     public function supportsDenormalization($data, string $type, string $format = null)
     {
-        return isset(self::$supportedTypes[$type]);
+        return isset(self::SUPPORTED_TYPES[$type]);
     }
 
     /**

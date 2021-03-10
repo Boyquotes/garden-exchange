@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
  */
 class JsonEncode implements EncoderInterface
 {
-    const OPTIONS = 'json_encode_options';
+    public const OPTIONS = 'json_encode_options';
 
     private $defaultContext = [
         self::OPTIONS => 0,
@@ -46,11 +46,11 @@ class JsonEncode implements EncoderInterface
             throw new NotEncodableValueException($e->getMessage(), 0, $e);
         }
 
-        if (\PHP_VERSION_ID >= 70300 && (JSON_THROW_ON_ERROR & $options)) {
+        if (\PHP_VERSION_ID >= 70300 && (\JSON_THROW_ON_ERROR & $options)) {
             return $encodedJson;
         }
 
-        if (JSON_ERROR_NONE !== json_last_error() && (false === $encodedJson || !($options & JSON_PARTIAL_OUTPUT_ON_ERROR))) {
+        if (\JSON_ERROR_NONE !== json_last_error() && (false === $encodedJson || !($options & \JSON_PARTIAL_OUTPUT_ON_ERROR))) {
             throw new NotEncodableValueException(json_last_error_msg());
         }
 

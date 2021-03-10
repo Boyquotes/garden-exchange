@@ -17,6 +17,8 @@ use ApiPlatform\Core\Api\ResourceClassResolverInterface;
 use ApiPlatform\Core\Util\ResourceClassInfoTrait;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\PropertyInfo\Type;
+use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * {@inheritdoc}
@@ -50,8 +52,8 @@ final class TypeFactory implements TypeFactoryInterface
     public function getType(Type $type, string $format = 'json', ?bool $readableLink = null, ?array $serializerContext = null, Schema $schema = null): array
     {
         if ($type->isCollection()) {
-            $keyType = $type->getCollectionKeyType();
-            $subType = $type->getCollectionValueType() ?? new Type($type->getBuiltinType(), false, $type->getClassName(), false);
+            $keyType = method_exists(Type::class, 'getCollectionKeyTypes') ? ($type->getCollectionKeyTypes()[0] ?? null) : $type->getCollectionKeyType();
+            $subType = (method_exists(Type::class, 'getCollectionValueTypes') ? ($type->getCollectionValueTypes()[0] ?? null) : $type->getCollectionValueType()) ?? new Type($type->getBuiltinType(), false, $type->getClassName(), false);
 
             if (null !== $keyType && Type::BUILTIN_TYPE_STRING === $keyType->getBuiltinType()) {
                 return $this->addNullabilityToTypeDefinition([
@@ -106,10 +108,16 @@ final class TypeFactory implements TypeFactoryInterface
                 'format' => 'duration',
             ];
         }
-        if (is_a($className, UuidInterface::class, true)) {
+        if (is_a($className, UuidInterface::class, true) || is_a($className, Uuid::class, true)) {
             return [
                 'type' => 'string',
                 'format' => 'uuid',
+            ];
+        }
+        if (is_a($className, Ulid::class, true)) {
+            return [
+                'type' => 'string',
+                'format' => 'ulid',
             ];
         }
 
@@ -118,7 +126,7 @@ final class TypeFactory implements TypeFactoryInterface
             return ['type' => 'string'];
         }
 
-        if ($this->isResourceClass($className) && true !== $readableLink) {
+        if (true !== $readableLink && $this->isResourceClass($className)) {
             return [
                 'type' => 'string',
                 'format' => 'iri-reference',
@@ -159,6 +167,17 @@ final class TypeFactory implements TypeFactoryInterface
                 'nullable' => true,
                 'anyOf' => [$jsonSchema],
             ];
+        }
+
+        if ($schema && Schema::VERSION_JSON_SCHEMA === $schema->getVersion()) {
+            return array_merge(
+                $jsonSchema,
+                [
+                    'type' => \is_array($jsonSchema['type'])
+                        ? array_merge($jsonSchema['type'], ['null'])
+                        : [$jsonSchema['type'], 'null'],
+                ]
+            );
         }
 
         return array_merge($jsonSchema, ['nullable' => true]);

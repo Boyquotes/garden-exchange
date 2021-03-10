@@ -139,7 +139,7 @@ final class Pagination
                 $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
                 $maxItemsPerPage = $resourceMetadata->getCollectionOperationAttribute($operationName, 'maximum_items_per_page', null, true);
                 if (null !== $maxItemsPerPage) {
-                    @trigger_error('The "maximum_items_per_page" option has been deprecated since API Platform 2.5 in favor of "pagination_maximum_items_per_page" and will be removed in API Platform 3.', E_USER_DEPRECATED);
+                    @trigger_error('The "maximum_items_per_page" option has been deprecated since API Platform 2.5 in favor of "pagination_maximum_items_per_page" and will be removed in API Platform 3.', \E_USER_DEPRECATED);
                 }
                 $maxItemsPerPage = $resourceMetadata->getCollectionOperationAttribute($operationName, 'pagination_maximum_items_per_page', $maxItemsPerPage ?? $this->options['maximum_items_per_page'], true);
             }
@@ -202,6 +202,22 @@ final class Pagination
         return $this->getEnabled($context, $resourceClass, $operationName, true);
     }
 
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function getGraphQlPaginationType(string $resourceClass, string $operationName): string
+    {
+        try {
+            $resourceMetadata = $this->resourceMetadataFactory->create($resourceClass);
+        } catch (ResourceClassNotFoundException $e) {
+            return 'cursor';
+        }
+
+        return (string) $resourceMetadata->getGraphqlAttribute($operationName, 'pagination_type', 'cursor', true);
+    }
+
     /**
      * Is the classic or partial pagination enabled?
      */
@@ -218,7 +234,7 @@ final class Pagination
         }
 
         if ($clientEnabled) {
-            return filter_var($this->getParameterFromContext($context, $this->options[$partial ? 'partial_parameter_name' : 'enabled_parameter_name'], $enabled), FILTER_VALIDATE_BOOLEAN);
+            return filter_var($this->getParameterFromContext($context, $this->options[$partial ? 'partial_parameter_name' : 'enabled_parameter_name'], $enabled), \FILTER_VALIDATE_BOOLEAN);
         }
 
         return (bool) $enabled;

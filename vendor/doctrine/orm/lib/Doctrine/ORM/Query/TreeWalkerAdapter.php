@@ -1,4 +1,5 @@
 <?php
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,26 +20,28 @@
 
 namespace Doctrine\ORM\Query;
 
+use Doctrine\ORM\AbstractQuery;
+
+use function array_diff;
+use function array_keys;
+
 /**
  * An adapter implementation of the TreeWalker interface. The methods in this class
  * are empty. ﻿This class exists as convenience for creating tree walkers.
- *
- * @author Roman Borschel <roman@code-factory.org>
- * @since 2.0
  */
 abstract class TreeWalkerAdapter implements TreeWalker
 {
     /**
      * The original Query.
      *
-     * @var \Doctrine\ORM\AbstractQuery
+     * @var AbstractQuery
      */
     private $_query;
 
     /**
      * The ParserResult of the original query that was produced by the Parser.
      *
-     * @var \Doctrine\ORM\Query\ParserResult
+     * @var ParserResult
      */
     private $_parserResult;
 
@@ -54,8 +57,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
      */
     public function __construct($query, $parserResult, array $queryComponents)
     {
-        $this->_query = $query;
-        $this->_parserResult = $parserResult;
+        $this->_query           = $query;
+        $this->_parserResult    = $parserResult;
         $this->_queryComponents = $queryComponents;
     }
 
@@ -92,7 +95,7 @@ abstract class TreeWalkerAdapter implements TreeWalker
     /**
      * Retrieves the Query Instance responsible for the current walkers execution.
      *
-     * @return \Doctrine\ORM\AbstractQuery
+     * @return AbstractQuery
      */
     protected function _getQuery()
     {
@@ -102,7 +105,7 @@ abstract class TreeWalkerAdapter implements TreeWalker
     /**
      * Retrieves the ParserResult.
      *
-     * @return \Doctrine\ORM\Query\ParserResult
+     * @return ParserResult
      */
     protected function _getParserResult()
     {
@@ -111,6 +114,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSelectStatement(AST\SelectStatement $AST)
     {
@@ -118,6 +123,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSelectClause($selectClause)
     {
@@ -125,6 +132,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkFromClause($fromClause)
     {
@@ -132,6 +141,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkFunction($function)
     {
@@ -139,6 +150,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkOrderByClause($orderByClause)
     {
@@ -146,6 +159,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkOrderByItem($orderByItem)
     {
@@ -153,6 +168,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkHavingClause($havingClause)
     {
@@ -160,6 +177,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkJoin($join)
     {
@@ -167,6 +186,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSelectExpression($selectExpression)
     {
@@ -174,6 +195,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkQuantifiedExpression($qExpr)
     {
@@ -181,6 +204,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSubselect($subselect)
     {
@@ -188,6 +213,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSubselectFromClause($subselectFromClause)
     {
@@ -195,6 +222,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSimpleSelectClause($simpleSelectClause)
     {
@@ -202,6 +231,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSimpleSelectExpression($simpleSelectExpression)
     {
@@ -209,6 +240,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkAggregateExpression($aggExpression)
     {
@@ -216,6 +249,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkGroupByClause($groupByClause)
     {
@@ -223,6 +258,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkGroupByItem($groupByItem)
     {
@@ -230,6 +267,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkUpdateStatement(AST\UpdateStatement $AST)
     {
@@ -237,6 +276,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkDeleteStatement(AST\DeleteStatement $AST)
     {
@@ -244,6 +285,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkDeleteClause(AST\DeleteClause $deleteClause)
     {
@@ -251,6 +294,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkUpdateClause($updateClause)
     {
@@ -258,6 +303,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkUpdateItem($updateItem)
     {
@@ -265,6 +312,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkWhereClause($whereClause)
     {
@@ -272,6 +321,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkConditionalExpression($condExpr)
     {
@@ -279,6 +330,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkConditionalTerm($condTerm)
     {
@@ -286,6 +339,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkConditionalFactor($factor)
     {
@@ -293,6 +348,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkConditionalPrimary($primary)
     {
@@ -300,6 +357,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkExistsExpression($existsExpr)
     {
@@ -307,6 +366,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkCollectionMemberExpression($collMemberExpr)
     {
@@ -314,6 +375,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkEmptyCollectionComparisonExpression($emptyCollCompExpr)
     {
@@ -321,6 +384,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkNullComparisonExpression($nullCompExpr)
     {
@@ -328,6 +393,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkInExpression($inExpr)
     {
@@ -335,6 +402,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkInstanceOfExpression($instanceOfExpr)
     {
@@ -342,6 +411,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkLiteral($literal)
     {
@@ -349,6 +420,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkBetweenExpression($betweenExpr)
     {
@@ -356,6 +429,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkLikeExpression($likeExpr)
     {
@@ -363,6 +438,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkStateFieldPathExpression($stateFieldPathExpression)
     {
@@ -370,6 +447,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkComparisonExpression($compExpr)
     {
@@ -377,6 +456,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkInputParameter($inputParam)
     {
@@ -384,6 +465,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkArithmeticExpression($arithmeticExpr)
     {
@@ -391,6 +474,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkArithmeticTerm($term)
     {
@@ -398,6 +483,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkStringPrimary($stringPrimary)
     {
@@ -405,6 +492,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkArithmeticFactor($factor)
     {
@@ -412,6 +501,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkSimpleArithmeticExpression($simpleArithmeticExpr)
     {
@@ -419,6 +510,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkPathExpression($pathExpr)
     {
@@ -426,6 +519,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function walkResultVariable($resultVariable)
     {
@@ -433,6 +528,8 @@ abstract class TreeWalkerAdapter implements TreeWalker
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function getExecutor($AST)
     {

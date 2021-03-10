@@ -188,7 +188,7 @@ footer #footer-resources i {
   border-color: #e74c3c
 }
 
-.form-group.has-error .control-label {
+.form-group.has-error, .form-group.has-error .control-label {
   color: #e74c3c
 }
 
@@ -604,7 +604,14 @@ body#admin_post_show .post-tags .label-default i {
     word-wrap: anywhere;
     word-wrap: break-word;
 }
-
+.ui-menu{
+    background: #FFF;
+    border: 1px solid #e7e8e6;
+}
+.ui-menu-item-wrapper, .ui-menu .ui-state-focus, .ui-menu .ui-state-active{
+    margin: 0;
+    line-height: 2em;
+}
 /* Photos   ------------------------------------------------------------------------- */
 
 .image-upload{

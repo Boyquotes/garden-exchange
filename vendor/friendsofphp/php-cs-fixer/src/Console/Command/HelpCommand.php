@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -23,7 +25,8 @@ use PhpCsFixer\FixerConfiguration\DeprecatedFixerOption;
 use PhpCsFixer\FixerConfiguration\FixerOptionInterface;
 use PhpCsFixer\FixerFactory;
 use PhpCsFixer\Preg;
-use PhpCsFixer\RuleSet;
+use PhpCsFixer\RuleSet\RuleSet;
+use PhpCsFixer\RuleSet\RuleSets;
 use PhpCsFixer\Utils;
 use Symfony\Component\Console\Command\HelpCommand as BaseHelpCommand;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -44,10 +47,8 @@ final class HelpCommand extends BaseHelpCommand
 
     /**
      * Returns help-copy suitable for console output.
-     *
-     * @return string
      */
-    public static function getHelpCopy()
+    public static function getHelpCopy(): string
     {
         $template =
             <<<'EOF'
@@ -57,36 +58,35 @@ problems as possible on a given file or files in a given directory and its subdi
     <info>$ php %command.full_name% /path/to/dir</info>
     <info>$ php %command.full_name% /path/to/file</info>
 
-By default <comment>--path-mode</comment> is set to ``override``, which means, that if you specify the path to a file or a directory via
-command arguments, then the paths provided to a ``Finder`` in config file will be ignored. You can use <comment>--path-mode=intersection</comment>
+By default <comment>--path-mode</comment> is set to `override`, which means, that if you specify the path to a file or a directory via
+command arguments, then the paths provided to a `Finder` in config file will be ignored. You can use <comment>--path-mode=intersection</comment>
 to merge paths from the config file and from the argument:
 
     <info>$ php %command.full_name% --path-mode=intersection /path/to/dir</info>
 
-The <comment>--format</comment> option for the output format. Supported formats are ``txt`` (default one), ``json``, ``xml``, ``checkstyle``, ``junit`` and ``gitlab``.
+The <comment>--format</comment> option for the output format. Supported formats are `txt` (default one), `json`, `xml`, `checkstyle`, `junit` and `gitlab`.
 
 NOTE: the output for the following formats are generated in accordance with XML schemas
 
-* ``junit`` follows the `JUnit xml schema from Jenkins </doc/junit-10.xsd>`_
-* ``checkstyle`` follows the common `"checkstyle" xml schema </doc/checkstyle.xsd>`_
+* `checkstyle` follows the common `"checkstyle" xml schema </doc/report-schema/checkstyle.xsd>`_
+* `junit` follows the `JUnit xml schema from Jenkins </doc/report-schema/junit-10.xsd>`_
 
 The <comment>--quiet</comment> Do not output any message.
 
-The <comment>--verbose</comment> option will show the applied rules. When using the ``txt`` format it will also display progress notifications.
+The <comment>--verbose</comment> option will show the applied rules. When using the `txt` format it will also display progress notifications.
 
 NOTE: if there is an error like "errors reported during linting after fixing", you can use this to be even more verbose for debugging purpose
 
-* ``--verbose=0`` or no option: normal
-* ``--verbose``, ``--verbose=1``, ``-v``: verbose
-* ``--verbose=2``, ``-vv``: very verbose
-* ``--verbose=3``, ``-vvv``: debug
+* `-v`: verbose
+* `-vv`: very verbose
+* `-vvv`: debug
 
 The <comment>--rules</comment> option limits the rules to apply to the
 project:
 
-    <info>$ php %command.full_name% /path/to/project --rules=@PSR2</info>
+    <info>$ php %command.full_name% /path/to/project --rules=@PSR12</info>
 
-By default the PSR1 and PSR2 rules are used.
+By default the PSR12 rules are used.
 
 The <comment>--rules</comment> option lets you choose the exact rules to
 apply (the rule names must be separated by a comma):
@@ -102,7 +102,7 @@ When using combinations of exact and exclude rules, applying exact rules along w
 
     <info>$ php %command.full_name% /path/to/project --rules=@Symfony,-@PSR1,-blank_line_before_statement,strict_comparison</info>
 
-Complete configuration for rules can be supplied using a ``json`` formatted string.
+Complete configuration for rules can be supplied using a `json` formatted string.
 
     <info>$ php %command.full_name% /path/to/project --rules='{"concat_space": {"spacing": "none"}}'</info>
 
@@ -110,12 +110,10 @@ The <comment>--dry-run</comment> flag will run the fixer without making changes 
 
 The <comment>--diff</comment> flag can be used to let the fixer output all the changes it makes.
 
-The <comment>--diff-format</comment> option allows to specify in which format the fixer should output the changes it makes:
-
 * <comment>null</comment>: no diff;
 * <comment>udiff</comment>: unified diff format.
 
-The <comment>--allow-risky</comment> option (pass ``yes`` or ``no``) allows you to set whether risky rules may run. Default value is taken from config file.
+The <comment>--allow-risky</comment> option (pass `yes` or `no`) allows you to set whether risky rules may run. Default value is taken from config file.
 A rule is considered risky if it could change code behaviour. By default no risky rules are run.
 
 The <comment>--stop-on-violation</comment> flag stops the execution upon first file that needs to be fixed.
@@ -135,7 +133,7 @@ automatically fix anything:
     <info>$ cat foo.php | php %command.full_name% --diff -</info>
 
 Finally, if you don't need BC kept on CLI level, you might use `PHP_CS_FIXER_FUTURE_MODE` to start using options that
-would be default in next MAJOR release (unified differ, dots, full-width progress indicator):
+would be default in next MAJOR release and to forbid using deprecated configuration:
 
     <info>$ PHP_CS_FIXER_FUTURE_MODE=1 php %command.full_name% -v --diff</info>
 
@@ -148,7 +146,7 @@ Use the following command to quickly understand what a rule will do to your code
 
 To visualize all the rules that belong to a ruleset:
 
-    <info>$ php php-cs-fixer.phar describe @PSR2</info>
+    <info>$ php php-cs-fixer.phar describe @PSR12</info>
 
 Choose from the list of available rules:
 
@@ -172,7 +170,7 @@ is a good practice to add that file into your <comment>.gitignore</comment> file
 With the <comment>--config</comment> option you can specify the path to the
 <comment>.php_cs</comment> file.
 
-The example below will add two rules to the default list of PSR2 set rules:
+The example below will add two rules to the default list of PSR12 set rules:
 
     <?php
 
@@ -182,9 +180,11 @@ The example below will add two rules to the default list of PSR2 set rules:
         ->in(__DIR__)
     ;
 
-    return (new PhpCsFixer\Config())
+    $config = new Config();
+
+    return $config
         ->setRules([
-            '@PSR2' => true,
+            '@PSR12' => true,
             'strict_param' => true,
             'array_syntax' => ['syntax' => 'short'],
         ])
@@ -193,14 +193,14 @@ The example below will add two rules to the default list of PSR2 set rules:
 
     ?>
 
-**NOTE**: ``exclude`` will work only for directories, so if you need to exclude file, try ``notPath``.
-Both ``exclude`` and ``notPath`` methods accept only relative paths to the ones defined with the ``in`` method.
+**NOTE**: `exclude` will work only for directories, so if you need to exclude file, try `notPath`.
+Both `exclude` and `notPath` methods accept only relative paths to the ones defined with the `in` method.
 
 See `Symfony\Finder` (<url>https://symfony.com/doc/current/components/finder.html</url>)
 online documentation for other `Finder` methods.
 
 You may also use an exclude list for the rules instead of the above shown include approach.
-The following example shows how to use all ``Symfony`` rules but the ``full_opening_tag`` rule.
+The following example shows how to use all `Symfony` rules but the `full_opening_tag` rule.
 
     <?php
 
@@ -209,7 +209,9 @@ The following example shows how to use all ``Symfony`` rules but the ``full_open
         ->in(__DIR__)
     ;
 
-    return (new PhpCsFixer\Config())
+    $config = new Config();
+
+    return $config
         ->setRules([
             '@Symfony' => true,
             'full_opening_tag' => false,
@@ -224,14 +226,16 @@ configure them in your config file.
 
     <?php
 
-    return (new PhpCsFixer\Config())
+    $config = new Config();
+
+    return $config
         ->setIndent("\t")
         ->setLineEnding("\r\n")
     ;
 
     ?>
 
-By using ``--using-cache`` option with ``yes`` or ``no`` you can set if the caching
+By using `--using-cache` option with `yes` or `no` you can set if the caching
 mechanism should be used.
 
 Caching
@@ -243,30 +247,30 @@ files if the tool version has changed or the list of rules has changed.
 Cache is supported only for tool downloaded as phar file or installed via
 composer.
 
-Cache can be disabled via ``--using-cache`` option or config file:
+Cache can be disabled via `--using-cache` option or config file:
 
     <?php
 
-    return (new PhpCsFixer\Config())
-        ->setUsingCache(false)
-    ;
+    $config = new Config();
+
+    return $config->setUsingCache(false);
 
     ?>
 
-Cache file can be specified via ``--cache-file`` option or config file:
+Cache file can be specified via `--cache-file` option or config file:
 
     <?php
 
-    return (new PhpCsFixer\Config())
-        ->setCacheFile(__DIR__.'/.php_cs.cache')
-    ;
+    $config = new Config();
+
+    return $config->setCacheFile(__DIR__.'/.php_cs.cache');
 
     ?>
 
 Using PHP CS Fixer on CI
 ------------------------
 
-Require ``friendsofphp/php-cs-fixer`` as a ``dev`` dependency:
+Require `friendsofphp/php-cs-fixer` as a `dev` dependency:
 
     $ ./composer.phar require --dev friendsofphp/php-cs-fixer
 
@@ -274,12 +278,12 @@ Then, add the following command to your CI:
 
 %%%CI_INTEGRATION%%%
 
-Where ``$COMMIT_RANGE`` is your range of commits, e.g. ``$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
+Where `$COMMIT_RANGE` is your range of commits, e.g. `$TRAVIS_COMMIT_RANGE` or `HEAD~..HEAD`.
 
 Exit code
 ---------
 
-Exit code is built using following bit flags:
+Exit code of the fix command is built using following bit flags:
 
 *  0 - OK.
 *  1 - General error (or PHP minimal requirement not matched).
@@ -289,7 +293,6 @@ Exit code is built using following bit flags:
 * 32 - Configuration error of a Fixer.
 * 64 - Exception raised within the application.
 
-(Applies to exit code of the ``fix`` command only)
 EOF
         ;
 
@@ -299,7 +302,7 @@ EOF
                 self::getLatestReleaseVersionFromChangeLog()
             ),
             '%%%CI_INTEGRATION%%%' => implode("\n", array_map(
-                static function ($line) { return '    $ '.$line; },
+                static function (string $line) { return '    $ '.$line; },
                 \array_slice(file(__DIR__.'/../../../ci-integration.sh', FILE_IGNORE_NEW_LINES), 3)
             )),
             '%%%FIXERS_DETAILS%%%' => self::getFixersHelp(),
@@ -308,10 +311,8 @@ EOF
 
     /**
      * @param mixed $value
-     *
-     * @return string
      */
-    public static function toString($value)
+    public static function toString($value): string
     {
         return \is_array($value)
             ? static::arrayToString($value)
@@ -321,10 +322,8 @@ EOF
 
     /**
      * Returns the allowed values of the given option that can be converted to a string.
-     *
-     * @return null|array
      */
-    public static function getDisplayableAllowedValues(FixerOptionInterface $option)
+    public static function getDisplayableAllowedValues(FixerOptionInterface $option): ?array
     {
         $allowed = $option->getAllowedValues();
 
@@ -358,10 +357,8 @@ EOF
 
     /**
      * @throws \RuntimeException when failing to parse the change log file
-     *
-     * @return string
      */
-    public static function getLatestReleaseVersionFromChangeLog()
+    public static function getLatestReleaseVersionFromChangeLog(): string
     {
         static $version = null;
 
@@ -405,25 +402,19 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $output->getFormatter()->setStyle('url', new OutputFormatterStyle('blue'));
     }
 
-    /**
-     * @return null|string
-     */
-    private static function getChangeLogFile()
+    private static function getChangeLogFile(): ?string
     {
         $changelogFile = __DIR__.'/../../../CHANGELOG.md';
 
         return is_file($changelogFile) ? $changelogFile : null;
     }
 
-    /**
-     * @return string
-     */
-    private static function getFixersHelp()
+    private static function getFixersHelp(): string
     {
         $help = '';
         $fixerFactory = new FixerFactory();
@@ -439,11 +430,11 @@ EOF
         );
 
         $ruleSets = [];
-        foreach (RuleSet::create()->getSetDefinitionNames() as $setName) {
+        foreach (RuleSets::getSetDefinitionNames() as $setName) {
             $ruleSets[$setName] = new RuleSet([$setName => true]);
         }
 
-        $getSetsWithRule = static function ($rule) use ($ruleSets) {
+        $getSetsWithRule = static function (string $rule) use ($ruleSets) {
             $sets = [];
 
             foreach ($ruleSets as $setName => $ruleSet) {
@@ -517,7 +508,7 @@ EOF
                             }
                         } else {
                             $allowed = array_map(
-                                static function ($type) {
+                                static function (string $type) {
                                     return '<comment>'.$type.'</comment>';
                                 },
                                 $option->getAllowedTypes()
@@ -572,12 +563,9 @@ EOF
     /**
      * Wraps a string to the given number of characters, ignoring style tags.
      *
-     * @param string $string
-     * @param int    $width
-     *
      * @return string[]
      */
-    private static function wordwrap($string, $width)
+    private static function wordwrap(string $string, int $width): array
     {
         $result = [];
         $currentLine = 0;
@@ -597,27 +585,22 @@ EOF
             $lineLength += $wordLength;
         }
 
-        return array_map(static function ($line) {
+        return array_map(static function (array $line) {
             return implode(' ', $line);
         }, $result);
     }
 
     /**
      * @param mixed $value
-     *
-     * @return string
      */
-    private static function scalarToString($value)
+    private static function scalarToString($value): string
     {
         $str = var_export($value, true);
 
         return Preg::replace('/\bNULL\b/', 'null', $str);
     }
 
-    /**
-     * @return string
-     */
-    private static function arrayToString(array $value)
+    private static function arrayToString(array $value): string
     {
         if (0 === \count($value)) {
             return '[]';
@@ -640,10 +623,7 @@ EOF
         return substr($str, 0, -2).']';
     }
 
-    /**
-     * @return bool
-     */
-    private static function isHash(array $array)
+    private static function isHash(array $array): bool
     {
         $i = 0;
 

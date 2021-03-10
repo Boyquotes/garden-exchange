@@ -9,8 +9,13 @@ use Doctrine\Migrations\Tools\Console\Exception\SchemaDumpRequiresNoMigrations;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function assert;
 use function class_exists;
 use function count;
+use function is_array;
+use function is_bool;
+use function is_string;
 use function sprintf;
 
 /**
@@ -24,7 +29,7 @@ class DumpSchemaCommand extends AbstractCommand
     /** @var string */
     protected static $defaultName = 'migrations:dump-schema';
 
-    protected function configure() : void
+    protected function configure(): void
     {
         parent::configure();
 
@@ -66,9 +71,11 @@ EOT
     public function execute(
         InputInterface $input,
         OutputInterface $output
-    ) : ?int {
+    ): ?int {
         $formatted  = (bool) $input->getOption('formatted');
-        $lineLength = (int) $input->getOption('line-length');
+        $lineLength = $input->getOption('line-length');
+        assert(! is_array($lineLength) && ! is_bool($lineLength));
+        $lineLength = (int) $lineLength;
 
         $schemaDumper = $this->dependencyFactory->getSchemaDumper();
         $versions     = $this->migrationRepository->getVersions();
@@ -94,6 +101,7 @@ EOT
         );
 
         $editorCommand = $input->getOption('editor-cmd');
+        assert(is_string($editorCommand) || $editorCommand === null);
 
         if ($editorCommand !== null) {
             $this->procOpen($editorCommand, $path);

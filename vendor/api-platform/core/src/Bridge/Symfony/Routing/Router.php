@@ -35,10 +35,12 @@ final class Router implements RouterInterface, UrlGeneratorInterface
     ];
 
     private $router;
+    private $urlGenerationStrategy;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router, int $urlGenerationStrategy = self::ABS_PATH)
     {
         $this->router = $router;
+        $this->urlGenerationStrategy = $urlGenerationStrategy;
     }
 
     /**
@@ -71,7 +73,10 @@ final class Router implements RouterInterface, UrlGeneratorInterface
     public function match($pathInfo)
     {
         $baseContext = $this->router->getContext();
-        $pathInfo = str_replace($baseContext->getBaseUrl(), '', $pathInfo);
+        $baseUrl = $baseContext->getBaseUrl();
+        if ($baseUrl === substr($pathInfo, 0, \strlen($baseUrl))) {
+            $pathInfo = substr($pathInfo, \strlen($baseUrl));
+        }
 
         $request = Request::create($pathInfo, 'GET', [], [], [], ['HTTP_HOST' => $baseContext->getHost()]);
         try {
@@ -96,8 +101,8 @@ final class Router implements RouterInterface, UrlGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generate($name, $parameters = [], $referenceType = self::ABS_PATH)
+    public function generate($name, $parameters = [], $referenceType = null)
     {
-        return $this->router->generate($name, $parameters, self::CONST_MAP[$referenceType]);
+        return $this->router->generate($name, $parameters, self::CONST_MAP[$referenceType ?? $this->urlGenerationStrategy]);
     }
 }

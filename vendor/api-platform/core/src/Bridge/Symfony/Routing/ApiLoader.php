@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace ApiPlatform\Core\Bridge\Symfony\Routing;
 
+use ApiPlatform\Core\Api\IdentifiersExtractorInterface;
 use ApiPlatform\Core\Api\OperationType;
 use ApiPlatform\Core\Exception\InvalidResourceException;
 use ApiPlatform\Core\Exception\RuntimeException;
@@ -56,8 +57,9 @@ final class ApiLoader extends Loader
     private $graphQlPlaygroundEnabled;
     private $entrypointEnabled;
     private $docsEnabled;
+    private $identifiersExtractor;
 
-    public function __construct(KernelInterface $kernel, ResourceNameCollectionFactoryInterface $resourceNameCollectionFactory, ResourceMetadataFactoryInterface $resourceMetadataFactory, OperationPathResolverInterface $operationPathResolver, ContainerInterface $container, array $formats, array $resourceClassDirectories = [], SubresourceOperationFactoryInterface $subresourceOperationFactory = null, bool $graphqlEnabled = false, bool $entrypointEnabled = true, bool $docsEnabled = true, bool $graphiQlEnabled = false, bool $graphQlPlaygroundEnabled = false)
+    public function __construct(KernelInterface $kernel, ResourceNameCollectionFactoryInterface $resourceNameCollectionFactory, ResourceMetadataFactoryInterface $resourceMetadataFactory, OperationPathResolverInterface $operationPathResolver, ContainerInterface $container, array $formats, array $resourceClassDirectories = [], SubresourceOperationFactoryInterface $subresourceOperationFactory = null, bool $graphqlEnabled = false, bool $entrypointEnabled = true, bool $docsEnabled = true, bool $graphiQlEnabled = false, bool $graphQlPlaygroundEnabled = false, IdentifiersExtractorInterface $identifiersExtractor = null)
     {
         /** @var string[]|string $paths */
         $paths = $kernel->locateResource('@ApiPlatformBundle/Resources/config/routing');
@@ -74,6 +76,7 @@ final class ApiLoader extends Loader
         $this->graphQlPlaygroundEnabled = $graphQlPlaygroundEnabled;
         $this->entrypointEnabled = $entrypointEnabled;
         $this->docsEnabled = $docsEnabled;
+        $this->identifiersExtractor = $identifiersExtractor;
     }
 
     /**
@@ -126,7 +129,10 @@ final class ApiLoader extends Loader
                     [
                         '_controller' => $controller,
                         '_format' => null,
+                        '_stateless' => $operation['stateless'] ?? $resourceMetadata->getAttribute('stateless'),
                         '_api_resource_class' => $operation['resource_class'],
+                        '_api_identifiers' => $operation['identifiers'],
+                        '_api_has_composite_identifier' => false,
                         '_api_subresource_operation_name' => $operation['route_name'],
                         '_api_subresource_context' => [
                             'property' => $operation['property'],
@@ -203,7 +209,7 @@ final class ApiLoader extends Loader
 
         if (isset($operation['route_name'])) {
             if (!isset($operation['method'])) {
-                @trigger_error(sprintf('Not setting the "method" attribute is deprecated and will not be supported anymore in API Platform 3.0, set it for the %s operation "%s" of the class "%s".', OperationType::COLLECTION === $operationType ? 'collection' : 'item', $operationName, $resourceClass), E_USER_DEPRECATED);
+                @trigger_error(sprintf('Not setting the "method" attribute is deprecated and will not be supported anymore in API Platform 3.0, set it for the %s operation "%s" of the class "%s".', OperationType::COLLECTION === $operationType ? 'collection' : 'item', $operationName, $resourceClass), \E_USER_DEPRECATED);
             }
 
             return;
@@ -221,6 +227,13 @@ final class ApiLoader extends Loader
             }
         }
 
+        if ($resourceMetadata->getItemOperations()) {
+            $operation['identifiers'] = (array) ($operation['identifiers'] ?? $resourceMetadata->getAttribute('identifiers', $this->identifiersExtractor ? $this->identifiersExtractor->getIdentifiersFromResourceClass($resourceClass) : ['id']));
+        } else {
+            $operation['identifiers'] = $operation['identifiers'] ?? [];
+        }
+
+        $operation['has_composite_identifier'] = \count($operation['identifiers']) > 1 ? $resourceMetadata->getAttribute('composite_identifier', true) : false;
         $path = trim(trim($resourceMetadata->getAttribute('route_prefix', '')), '/');
         $path .= $this->operationPathResolver->resolveOperationPath($resourceShortName, $operation, $operationType, $operationName);
 
@@ -229,7 +242,10 @@ final class ApiLoader extends Loader
             [
                 '_controller' => $controller,
                 '_format' => null,
+                '_stateless' => $operation['stateless'],
                 '_api_resource_class' => $resourceClass,
+                '_api_identifiers' => $operation['identifiers'],
+                '_api_has_composite_identifier' => $operation['has_composite_identifier'],
                 sprintf('_api_%s_operation_name', $operationType) => $operationName,
             ] + ($operation['defaults'] ?? []),
             $operation['requirements'] ?? [],

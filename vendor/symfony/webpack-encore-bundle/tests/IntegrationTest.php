@@ -28,6 +28,7 @@ use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollectionInterface;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\CacheWarmer\EntrypointCacheWarmer;
+use Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 
 class IntegrationTest extends TestCase
@@ -35,12 +36,13 @@ class IntegrationTest extends TestCase
     public function testTwigIntegration()
     {
         $kernel = new WebpackEncoreIntegrationTestKernel(true);
+        $kernel->scriptAttributes = ['referrerpolicy' => 'origin'];
         $kernel->boot();
-        $container = $kernel->getContainer();
+        $twig = $this->getTwigEnvironmentFromBootedKernel($kernel);
 
-        $html1 = $container->get('twig')->render('@integration_test/template.twig');
+        $html1 = $twig->render('@integration_test/template.twig');
         $this->assertStringContainsString(
-            '<script src="/build/file1.js" integrity="sha384-Q86c+opr0lBUPWN28BLJFqmLhho+9ZcJpXHorQvX6mYDWJ24RQcdDarXFQYN8HLc"></script>',
+            '<script src="/build/file1.js" referrerpolicy="origin" defer integrity="sha384-Q86c+opr0lBUPWN28BLJFqmLhho+9ZcJpXHorQvX6mYDWJ24RQcdDarXFQYN8HLc"></script>',
             $html1
         );
         $this->assertStringContainsString(
@@ -49,7 +51,7 @@ class IntegrationTest extends TestCase
             $html1
         );
         $this->assertStringContainsString(
-            '<script src="/build/other3.js"></script>',
+            '<script src="/build/other3.js" referrerpolicy="origin"></script>',
             $html1
         );
         $this->assertStringContainsString(
@@ -58,7 +60,7 @@ class IntegrationTest extends TestCase
             $html1
         );
 
-        $html2 = $container->get('twig')->render('@integration_test/manual_template.twig');
+        $html2 = $twig->render('@integration_test/manual_template.twig');
         $this->assertStringContainsString(
             '<script src="/build/file3.js"></script>',
             $html2
@@ -73,10 +75,10 @@ class IntegrationTest extends TestCase
     {
         $kernel = new WebpackEncoreIntegrationTestKernel(true);
         $kernel->boot();
-        $container = $kernel->getContainer();
+        $twig = $this->getTwigEnvironmentFromBootedKernel($kernel);
 
-        $html1 = $container->get('twig')->render('@integration_test/template.twig');
-        $html2 = $container->get('twig')->render('@integration_test/manual_template.twig');
+        $html1 = $twig->render('@integration_test/template.twig');
+        $html2 = $twig->render('@integration_test/manual_template.twig');
         $this->assertStringContainsString(
             '<script src="/build/file3.js"></script>',
             $html2
@@ -102,7 +104,7 @@ class IntegrationTest extends TestCase
     {
         $kernel = new WebpackEncoreIntegrationTestKernel(true);
         $kernel->boot();
-        $container = $kernel->getContainer();
+        $container = $this->getContainerFromBootedKernel($kernel);
 
         $cacheWarmer = $container->get(WebpackEncoreCacheWarmerTester::class);
 
@@ -118,14 +120,14 @@ class IntegrationTest extends TestCase
     public function testEnabledStrictMode_throwsException_ifBuildMissing()
     {
         $this->expectException(\Twig\Error\RuntimeError::class);
-        $this->expectExceptionMessageRegExp('/Could not find the entrypoints file/');
+        $this->expectExceptionMessage('Could not find the entrypoints file from Webpack: the file "missing_build/entrypoints.json" does not exist.');
 
         $kernel = new WebpackEncoreIntegrationTestKernel(true);
         $kernel->outputPath = 'missing_build';
         $kernel->builds = ['different_build' => 'missing_build'];
         $kernel->boot();
-        $container = $kernel->getContainer();
-        $container->get('twig')->render('@integration_test/template.twig');
+        $twig = $this->getTwigEnvironmentFromBootedKernel($kernel);
+        $twig->render('@integration_test/template.twig');
     }
 
     public function testDisabledStrictMode_ignoresMissingBuild()
@@ -135,8 +137,8 @@ class IntegrationTest extends TestCase
         $kernel->strictMode = false;
         $kernel->builds = ['different_build' => 'missing_build'];
         $kernel->boot();
-        $container = $kernel->getContainer();
-        $html = $container->get('twig')->render('@integration_test/template.twig');
+        $twig = $this->getTwigEnvironmentFromBootedKernel($kernel);
+        $html = $twig->render('@integration_test/template.twig');
         self::assertSame('', trim($html));
     }
 
@@ -144,7 +146,7 @@ class IntegrationTest extends TestCase
     {
         $kernel = new WebpackEncoreIntegrationTestKernel(true);
         $kernel->boot();
-        $container = $kernel->getContainer();
+        $container = $this->getContainerFromBootedKernel($kernel);
         $this->assertInstanceOf(WebpackEncoreAutowireTestService::class, $container->get(WebpackEncoreAutowireTestService::class));
     }
 
@@ -152,7 +154,7 @@ class IntegrationTest extends TestCase
     {
         $kernel = new WebpackEncoreIntegrationTestKernel(true);
         $kernel->boot();
-        $container = $kernel->getContainer();
+        $container = $this->getContainerFromBootedKernel($kernel);
 
         /** @var TagRenderer $tagRenderer */
         $tagRenderer = $container->get('public.webpack_encore.tag_renderer');
@@ -168,13 +170,130 @@ class IntegrationTest extends TestCase
     {
         $kernel = new WebpackEncoreIntegrationTestKernel(true);
         $kernel->boot();
-        $container = $kernel->getContainer();
+        $container = $this->getContainerFromBootedKernel($kernel);
 
         $container->get('public.webpack_encore.entrypoint_lookup_collection')
             ->getEntrypointLookup();
 
         // Testing that it doesn't throw an exception is enough
         $this->assertTrue(true);
+    }
+
+    public function provideRenderStimulusController()
+    {
+        yield 'empty' => [
+            'dataOrControllerName' => [],
+            'controllerValues' => [],
+            'expected' => '',
+        ];
+
+        yield 'single-controller-no-data' => [
+            'dataOrControllerName' => [
+                'my-controller' => [],
+            ],
+            'controllerValues' => [],
+            'expected' => 'data-controller="my-controller"',
+        ];
+
+        yield 'single-controller-scalar-data' => [
+            'dataOrControllerName' => [
+                'my-controller' => [
+                    'myValue' => 'scalar-value',
+                ],
+            ],
+            'controllerValues' => [],
+            'expected' => 'data-controller="my-controller" data-my-controller-my-value-value="scalar-value"',
+        ];
+
+        yield 'single-controller-typed-data' => [
+            'dataOrControllerName' => [
+                'my-controller' => [
+                    'boolean' => true,
+                    'number' => 4,
+                    'string' => 'str',
+                ],
+            ],
+            'controllerValues' => [],
+            'expected' => 'data-controller="my-controller" data-my-controller-boolean-value="1" data-my-controller-number-value="4" data-my-controller-string-value="str"',
+        ];
+
+        yield 'single-controller-nested-data' => [
+            'dataOrControllerName' => [
+                'my-controller' => [
+                    'myValue' => ['nested' => 'array'],
+                ],
+            ],
+            'controllerValues' => [],
+            'expected' => 'data-controller="my-controller" data-my-controller-my-value-value="&#x7B;&quot;nested&quot;&#x3A;&quot;array&quot;&#x7D;"',
+        ];
+
+        yield 'multiple-controllers-scalar-data' => [
+            'dataOrControllerName' => [
+                'my-controller' => [
+                    'myValue' => 'scalar-value',
+                ],
+                'another-controller' => [
+                    'anotherValue' => 'scalar-value 2',
+                ],
+            ],
+            'controllerValues' => [],
+            'expected' => 'data-controller="my-controller another-controller" data-my-controller-my-value-value="scalar-value" data-another-controller-another-value-value="scalar-value&#x20;2"',
+        ];
+
+        yield 'normalize-names' => [
+            'dataOrControllerName' => [
+                '@symfony/ux-dropzone/dropzone' => [
+                    'my"Key"' => true,
+                ],
+            ],
+            'controllerValues' => [],
+            'expected' => 'data-controller="symfony--ux-dropzone--dropzone" data-symfony--ux-dropzone--dropzone-my-key-value="1"',
+        ];
+
+        yield 'short-single-controller-no-data' => [
+            'dataOrControllerName' => 'my-controller',
+            'controllerValues' => [],
+            'expected' => 'data-controller="my-controller"',
+        ];
+
+        yield 'short-single-controller-with-data' => [
+            'dataOrControllerName' => 'my-controller',
+            'controllerValues' => ['myValue' => 'scalar-value'],
+            'expected' => 'data-controller="my-controller" data-my-controller-my-value-value="scalar-value"',
+        ];
+    }
+
+    /**
+     * @dataProvider provideRenderStimulusController
+     */
+    public function testRenderStimulusController($dataOrControllerName, array $controllerValues, string $expected)
+    {
+        $kernel = new WebpackEncoreIntegrationTestKernel(true);
+        $kernel->boot();
+        $twig = $this->getTwigEnvironmentFromBootedKernel($kernel);
+
+        $extension = new StimulusTwigExtension();
+        $this->assertSame($expected, $extension->renderStimulusController($twig, $dataOrControllerName, $controllerValues));
+    }
+
+    private function getContainerFromBootedKernel(WebpackEncoreIntegrationTestKernel $kernel)
+    {
+        if ($kernel::VERSION_ID >= 40100) {
+            return $kernel->getContainer()->get('test.service_container');
+        }
+
+        return $kernel->getContainer();
+    }
+
+    private function getTwigEnvironmentFromBootedKernel(WebpackEncoreIntegrationTestKernel $kernel)
+    {
+        $container = $this->getContainerFromBootedKernel($kernel);
+
+        if ($container->has(\Twig\Environment::class)) {
+            return $container->get(\Twig\Environment::class);
+        }
+
+        return $container->get('twig');
     }
 }
 
@@ -188,6 +307,7 @@ abstract class AbstractWebpackEncoreIntegrationTestKernel extends Kernel
     public $builds = [
         'different_build' => __DIR__.'/fixtures/different_build',
     ];
+    public $scriptAttributes = [];
 
     public function __construct(bool $enableAssets)
     {
@@ -206,12 +326,19 @@ abstract class AbstractWebpackEncoreIntegrationTestKernel extends Kernel
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
     {
-        $container->loadFromExtension('framework', [
+        $frameworkConfig = [
             'secret' => 'foo',
             'assets' => [
                 'enabled' => $this->enableAssets,
             ],
-        ]);
+            'test' => true,
+        ];
+        if (AbstractWebpackEncoreIntegrationTestKernel::VERSION_ID >= 50100) {
+            $frameworkConfig['router'] = [
+                'utf8' => true,
+            ];
+        }
+        $container->loadFromExtension('framework', $frameworkConfig);
 
         $container->loadFromExtension('twig', [
             'paths' => [
@@ -228,6 +355,7 @@ abstract class AbstractWebpackEncoreIntegrationTestKernel extends Kernel
             'preload' => true,
             'builds' => $this->builds,
             'strict_mode' => $this->strictMode,
+            'script_attributes' => $this->scriptAttributes,
         ]);
 
         $container->register(WebpackEncoreCacheWarmerTester::class)
@@ -238,10 +366,10 @@ abstract class AbstractWebpackEncoreIntegrationTestKernel extends Kernel
             ->setPublic(true);
 
         $container->setAlias(new Alias('public.webpack_encore.tag_renderer', true), 'webpack_encore.tag_renderer');
-        $container->getAlias('public.webpack_encore.tag_renderer')->setPrivate(false);
+        $container->getAlias('public.webpack_encore.tag_renderer')->setPublic(true);
 
         $container->setAlias(new Alias('public.webpack_encore.entrypoint_lookup_collection', true), 'webpack_encore.entrypoint_lookup_collection');
-        $container->getAlias('public.webpack_encore.entrypoint_lookup_collection')->setPrivate(false);
+        $container->getAlias('public.webpack_encore.entrypoint_lookup_collection')->setPublic(true);
 
         // avoid logging request logs
         $container->register('logger', Logger::class)
@@ -264,11 +392,11 @@ abstract class AbstractWebpackEncoreIntegrationTestKernel extends Kernel
     }
 }
 
-if (method_exists(AbstractWebpackEncoreIntegrationTestKernel::class, 'configureRouting')) {
+if (AbstractWebpackEncoreIntegrationTestKernel::VERSION_ID >= 50100) {
     class WebpackEncoreIntegrationTestKernel extends AbstractWebpackEncoreIntegrationTestKernel {
         protected function configureRouting(RoutingConfigurator $routes): void
         {
-            $routes->add('/foo', 'kernel:'.(parent::VERSION_ID >= 40100 ? ':' : '').'renderFoo');
+            $routes->add('/foo', 'kernel::renderFoo');
         }
     }
 } else {

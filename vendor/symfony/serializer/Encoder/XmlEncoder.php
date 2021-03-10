@@ -29,37 +29,37 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
 {
     use SerializerAwareTrait;
 
-    const FORMAT = 'xml';
+    public const FORMAT = 'xml';
 
-    const AS_COLLECTION = 'as_collection';
+    public const AS_COLLECTION = 'as_collection';
 
     /**
      * An array of ignored XML node types while decoding, each one of the DOM Predefined XML_* constants.
      */
-    const DECODER_IGNORED_NODE_TYPES = 'decoder_ignored_node_types';
+    public const DECODER_IGNORED_NODE_TYPES = 'decoder_ignored_node_types';
 
     /**
      * An array of ignored XML node types while encoding, each one of the DOM Predefined XML_* constants.
      */
-    const ENCODER_IGNORED_NODE_TYPES = 'encoder_ignored_node_types';
-    const ENCODING = 'xml_encoding';
-    const FORMAT_OUTPUT = 'xml_format_output';
+    public const ENCODER_IGNORED_NODE_TYPES = 'encoder_ignored_node_types';
+    public const ENCODING = 'xml_encoding';
+    public const FORMAT_OUTPUT = 'xml_format_output';
 
     /**
      * A bit field of LIBXML_* constants.
      */
-    const LOAD_OPTIONS = 'load_options';
-    const REMOVE_EMPTY_TAGS = 'remove_empty_tags';
-    const ROOT_NODE_NAME = 'xml_root_node_name';
-    const STANDALONE = 'xml_standalone';
-    const TYPE_CAST_ATTRIBUTES = 'xml_type_cast_attributes';
-    const VERSION = 'xml_version';
+    public const LOAD_OPTIONS = 'load_options';
+    public const REMOVE_EMPTY_TAGS = 'remove_empty_tags';
+    public const ROOT_NODE_NAME = 'xml_root_node_name';
+    public const STANDALONE = 'xml_standalone';
+    public const TYPE_CAST_ATTRIBUTES = 'xml_type_cast_attributes';
+    public const VERSION = 'xml_version';
 
     private $defaultContext = [
         self::AS_COLLECTION => false,
-        self::DECODER_IGNORED_NODE_TYPES => [XML_PI_NODE, XML_COMMENT_NODE],
+        self::DECODER_IGNORED_NODE_TYPES => [\XML_PI_NODE, \XML_COMMENT_NODE],
         self::ENCODER_IGNORED_NODE_TYPES => [],
-        self::LOAD_OPTIONS => LIBXML_NONET | LIBXML_NOBLANKS,
+        self::LOAD_OPTIONS => \LIBXML_NONET | \LIBXML_NOBLANKS,
         self::REMOVE_EMPTY_TAGS => false,
         self::ROOT_NODE_NAME => 'response',
         self::TYPE_CAST_ATTRIBUTES => true,
@@ -83,7 +83,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
     public function encode($data, string $format, array $context = [])
     {
         $encoderIgnoredNodeTypes = $context[self::ENCODER_IGNORED_NODE_TYPES] ?? $this->defaultContext[self::ENCODER_IGNORED_NODE_TYPES];
-        $ignorePiNode = \in_array(XML_PI_NODE, $encoderIgnoredNodeTypes, true);
+        $ignorePiNode = \in_array(\XML_PI_NODE, $encoderIgnoredNodeTypes, true);
         if ($data instanceof \DOMDocument) {
             return $data->saveXML($ignorePiNode ? $data->documentElement : null);
         }
@@ -115,14 +115,18 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
         }
 
         $internalErrors = libxml_use_internal_errors(true);
-        $disableEntities = libxml_disable_entity_loader(true);
+        if (\LIBXML_VERSION < 20900) {
+            $disableEntities = libxml_disable_entity_loader(true);
+        }
         libxml_clear_errors();
 
         $dom = new \DOMDocument();
         $dom->loadXML($data, $context[self::LOAD_OPTIONS] ?? $this->defaultContext[self::LOAD_OPTIONS]);
 
         libxml_use_internal_errors($internalErrors);
-        libxml_disable_entity_loader($disableEntities);
+        if (\LIBXML_VERSION < 20900) {
+            libxml_disable_entity_loader($disableEntities);
+        }
 
         if ($error = libxml_get_last_error()) {
             libxml_clear_errors();
@@ -133,7 +137,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
         $rootNode = null;
         $decoderIgnoredNodeTypes = $context[self::DECODER_IGNORED_NODE_TYPES] ?? $this->defaultContext[self::DECODER_IGNORED_NODE_TYPES];
         foreach ($dom->childNodes as $child) {
-            if (XML_DOCUMENT_TYPE_NODE === $child->nodeType) {
+            if (\XML_DOCUMENT_TYPE_NODE === $child->nodeType) {
                 throw new NotEncodableValueException('Document types are not allowed.');
             }
             if (!$rootNode && !\in_array($child->nodeType, $decoderIgnoredNodeTypes, true)) {
@@ -297,13 +301,13 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
         $typeCastAttributes = (bool) ($context[self::TYPE_CAST_ATTRIBUTES] ?? $this->defaultContext[self::TYPE_CAST_ATTRIBUTES]);
 
         foreach ($node->attributes as $attr) {
-            if (!is_numeric($attr->nodeValue) || !$typeCastAttributes || (isset($attr->nodeValue[1]) && '0' === $attr->nodeValue[0])) {
+            if (!is_numeric($attr->nodeValue) || !$typeCastAttributes || (isset($attr->nodeValue[1]) && '0' === $attr->nodeValue[0] && '.' !== $attr->nodeValue[1])) {
                 $data['@'.$attr->nodeName] = $attr->nodeValue;
 
                 continue;
             }
 
-            if (false !== $val = filter_var($attr->nodeValue, FILTER_VALIDATE_INT)) {
+            if (false !== $val = filter_var($attr->nodeValue, \FILTER_VALIDATE_INT)) {
                 $data['@'.$attr->nodeName] = $val;
 
                 continue;
@@ -326,7 +330,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
             return $node->nodeValue;
         }
 
-        if (1 === $node->childNodes->length && \in_array($node->firstChild->nodeType, [XML_TEXT_NODE, XML_CDATA_SECTION_NODE])) {
+        if (1 === $node->childNodes->length && \in_array($node->firstChild->nodeType, [\XML_TEXT_NODE, \XML_CDATA_SECTION_NODE])) {
             return $node->firstChild->nodeValue;
         }
 
@@ -380,7 +384,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
                 } elseif ('#' === $key) {
                     $append = $this->selectNodeType($parentNode, $data);
                 } elseif ('#comment' === $key) {
-                    if (!\in_array(XML_COMMENT_NODE, $encoderIgnoredNodeTypes, true)) {
+                    if (!\in_array(\XML_COMMENT_NODE, $encoderIgnoredNodeTypes, true)) {
                         $append = $this->appendComment($parentNode, $data);
                     }
                 } elseif (\is_array($data) && false === is_numeric($key)) {
@@ -473,6 +477,9 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
             $node->appendChild($child);
         } elseif ($val instanceof \Traversable) {
             $this->buildXml($node, $val);
+        } elseif ($val instanceof \DOMNode) {
+            $child = $this->dom->importNode($val, true);
+            $node->appendChild($child);
         } elseif (\is_object($val)) {
             if (null === $this->serializer) {
                 throw new BadMethodCallException(sprintf('The serializer needs to be set to allow "%s()" to be used with object data.', __METHOD__));
@@ -487,9 +494,6 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
             return $this->appendText($node, $val);
         } elseif (\is_bool($val)) {
             return $this->appendText($node, (int) $val);
-        } elseif ($val instanceof \DOMNode) {
-            $child = $this->dom->importNode($val, true);
-            $node->appendChild($child);
         }
 
         return true;

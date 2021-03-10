@@ -17,7 +17,10 @@
             <tag name="kernel.reset" method="reset" />
             <argument type="service" id="webpack_encore.entrypoint_lookup_collection" />
             <argument type="service" id="assets.packages" />
-            <argument type="collection" />
+            <argument type="collection"/> <!-- Default attributes-->
+            <argument type="collection"/> <!-- Default script attributes -->
+            <argument type="collection"/> <!-- Default link attributes -->
+            <argument type="service" id="event_dispatcher" />
         </service>
 
         <service id="webpack_encore.twig_entry_files_extension" class="Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension">
@@ -31,6 +34,10 @@
                     </argument>
                 </service>
             </argument>
+        </service>
+
+        <service id="webpack_encore.twig_stimulus_extension" class="Symfony\WebpackEncoreBundle\Twig\StimulusTwigExtension">
+            <tag name="twig.extension" />
         </service>
 
         <service id="webpack_encore.entrypoint_lookup.cache_warmer" class="Symfony\WebpackEncoreBundle\CacheWarmer\EntrypointCacheWarmer">

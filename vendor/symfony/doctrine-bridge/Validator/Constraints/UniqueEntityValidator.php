@@ -147,8 +147,7 @@ class UniqueEntityValidator extends ConstraintValidator
             if ($result instanceof \Countable && 1 < \count($result)) {
                 $result = [$result->current(), $result->current()];
             } else {
-                $result = $result->current();
-                $result = null === $result ? [] : [$result];
+                $result = $result->valid() && null !== $result->current() ? [$result->current()] : [];
             }
         } elseif (\is_array($result)) {
             reset($result);
@@ -165,7 +164,7 @@ class UniqueEntityValidator extends ConstraintValidator
         }
 
         $errorPath = null !== $constraint->errorPath ? $constraint->errorPath : $fields[0];
-        $invalidValue = isset($criteria[$errorPath]) ? $criteria[$errorPath] : $criteria[$fields[0]];
+        $invalidValue = $criteria[$errorPath] ?? $criteria[$fields[0]];
 
         $this->context->buildViolation($constraint->message)
             ->atPath($errorPath)

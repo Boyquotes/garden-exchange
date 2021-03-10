@@ -17,6 +17,8 @@ namespace Symfony\Component\Intl\DateFormatter\DateFormat;
  * @author Igor Wiedler <igor@wiedler.ch>
  *
  * @internal
+ *
+ * @deprecated since Symfony 5.3, use symfony/polyfill-intl-icu ^1.21 instead
  */
 abstract class Transformer
 {
@@ -60,6 +62,6 @@ abstract class Transformer
      */
     protected function padLeft(string $value, int $length): string
     {
-        return str_pad($value, $length, '0', STR_PAD_LEFT);
+        return str_pad($value, $length, '0', \STR_PAD_LEFT);
     }
 }

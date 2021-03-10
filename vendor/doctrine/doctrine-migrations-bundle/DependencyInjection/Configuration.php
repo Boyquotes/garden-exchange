@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Doctrine\Bundle\MigrationsBundle\DependencyInjection;
 
 use ReflectionClass;
+use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+
 use function constant;
 use function count;
 use function in_array;
@@ -27,7 +29,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return TreeBuilder The config tree builder
      */
-    public function getConfigTreeBuilder() : TreeBuilder
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('doctrine_migrations');
 
@@ -43,7 +45,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('name')
-                    ->setDeprecated('The "%node%" option is deprecated.')
+                    ->setDeprecated(...$this->getDeprecationParams('The "%node%" option is deprecated.'))
                     ->defaultValue('Application Migrations')
                 ->end()
 
@@ -54,12 +56,12 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue([])
                     ->prototype('scalar')->end()
                     ->validate()
-                        ->ifTrue(static function ($v) : bool {
+                        ->ifTrue(static function ($v): bool {
                             return count($v) === 0;
                         })
                         ->thenInvalid('At least one migration path must be specified.')
 
-                        ->ifTrue(static function ($v) : bool {
+                        ->ifTrue(static function ($v): bool {
                             return count($v) >  1;
                         })
                         ->thenInvalid('Maximum one migration path can be specified with the 2.x version.')
@@ -77,7 +79,7 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('version_column_length')
                                     ->defaultValue(null)
                                     ->validate()
-                                        ->ifTrue(static function ($v) : bool {
+                                        ->ifTrue(static function ($v): bool {
                                             return $v < 1024;
                                         })
                                         ->thenInvalid('The minimum length for the version column is 1024.')
@@ -91,27 +93,27 @@ class Configuration implements ConfigurationInterface
 
                 ->scalarNode('dir_name')
                     ->defaultValue('%kernel.root_dir%/DoctrineMigrations')->cannotBeEmpty()
-                    ->setDeprecated('The "%node%" option is deprecated. Use "migrations_paths" instead.')
+                    ->setDeprecated(...$this->getDeprecationParams('The "%node%" option is deprecated. Use "migrations_paths" instead.'))
                 ->end()
                 ->scalarNode('namespace')
                     ->defaultValue('Application\Migrations')->cannotBeEmpty()
-                    ->setDeprecated('The "%node%" option is deprecated. Use "migrations_paths" instead.')
+                    ->setDeprecated(...$this->getDeprecationParams('The "%node%" option is deprecated. Use "migrations_paths" instead.'))
                 ->end()
                 ->scalarNode('table_name')
                     ->defaultValue('migration_versions')->cannotBeEmpty()
-                    ->setDeprecated('The "%node%" option is deprecated. Use "storage.table_storage.table_name" instead.')
+                    ->setDeprecated(...$this->getDeprecationParams('The "%node%" option is deprecated. Use "storage.table_storage.table_name" instead.'))
                 ->end()
                 ->scalarNode('column_name')
                     ->defaultValue('version')
-                    ->setDeprecated('The "%node%" option is deprecated. Use "storage.table_storage.version_column_name" instead.')
+                    ->setDeprecated(...$this->getDeprecationParams('The "%node%" option is deprecated. Use "storage.table_storage.version_column_name" instead.'))
                 ->end()
                 ->scalarNode('column_length')
                     ->defaultValue(14)
-                    ->setDeprecated('The "%node%" option is deprecated. Use "storage.table_storage.version_column_length" instead.')
+                    ->setDeprecated(...$this->getDeprecationParams('The "%node%" option is deprecated. Use "storage.table_storage.version_column_length" instead.'))
                 ->end()
                 ->scalarNode('executed_at_column_name')
                     ->defaultValue('executed_at')
-                    ->setDeprecated('The "%node%" option is deprecated. Use "storage.table_storage.executed_at_column_name" instead.')
+                    ->setDeprecated(...$this->getDeprecationParams('The "%node%" option is deprecated. Use "storage.table_storage.executed_at_column_name" instead.'))
                 ->end()
                 ->scalarNode('all_or_nothing')->defaultValue(false)->end()
                 ->scalarNode('custom_template')->defaultValue(null)->end()
@@ -123,11 +125,7 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            if (is_string($v) && in_array(strtoupper($v), $organizeMigrationModes)) {
-                                return false;
-                            }
-
-                            return true;
+                            return ! is_string($v) || ! in_array(strtoupper($v), $organizeMigrationModes);
                         })
                         ->thenInvalid('Invalid organize migrations mode value %s')
                     ->end()
@@ -143,13 +141,12 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-
     /**
      * Find organize migrations modes for their names
      *
      * @return string[]
      */
-    private function getOrganizeMigrationsModes() : array
+    private function getOrganizeMigrationsModes(): array
     {
         $constPrefix = 'VERSIONS_ORGANIZATION_';
         $prefixLen   = strlen($constPrefix);
@@ -166,5 +163,28 @@ class Configuration implements ConfigurationInterface
         }
 
         return $namesArray;
+    }
+
+    /**
+     * Returns the correct deprecation params as an array for setDeprecated().
+     *
+     * symfony/config v5.1 introduces a deprecation notice when calling
+     * setDeprecated() with less than 3 args and the getDeprecation() method was
+     * introduced at the same time. By checking if getDeprecation() exists,
+     * we can determine the correct param count to use when calling setDeprecated().
+     *
+     * @return string[]
+     */
+    private function getDeprecationParams(string $message): array
+    {
+        if (method_exists(BaseNode::class, 'getDeprecation')) {
+            return [
+                'doctrine/doctrine-migrations-bundle',
+                '2.2',
+                $message,
+            ];
+        }
+
+        return [$message];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -15,10 +17,12 @@ namespace PhpCsFixer\Fixer\Basic;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerConfiguration\InvalidOptionsForEnvException;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\FixerDefinition\VersionSpecification;
 use PhpCsFixer\FixerDefinition\VersionSpecificCodeSample;
 use PhpCsFixer\Preg;
@@ -61,7 +65,7 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'Remove Zero-width space (ZWSP), Non-breaking space (NBSP) and other invisible unicode symbols.',
@@ -72,7 +76,7 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
                 new VersionSpecificCodeSample(
                     '<?php echo "'.pack('H*', 'e2808b').'Hello'.pack('H*', 'e28087').'World'.pack('H*', 'c2a0')."!\";\n",
                     new VersionSpecification(70000),
-                    ['use_escape_sequences_in_strings' => true]
+                    ['use_escape_sequences_in_strings' => false]
                 ),
             ],
             null,
@@ -83,7 +87,7 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    public function isRisky()
+    public function isRisky(): bool
     {
         return true;
     }
@@ -91,7 +95,7 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
+    public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(self::$tokens);
     }
@@ -99,12 +103,12 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    protected function createConfigurationDefinition()
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('use_escape_sequences_in_strings', 'Whether characters should be replaced with escape sequences in strings.'))
                 ->setAllowedTypes(['bool'])
-                ->setDefault(false) // @TODO 3.0 consider changing to true, but it will require that all fixed code by default is php7+, maybe the best is to keep it in `@PHP70Migration:risky` only
+                ->setDefault(true)
                 ->setNormalizer(static function (Options $options, $value) {
                     if (\PHP_VERSION_ID < 70000 && $value) {
                         throw new InvalidOptionsForEnvException('Escape sequences require PHP 7.0+.');
@@ -119,10 +123,11 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $replacements = [];
         $escapeSequences = [];
+
         foreach ($this->symbolsReplace as $character => list($replacement, $codepoint)) {
             $replacements[$character] = $replacement;
             $escapeSequences[$character] = '\u{'.$codepoint.'}';
@@ -158,10 +163,12 @@ final class NonPrintableCharacterFixer extends AbstractFixer implements Configur
                 if ($swapQuotes) {
                     $content = str_replace("\\'", "'", $content);
                 }
+
                 if ($stringTypeChanged) {
                     $content = Preg::replace('/(\\\\{1,2})/', '\\\\\\\\', $content);
                     $content = str_replace('$', '\$', $content);
                 }
+
                 if ($swapQuotes) {
                     $content = str_replace('"', '\"', $content);
                     $content = Preg::replace('/^\'(.*)\'$/', '"$1"', $content);

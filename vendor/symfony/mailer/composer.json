@@ -1,7 +1,7 @@
 {
     "name": "symfony/mailer",
     "type": "library",
-    "description": "Symfony Mailer Component",
+    "description": "Helps sending emails",
     "keywords": [],
     "homepage": "https://symfony.com",
     "license": "MIT",
@@ -17,10 +17,10 @@
     ],
     "require": {
         "php": ">=7.2.5",
-        "egulias/email-validator": "^2.1.10",
+        "egulias/email-validator": "^2.1.10|^3",
         "psr/log": "~1.0",
         "symfony/event-dispatcher": "^4.4|^5.0",
-        "symfony/mime": "^4.4|^5.0",
+        "symfony/mime": "^5.2",
         "symfony/polyfill-php80": "^1.15",
         "symfony/service-contracts": "^1.1|^2"
     },
@@ -28,6 +28,7 @@
         "symfony/amazon-mailer": "^4.4|^5.0",
         "symfony/google-mailer": "^4.4|^5.0",
         "symfony/http-client-contracts": "^1.1|^2",
+        "symfony/mailjet-mailer": "^4.4|^5.0",
         "symfony/mailgun-mailer": "^4.4|^5.0",
         "symfony/mailchimp-mailer": "^4.4|^5.0",
         "symfony/messenger": "^4.4|^5.0",
@@ -43,10 +44,5 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "5.1-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

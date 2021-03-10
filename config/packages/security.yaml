@@ -4,7 +4,7 @@ security:
         # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
         # https://symfony.com/doc/current/security.html#c-encoding-passwords
         App\Entity\User: 'auto'
-
+        
     providers:
         # https://symfony.com/doc/current/security/user_provider.html
         # In this example, users are stored via Doctrine in the database
@@ -13,12 +13,10 @@ security:
         database_users:
             entity: { class: App\Entity\User, property: email }
 
-    # https://symfony.com/doc/current/security.html#a-authentication-firewalls
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
             # this firewall applies to all URLs
             pattern: ^/

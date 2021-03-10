@@ -44,7 +44,7 @@ class OrderFilter extends AbstractContextAwareFilter implements OrderFilterInter
     public function __construct(ManagerRegistry $managerRegistry, ?RequestStack $requestStack = null, string $orderParameterName = 'order', LoggerInterface $logger = null, array $properties = null, NameConverterInterface $nameConverter = null)
     {
         if (null !== $properties) {
-            $properties = array_map(function ($propertyOptions) {
+            $properties = array_map(static function ($propertyOptions) {
                 // shorthand for default direction
                 if (\is_string($propertyOptions)) {
                     $propertyOptions = [
@@ -119,7 +119,7 @@ class OrderFilter extends AbstractContextAwareFilter implements OrderFilterInter
      */
     protected function extractProperties(Request $request/*, string $resourceClass*/): array
     {
-        @trigger_error(sprintf('The use of "%s::extractProperties()" is deprecated since 2.2. Use the "filters" key of the context instead.', __CLASS__), E_USER_DEPRECATED);
+        @trigger_error(sprintf('The use of "%s::extractProperties()" is deprecated since 2.2. Use the "filters" key of the context instead.', __CLASS__), \E_USER_DEPRECATED);
 
         $properties = $request->query->all()[$this->orderParameterName] ?? null;
 

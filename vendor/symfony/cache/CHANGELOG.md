@@ -1,6 +1,17 @@
 CHANGELOG
 =========
 
+5.3
+---
+
+ * added support for connecting to Redis Sentinel clusters when using the Redis PHP extension
+
+5.2.0
+-----
+
+ * added integration with Messenger to allow computing cached values in a worker
+ * allow ISO 8601 time intervals to specify default lifetime
+
 5.1.0
 -----
 

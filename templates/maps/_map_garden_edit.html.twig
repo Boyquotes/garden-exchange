@@ -1,3 +1,8 @@
+    {% if garden.lat is null and garden.lng is null and garden.latCity is null and garden.lngCity is null%}
+        <div class="d-flex jc-center form-group has-error error-area">
+            Vous pouvez positionner ci-dessous le marqueur a l'emplacement de votre jardin.
+        </div>
+    {% endif %}
     <div id="macarte" style="width:80%;margin: 1em auto 4em auto; height:350px"></div>
     {% if garden.lat is not null and garden.lng is not null%}
         <script>

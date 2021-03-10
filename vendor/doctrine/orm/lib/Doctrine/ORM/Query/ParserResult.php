@@ -1,4 +1,5 @@
 <?php
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -19,30 +20,27 @@
 
 namespace Doctrine\ORM\Query;
 
+use Doctrine\ORM\Query\Exec\AbstractSqlExecutor;
+
 /**
  * Encapsulates the resulting components from a DQL query parsing process that
  * can be serialized.
  *
- * @author      Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author      Janne Vanhala <jpvanhal@cc.hut.fi>
- * @author		Roman Borschel <roman@code-factory.org>
- * @license     http://www.opensource.org/licenses/mit-license.php MIT
  * @link        http://www.doctrine-project.org
- * @since       2.0
  */
 class ParserResult
 {
     /**
      * The SQL executor used for executing the SQL.
      *
-     * @var \Doctrine\ORM\Query\Exec\AbstractSqlExecutor
+     * @var AbstractSqlExecutor
      */
     private $_sqlExecutor;
 
     /**
      * The ResultSetMapping that describes how to map the SQL result set.
      *
-     * @var \Doctrine\ORM\Query\ResultSetMapping
+     * @var ResultSetMapping
      */
     private $_resultSetMapping;
 
@@ -59,14 +57,13 @@ class ParserResult
      */
     public function __construct()
     {
-        $this->_resultSetMapping = new ResultSetMapping;
+        $this->_resultSetMapping = new ResultSetMapping();
     }
 
     /**
      * Gets the ResultSetMapping for the parsed query.
      *
-     * @return ResultSetMapping|null The result set mapping of the parsed query or NULL
-     *                               if the query is not a SELECT query.
+     * @return ResultSetMapping The result set mapping of the parsed query
      */
     public function getResultSetMapping()
     {
@@ -75,8 +72,6 @@ class ParserResult
 
     /**
      * Sets the ResultSetMapping of the parsed query.
-     *
-     * @param ResultSetMapping $rsm
      *
      * @return void
      */
@@ -88,7 +83,7 @@ class ParserResult
     /**
      * Sets the SQL executor that should be used for this ParserResult.
      *
-     * @param \Doctrine\ORM\Query\Exec\AbstractSqlExecutor $executor
+     * @param AbstractSqlExecutor $executor
      *
      * @return void
      */
@@ -100,7 +95,7 @@ class ParserResult
     /**
      * Gets the SQL executor used by this ParserResult.
      *
-     * @return \Doctrine\ORM\Query\Exec\AbstractSqlExecutor
+     * @return AbstractSqlExecutor
      */
     public function getSqlExecutor()
     {
@@ -111,8 +106,8 @@ class ParserResult
      * Adds a DQL to SQL parameter mapping. One DQL parameter name/position can map to
      * several SQL parameter positions.
      *
-     * @param string|integer $dqlPosition
-     * @param integer        $sqlPosition
+     * @param string|int $dqlPosition
+     * @param int        $sqlPosition
      *
      * @return void
      */
@@ -134,7 +129,7 @@ class ParserResult
     /**
      * Gets the SQL parameter positions for a DQL parameter name/position.
      *
-     * @param string|integer $dqlPosition The name or position of the DQL parameter.
+     * @param string|int $dqlPosition The name or position of the DQL parameter.
      *
      * @return array The positions of the corresponding SQL parameters.
      */

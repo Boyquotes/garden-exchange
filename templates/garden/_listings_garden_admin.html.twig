@@ -61,6 +61,17 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% if garden.latCity is null and garden.lngCity is null %}
+                        <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">GPS VILLE INCORRECT</a>
+                    {% elseif garden.latCity is not null and garden.lngCity is not null %}
+                        <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">GPS VILLE OK</a>
+                    {% endif %}
+                    {% if garden.lat is null and garden.lng is null %}
+                        <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">GPS precis INCORRECT</a>
+                    {% elseif garden.lat is not null and garden.lng is not null %}
+                        <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">GPS precis OK</a>
+                    {% endif %}
+
                 {% if is_granted(constant('\\App\\Security\\GardenVoter::EDIT'), garden) %}
                     <div id="garden{{garden.id}}">
                         {{ render(controller('App\\Controller\\Admin\\GardenAdminController::actionsGarden', {

@@ -23,7 +23,7 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
     /**
      * The namespace used to store values in the session.
      */
-    const SESSION_NAMESPACE = '_csrf';
+    public const SESSION_NAMESPACE = '_csrf';
 
     private $sessionStarted = false;
     private $namespace;
@@ -112,7 +112,7 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
 
     private function startSession()
     {
-        if (PHP_SESSION_NONE === session_status()) {
+        if (\PHP_SESSION_NONE === session_status()) {
             session_start();
         }
 

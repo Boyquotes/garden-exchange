@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -85,7 +87,7 @@ final class FixCommand extends Command
      *
      * Override here to only generate the help copy when used.
      */
-    public function getHelp()
+    public function getHelp(): string
     {
         return HelpCommand::getHelpCopy();
     }
@@ -93,7 +95,7 @@ final class FixCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDefinition(
@@ -107,7 +109,6 @@ final class FixCommand extends Command
                     new InputOption('using-cache', '', InputOption::VALUE_REQUIRED, 'Does cache should be used (can be yes or no).'),
                     new InputOption('cache-file', '', InputOption::VALUE_REQUIRED, 'The path to the cache file.'),
                     new InputOption('diff', '', InputOption::VALUE_NONE, 'Also produce diff for each file.'),
-                    new InputOption('diff-format', '', InputOption::VALUE_REQUIRED, 'Specify diff format.'),
                     new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats.'),
                     new InputOption('stop-on-violation', '', InputOption::VALUE_NONE, 'Stop execution on first violation.'),
                     new InputOption('show-progress', '', InputOption::VALUE_REQUIRED, 'Type of progress indicator (none, dots).'),
@@ -120,8 +121,10 @@ final class FixCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $verbosity = $output->getVerbosity();
+
         $passedConfig = $input->getOption('config');
         $passedRules = $input->getOption('rules');
 
@@ -142,9 +145,8 @@ final class FixCommand extends Command
                 'cache-file' => $input->getOption('cache-file'),
                 'format' => $input->getOption('format'),
                 'diff' => $input->getOption('diff'),
-                'diff-format' => $input->getOption('diff-format'),
                 'stop-on-violation' => $input->getOption('stop-on-violation'),
-                'verbosity' => $output->getVerbosity(),
+                'verbosity' => $verbosity,
                 'show-progress' => $input->getOption('show-progress'),
             ],
             getcwd(),
@@ -159,11 +161,17 @@ final class FixCommand extends Command
         ;
 
         if (null !== $stdErr) {
+            if (OutputInterface::VERBOSITY_VERBOSE <= $verbosity) {
+                $stdErr->writeln($this->getApplication()->getLongVersion());
+                $stdErr->writeln(sprintf('Runtime: <info>PHP %s</info>', PHP_VERSION));
+            }
+
             $configFile = $resolver->getConfigFile();
             $stdErr->writeln(sprintf('Loaded config <comment>%s</comment>%s.', $resolver->getConfig()->getName(), null === $configFile ? '' : ' from "'.$configFile.'"'));
 
             if ($resolver->getUsingCache()) {
                 $cacheFile = $resolver->getCacheFile();
+
                 if (is_file($cacheFile)) {
                     $stdErr->writeln(sprintf('Using cache file "%s".', $cacheFile));
                 }
@@ -216,7 +224,7 @@ final class FixCommand extends Command
             $changed,
             $fixEvent->getDuration(),
             $fixEvent->getMemory(),
-            OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity(),
+            OutputInterface::VERBOSITY_VERBOSE <= $verbosity,
             $resolver->isDryRun(),
             $output->isDecorated()
         );

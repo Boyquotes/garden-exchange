@@ -25,9 +25,9 @@ use Symfony\Component\Process\Process;
  */
 final class Dotenv
 {
-    const VARNAME_REGEX = '(?i:[A-Z][A-Z0-9_]*+)';
-    const STATE_VARNAME = 0;
-    const STATE_VALUE = 1;
+    public const VARNAME_REGEX = '(?i:[A-Z][A-Z0-9_]*+)';
+    public const STATE_VARNAME = 0;
+    public const STATE_VALUE = 1;
 
     private $path;
     private $cursor;
@@ -161,7 +161,7 @@ final class Dotenv
 
         $k = $this->debugKey;
         $debug = $_SERVER[$k] ?? !\in_array($_SERVER[$this->envKey], $this->prodEnvs, true);
-        $_SERVER[$k] = $_ENV[$k] = (int) $debug || (!\is_bool($debug) && filter_var($debug, FILTER_VALIDATE_BOOLEAN)) ? '1' : '0';
+        $_SERVER[$k] = $_ENV[$k] = (int) $debug || (!\is_bool($debug) && filter_var($debug, \FILTER_VALIDATE_BOOLEAN)) ? '1' : '0';
     }
 
     /**
@@ -312,7 +312,7 @@ final class Dotenv
             throw $this->createFormatException('Whitespace are not supported before the value');
         }
 
-        $loadedVars = array_flip(explode(',', isset($_SERVER['SYMFONY_DOTENV_VARS']) ? $_SERVER['SYMFONY_DOTENV_VARS'] : (isset($_ENV['SYMFONY_DOTENV_VARS']) ? $_ENV['SYMFONY_DOTENV_VARS'] : '')));
+        $loadedVars = array_flip(explode(',', $_SERVER['SYMFONY_DOTENV_VARS'] ?? ($_ENV['SYMFONY_DOTENV_VARS'] ?? '')));
         unset($loadedVars['']);
         $v = '';
 
@@ -456,7 +456,7 @@ final class Dotenv
 
             $process = method_exists(Process::class, 'fromShellCommandline') ? Process::fromShellCommandline('echo '.$matches[0]) : new Process('echo '.$matches[0]);
 
-            if (!method_exists(Process::class, 'fromShellCommandline')) {
+            if (!method_exists(Process::class, 'fromShellCommandline') && method_exists(Process::class, 'inheritEnvironmentVariables')) {
                 // Symfony 3.4 does not inherit env vars by default:
                 $process->inheritEnvironmentVariables();
             }

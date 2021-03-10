@@ -6,11 +6,10 @@ use Doctrine\Common\Cache\Cache;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Proxy;
 use ReflectionException;
+
 use function array_reverse;
 use function array_unshift;
-use function class_exists;
 use function explode;
-use function interface_exists;
 use function strpos;
 use function strrpos;
 use function substr;
@@ -297,6 +296,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
                     $rootEntityFound = true;
                     array_unshift($visited, $className);
                 }
+
                 continue;
             }
 
@@ -403,7 +403,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
     /**
      * Gets the real class name of a class name that could be a proxy.
      */
-    private function getRealClass(string $class) : string
+    private function getRealClass(string $class): string
     {
         $pos = strrpos($class, '\\' . Proxy::MARKER . '\\');
 
@@ -414,7 +414,3 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
         return substr($class, $pos + Proxy::MARKER_LENGTH + 2);
     }
 }
-
-class_exists(\Doctrine\Common\Persistence\Mapping\AbstractClassMetadataFactory::class);
-interface_exists(ClassMetadata::class);
-interface_exists(ReflectionService::class);

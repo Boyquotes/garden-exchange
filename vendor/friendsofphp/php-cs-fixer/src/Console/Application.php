@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -15,7 +17,6 @@ namespace PhpCsFixer\Console;
 use PhpCsFixer\Console\Command\DescribeCommand;
 use PhpCsFixer\Console\Command\FixCommand;
 use PhpCsFixer\Console\Command\HelpCommand;
-use PhpCsFixer\Console\Command\ReadmeCommand;
 use PhpCsFixer\Console\Command\SelfUpdateCommand;
 use PhpCsFixer\Console\SelfUpdate\GithubClient;
 use PhpCsFixer\Console\SelfUpdate\NewVersionChecker;
@@ -35,8 +36,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class Application extends BaseApplication
 {
-    const VERSION = '3.0.0-DEV';
-    const VERSION_CODENAME = '';
+    public const VERSION = '3.0.0-DEV';
+    public const VERSION_CODENAME = '';
 
     /**
      * @var ToolInfo
@@ -51,7 +52,6 @@ final class Application extends BaseApplication
 
         $this->add(new DescribeCommand());
         $this->add(new FixCommand($this->toolInfo));
-        $this->add(new ReadmeCommand());
         $this->add(new SelfUpdateCommand(
             new NewVersionChecker(new GithubClient()),
             $this->toolInfo,
@@ -59,10 +59,7 @@ final class Application extends BaseApplication
         ));
     }
 
-    /**
-     * @return int
-     */
-    public static function getMajorVersion()
+    public static function getMajorVersion(): int
     {
         return (int) explode('.', self::VERSION)[0];
     }
@@ -70,7 +67,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): int
     {
         $stdErr = $output instanceof ConsoleOutputInterface
             ? $output->getErrorOutput()
@@ -91,7 +88,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    public function getLongVersion()
+    public function getLongVersion(): string
     {
         $version = sprintf(
             '%s <info>%s</info> by <comment>Fabien Potencier</comment> and <comment>Dariusz Ruminski</comment>',
@@ -111,7 +108,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         return [new HelpCommand(), new ListCommand()];
     }

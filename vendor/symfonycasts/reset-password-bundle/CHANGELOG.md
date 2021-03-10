@@ -4,6 +4,40 @@
 find a change that break's semver, please create an issue.*
 
 ## NEXT
+- [#160](https://github.com/SymfonyCasts/reset-password-bundle/pull/160) Add Italian translation
+- [#157](https://github.com/SymfonyCasts/reset-password-bundle/pull/157) Add Spanish translation
+- [#158](https://github.com/SymfonyCasts/reset-password-bundle/pull/158) Add Portuguese translation
+
+## 1.4.0
+
+- [#145](https://github.com/SymfonyCasts/reset-password-bundle/pull/145) Add German translations
+- [#148](https://github.com/SymfonyCasts/reset-password-bundle/pull/148) Add French translations
+- [#149](https://github.com/SymfonyCasts/reset-password-bundle/pull/149) Add Polish translations
+- [#150](https://github.com/SymfonyCasts/reset-password-bundle/pull/145) Add Serbian translations
+- [#151](https://github.com/SymfonyCasts/reset-password-bundle/pull/151) Add Ukrainian translation
+- [#152](https://github.com/SymfonyCasts/reset-password-bundle/pull/152) Add Russian translation
+
+## v1.3.0
+
+- [#143](https://github.com/SymfonyCasts/reset-password-bundle/pull/143) Adds controller trait methods to set/get the 
+  `ResetPasswordToken::class` object in the session. The following `ResetPasswordControllerTrait::class` methods have been deprecated: 
+  `setCanCheckEmailInSession()`, `canCheckEmail()`
+
+## v1.2.2
+
+- [#139](https://github.com/SymfonyCasts/reset-password-bundle/pull/139) Fixed regression
+  in 1.2.2 with expiration DateTime timezone
+
+## v1.2.1
+
+- [#135](https://github.com/SymfonyCasts/reset-password-bundle/pull/135) Add translation support for signature expiration time
+- [#135](https://github.com/SymfonyCasts/reset-password-bundle/pull/134) Fixed invalid signature expiration time
+
+## v1.2.0
+
+*Dec 10th, 2020*
+
+- [#134](https://github.com/SymfonyCasts/reset-password-bundle/pull/134)  - Allow the bundle to be used with PHP 8 - thanks to @ker0x
 
 ## v1.1.0
 

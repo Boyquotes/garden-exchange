@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Exception\MissingOptionsException;
  *
  * Constraint instances are immutable and serializable.
  *
- * @property array $groups The groups that the constraint belongs to
+ * @property string[] $groups The groups that the constraint belongs to
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
@@ -34,17 +34,17 @@ abstract class Constraint
     /**
      * The name of the group given to all constraints with no explicit group.
      */
-    const DEFAULT_GROUP = 'Default';
+    public const DEFAULT_GROUP = 'Default';
 
     /**
      * Marks a constraint that can be put onto classes.
      */
-    const CLASS_CONSTRAINT = 'class';
+    public const CLASS_CONSTRAINT = 'class';
 
     /**
      * Marks a constraint that can be put onto properties.
      */
-    const PROPERTY_CONSTRAINT = 'property';
+    public const PROPERTY_CONSTRAINT = 'property';
 
     /**
      * Maps error codes to the names of their constants.
@@ -91,9 +91,11 @@ abstract class Constraint
      * getRequiredOptions() to return the names of these options. If any
      * option is not set here, an exception is thrown.
      *
-     * @param mixed $options The options (as associative array)
-     *                       or the value for the default
-     *                       option (any other type)
+     * @param mixed    $options The options (as associative array)
+     *                          or the value for the default
+     *                          option (any other type)
+     * @param string[] $groups  An array of validation groups
+     * @param mixed    $payload Domain-specific data attached to a constraint
      *
      * @throws InvalidOptionsException       When you pass the names of non-existing
      *                                       options
@@ -103,9 +105,15 @@ abstract class Constraint
      *                                       array, but getDefaultOption() returns
      *                                       null
      */
-    public function __construct($options = null)
+    public function __construct($options = null, array $groups = null, $payload = null)
     {
-        foreach ($this->normalizeOptions($options) as $name => $value) {
+        $options = $this->normalizeOptions($options);
+        if (null !== $groups) {
+            $options['groups'] = $groups;
+        }
+        $options['payload'] = $payload ?? $options['payload'] ?? null;
+
+        foreach ($options as $name => $value) {
             $this->$name = $value;
         }
     }
@@ -255,7 +263,7 @@ abstract class Constraint
      *
      * Override this method if you want to define required options.
      *
-     * @return array
+     * @return string[]
      *
      * @see __construct()
      */
@@ -285,7 +293,7 @@ abstract class Constraint
      * This method should return one or more of the constants
      * Constraint::CLASS_CONSTRAINT and Constraint::PROPERTY_CONSTRAINT.
      *
-     * @return string|array One or more constant values
+     * @return string|string[] One or more constant values
      */
     public function getTargets()
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -15,9 +17,11 @@ namespace PhpCsFixer\Fixer\FunctionNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Analyzer\Analysis\NamespaceAnalysis;
 use PhpCsFixer\Tokenizer\Analyzer\FunctionsAnalyzer;
 use PhpCsFixer\Tokenizer\Analyzer\NamespacesAnalyzer;
@@ -34,7 +38,7 @@ final class NativeFunctionInvocationFixer extends AbstractFixer implements Confi
     /**
      * @internal
      */
-    const SET_ALL = '@all';
+    public const SET_ALL = '@all';
 
     /**
      * Subset of SET_INTERNAL.
@@ -46,19 +50,19 @@ final class NativeFunctionInvocationFixer extends AbstractFixer implements Confi
      *
      * @internal
      */
-    const SET_COMPILER_OPTIMIZED = '@compiler_optimized';
+    public const SET_COMPILER_OPTIMIZED = '@compiler_optimized';
 
     /**
      * @internal
      */
-    const SET_INTERNAL = '@internal';
+    public const SET_INTERNAL = '@internal';
 
     /**
      * @var callable
      */
     private $functionFilter;
 
-    public function configure(array $configuration = null)
+    public function configure(array $configuration = null): void
     {
         parent::configure($configuration);
 
@@ -68,7 +72,7 @@ final class NativeFunctionInvocationFixer extends AbstractFixer implements Confi
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'Add leading `\` before function invocation to speed up resolving.',
@@ -166,7 +170,7 @@ $c = get_class($d);
      * Must run before GlobalNamespaceImportFixer.
      * Must run after BacktickToShellExecFixer, StrictParamFixer.
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 1;
     }
@@ -174,7 +178,7 @@ $c = get_class($d);
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
+    public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(T_STRING);
     }
@@ -182,7 +186,7 @@ $c = get_class($d);
     /**
      * {@inheritdoc}
      */
-    public function isRisky()
+    public function isRisky(): bool
     {
         return true;
     }
@@ -190,7 +194,7 @@ $c = get_class($d);
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if ('all' === $this->configuration['scope']) {
             $this->fixFunctionCalls($tokens, $this->functionFilter, 0, \count($tokens) - 1, false);
@@ -210,7 +214,7 @@ $c = get_class($d);
     /**
      * {@inheritdoc}
      */
-    protected function createConfigurationDefinition()
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('exclude', 'List of functions to ignore.'))
@@ -261,21 +265,16 @@ $c = get_class($d);
                 ->getOption(),
             (new FixerOptionBuilder('strict', 'Whether leading `\` of function call not meant to have it should be removed.'))
                 ->setAllowedTypes(['bool'])
-                ->setDefault(false) // @TODO: 3.0 change to true as default
+                ->setDefault(true)
                 ->getOption(),
         ]);
     }
 
-    /**
-     * @param int  $start
-     * @param int  $end
-     * @param bool $tryToRemove
-     */
-    private function fixFunctionCalls(Tokens $tokens, callable $functionFilter, $start, $end, $tryToRemove)
+    private function fixFunctionCalls(Tokens $tokens, callable $functionFilter, int $start, int $end, bool $tryToRemove): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
 
-        $insertAtIndexes = [];
+        $tokensToInsert = [];
         for ($index = $start; $index < $end; ++$index) {
             if (!$functionsAnalyzer->isGlobalFunctionCall($tokens, $index)) {
                 continue;
@@ -298,24 +297,19 @@ $c = get_class($d);
                 continue; // do not bother if previous token is already namespace separator
             }
 
-            $insertAtIndexes[] = $index;
+            $tokensToInsert[$index] = new Token([T_NS_SEPARATOR, '\\']);
         }
 
-        foreach (array_reverse($insertAtIndexes) as $index) {
-            $tokens->insertAt($index, new Token([T_NS_SEPARATOR, '\\']));
-        }
+        $tokens->insertSlices($tokensToInsert);
     }
 
-    /**
-     * @return callable
-     */
-    private function getFunctionFilter()
+    private function getFunctionFilter(): callable
     {
         $exclude = $this->normalizeFunctionNames($this->configuration['exclude']);
 
         if (\in_array(self::SET_ALL, $this->configuration['include'], true)) {
             if (\count($exclude) > 0) {
-                return static function ($functionName) use ($exclude) {
+                return static function (string $functionName) use ($exclude) {
                     return !isset($exclude[strtolower($functionName)]);
                 };
             }
@@ -339,12 +333,12 @@ $c = get_class($d);
         }
 
         if (\count($exclude) > 0) {
-            return static function ($functionName) use ($include, $exclude) {
+            return static function (string $functionName) use ($include, $exclude) {
                 return isset($include[strtolower($functionName)]) && !isset($exclude[strtolower($functionName)]);
             };
         }
 
-        return static function ($functionName) use ($include) {
+        return static function (string $functionName) use ($include) {
             return isset($include[strtolower($functionName)]);
         };
     }

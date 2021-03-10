@@ -12,8 +12,6 @@
 namespace Symfony\Component\Serializer;
 
 /**
- * Defines the interface of the Serializer.
- *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
 interface SerializerInterface
@@ -34,7 +32,7 @@ interface SerializerInterface
      *
      * @param mixed $data
      *
-     * @return object|array
+     * @return mixed
      */
     public function deserialize($data, string $type, string $format, array $context = []);
 }

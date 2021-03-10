@@ -14,6 +14,7 @@ namespace Symfony\Bundle\FrameworkBundle\Console\Descriptor;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Argument\AbstractArgument;
 use Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -145,7 +146,7 @@ class JsonDescriptor extends Descriptor
 
     protected function describeContainerParameter($parameter, array $options = [])
     {
-        $key = isset($options['parameter']) ? $options['parameter'] : '';
+        $key = $options['parameter'] ?? '';
 
         $this->writeData([$key => $parameter], $options);
     }
@@ -157,7 +158,7 @@ class JsonDescriptor extends Descriptor
 
     protected function describeContainerDeprecations(ContainerBuilder $builder, array $options = []): void
     {
-        $containerDeprecationFilePath = sprintf('%s/%sDeprecations.log', $builder->getParameter('kernel.cache_dir'), $builder->getParameter('kernel.container_class'));
+        $containerDeprecationFilePath = sprintf('%s/%sDeprecations.log', $builder->getParameter('kernel.build_dir'), $builder->getParameter('kernel.container_class'));
         if (!file_exists($containerDeprecationFilePath)) {
             throw new RuntimeException('The deprecation file does not exist, please try warming the cache first.');
         }
@@ -181,9 +182,9 @@ class JsonDescriptor extends Descriptor
 
     private function writeData(array $data, array $options)
     {
-        $flags = isset($options['json_encoding']) ? $options['json_encoding'] : 0;
+        $flags = $options['json_encoding'] ?? 0;
 
-        $this->write(json_encode($data, $flags | JSON_PRETTY_PRINT)."\n");
+        $this->write(json_encode($data, $flags | \JSON_PRETTY_PRINT)."\n");
     }
 
     protected function getRouteData(Route $route): array
@@ -391,6 +392,10 @@ class JsonDescriptor extends Descriptor
                 'type' => 'service',
                 'id' => (string) $value,
             ];
+        }
+
+        if ($value instanceof AbstractArgument) {
+            return ['type' => 'abstract', 'text' => $value->getText()];
         }
 
         if ($value instanceof ArgumentInterface) {

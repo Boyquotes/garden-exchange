@@ -105,6 +105,48 @@ class GardenAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            //~ Geocode de l'adresse
+            $street = $form->get('street')->getData();
+            $postcode = $form->get('postcode')->getData();
+            $city = $form->get('city')->getData();
+            $country = $form->get('country')->getData();
+
+            $data = array($city." ".$postcode." ".$country->getLangFR());
+            $url = 'https://api-adresse.data.gouv.fr/search/?q=' . http_build_query($data);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0');
+            $geopos = curl_exec($ch);
+            curl_close($ch);
+
+            $json_data = json_decode($geopos, true);
+
+            if(!is_null($json_data) && count($json_data) != 0){
+                $lngCity = $json_data['features'][0]['geometry']['coordinates'][0];
+                $latCity = $json_data['features'][0]['geometry']['coordinates'][1];
+                $garden->setLatCity($latCity);
+                $garden->setLngCity($lngCity);
+                $gps = true;
+            }
+            
+            $data = array($street." ".$city." ".$postcode." ".$country->getLangFR());
+            $url = 'https://api-adresse.data.gouv.fr/search/?q=' . http_build_query($data);
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0');
+            $geopos = curl_exec($ch);
+            curl_close($ch);
+
+            $json_data = json_decode($geopos, true);
+
+            if(!is_null($json_data) && count($json_data) != 0){
+                $lng = $json_data['features'][0]['geometry']['coordinates'][0];
+                $lat = $json_data['features'][0]['geometry']['coordinates'][1];
+                $garden->setLat($lat);
+                $garden->setLng($lng);
+                $gps = true;
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'garden.updated_successfully');
@@ -131,7 +173,7 @@ class GardenAdminController extends AbstractController
     public function save(Request $request, MailerInterface $mailer, TranslatorInterface $translator, Garden $garden): Response
     {
         //~ dump($request);
-        dump($garden);
+        //~ dump($garden);
         //~ exit;
         $user = $this->getUser();
         $gps = false;
@@ -142,8 +184,7 @@ class GardenAdminController extends AbstractController
         //~ dump($form);
         //~ exit;
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($form);
-
+            //~ dump($form);
             $garden->setUser($user);
 
             //~ Geocode de l'adresse
@@ -151,15 +192,9 @@ class GardenAdminController extends AbstractController
             $postcode = $form->get('postcode')->getData();
             $city = $form->get('city')->getData();
             $country = $form->get('country')->getData();
-            
-            $data = array(
-              'street'     => '',
-              'postalcode' => $postcode,
-              'city'       => $city,
-              'country'    => $country,
-              'format'     => 'json',
-            );
-            $url = 'https://nominatim.openstreetmap.org/?' . http_build_query($data);
+
+            $data = array($city." ".$postcode." ".$country->getLangFR());
+            $url = 'https://api-adresse.data.gouv.fr/search/?q=' . http_build_query($data);
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0');
@@ -167,21 +202,17 @@ class GardenAdminController extends AbstractController
             curl_close($ch);
 
             $json_data = json_decode($geopos, true);
-            if(count($json_data) != 0){
-                $latCity = $json_data[0]['lat'];
-                $lngCity = $json_data[0]['lon'];
+
+            if(!is_null($json_data) && count($json_data) != 0){
+                $lngCity = $json_data['features'][0]['geometry']['coordinates'][0];
+                $latCity = $json_data['features'][0]['geometry']['coordinates'][1];
                 $garden->setLatCity($latCity);
                 $garden->setLngCity($lngCity);
                 $gps = true;
             }
-            $data = array(
-              'street'     => $street,
-              'postalcode' => $postcode,
-              'city'       => $city,
-              'country'    => $country,
-              'format'     => 'json',
-            );
-            $url = 'https://nominatim.openstreetmap.org/?' . http_build_query($data);
+            
+            $data = array($street." ".$city." ".$postcode." ".$country->getLangFR());
+            $url = 'https://api-adresse.data.gouv.fr/search/?q=' . http_build_query($data);
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0');
@@ -189,9 +220,10 @@ class GardenAdminController extends AbstractController
             curl_close($ch);
 
             $json_data = json_decode($geopos, true);
-            if(count($json_data) != 0){
-                $lat = $json_data[0]['lat'];
-                $lng = $json_data[0]['lon'];
+
+            if(!is_null($json_data) && count($json_data) != 0){
+                $lng = $json_data['features'][0]['geometry']['coordinates'][0];
+                $lat = $json_data['features'][0]['geometry']['coordinates'][1];
                 $garden->setLat($lat);
                 $garden->setLng($lng);
                 $gps = true;

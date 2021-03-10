@@ -70,6 +70,8 @@ class ResetPasswordHelper implements ResetPasswordHelperInterface
 
         $expiresAt = new \DateTimeImmutable(\sprintf('+%d seconds', $this->resetRequestLifetime));
 
+        $generatedAt = ($expiresAt->getTimestamp() - $this->resetRequestLifetime);
+
         $tokenComponents = $this->tokenGenerator->createToken($expiresAt, $this->repository->getUserIdentifier($user));
 
         $passwordResetRequest = $this->repository->createResetPasswordRequest(
@@ -84,7 +86,8 @@ class ResetPasswordHelper implements ResetPasswordHelperInterface
         // final "public" token is the selector + non-hashed verifier token
         return new ResetPasswordToken(
             $tokenComponents->getPublicToken(),
-            $expiresAt
+            $expiresAt,
+            $generatedAt
         );
     }
 

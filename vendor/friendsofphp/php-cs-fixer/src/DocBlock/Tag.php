@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -18,6 +20,8 @@ use PhpCsFixer\Preg;
  * This represents a tag, as defined by the proposed PSR PHPDoc standard.
  *
  * @author Graham Campbell <graham@alt-three.com>
+ *
+ * @final
  */
 final class Tag
 {
@@ -59,10 +63,8 @@ final class Tag
      * Get the tag name.
      *
      * This may be "param", or "return", etc.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         if (null === $this->name) {
             Preg::matchAll('/@[a-zA-Z0-9_-]+(?=\s|$)/', $this->line->getContent(), $matches);
@@ -81,10 +83,8 @@ final class Tag
      * Set the tag name.
      *
      * This will also be persisted to the upstream line and annotation.
-     *
-     * @param string $name
      */
-    public function setName($name)
+    public function setName(string $name): void
     {
         $current = $this->getName();
 
@@ -101,10 +101,8 @@ final class Tag
      * Is the tag a known tag?
      *
      * This is defined by if it exists in the proposed PSR PHPDoc standard.
-     *
-     * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
         return \in_array($this->getName(), self::$tags, true);
     }

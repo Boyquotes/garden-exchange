@@ -5,13 +5,14 @@ namespace Doctrine\Persistence\Mapping\Driver;
 use Doctrine\Persistence\Mapping\MappingException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use const DIRECTORY_SEPARATOR;
+
 use function array_merge;
 use function array_unique;
-use function class_exists;
 use function is_dir;
 use function is_file;
 use function str_replace;
+
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Locates the file that contains the metadata information for a given class name.
@@ -160,5 +161,3 @@ class DefaultFileLocator implements FileLocator
         return false;
     }
 }
-
-class_exists(\Doctrine\Common\Persistence\Mapping\Driver\DefaultFileLocator::class);

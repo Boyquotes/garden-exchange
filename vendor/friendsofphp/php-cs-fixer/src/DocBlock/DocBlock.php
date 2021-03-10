@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -20,6 +22,8 @@ use PhpCsFixer\Preg;
  * It internally splits it up into "lines" that we can manipulate.
  *
  * @author Graham Campbell <graham@alt-three.com>
+ *
+ * @final
  */
 final class DocBlock
 {
@@ -39,10 +43,8 @@ final class DocBlock
 
     /**
      * Create a new docblock instance.
-     *
-     * @param string $content
      */
-    public function __construct($content)
+    public function __construct(string $content)
     {
         foreach (Preg::split('/([^\n\r]+\R*)/', $content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE) as $line) {
             $this->lines[] = new Line($line);
@@ -51,10 +53,8 @@ final class DocBlock
 
     /**
      * Get the string representation of object.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getContent();
     }
@@ -64,19 +64,15 @@ final class DocBlock
      *
      * @return Line[]
      */
-    public function getLines()
+    public function getLines(): array
     {
         return $this->lines;
     }
 
     /**
      * Get a single line.
-     *
-     * @param int $pos
-     *
-     * @return null|Line
      */
-    public function getLine($pos)
+    public function getLine(int $pos): ?Line
     {
         return isset($this->lines[$pos]) ? $this->lines[$pos] : null;
     }
@@ -86,7 +82,7 @@ final class DocBlock
      *
      * @return Annotation[]
      */
-    public function getAnnotations()
+    public function getAnnotations(): array
     {
         if (null !== $this->annotations) {
             return $this->annotations;
@@ -112,18 +108,15 @@ final class DocBlock
         return $this->annotations;
     }
 
-    public function isMultiLine()
+    public function isMultiLine(): bool
     {
         return 1 !== \count($this->lines);
     }
 
     /**
      * Take a one line doc block, and turn it into a multi line doc block.
-     *
-     * @param string $indent
-     * @param string $lineEnd
      */
-    public function makeMultiLine($indent, $lineEnd)
+    public function makeMultiLine(string $indent, string $lineEnd): void
     {
         if ($this->isMultiLine()) {
             return;
@@ -148,7 +141,7 @@ final class DocBlock
         ];
     }
 
-    public function makeSingleLine()
+    public function makeSingleLine(): void
     {
         if (!$this->isMultiLine()) {
             return;
@@ -173,12 +166,7 @@ final class DocBlock
         $this->lines = [new Line('/** '.$lineContent.' */')];
     }
 
-    /**
-     * @param int $pos
-     *
-     * @return null|Annotation
-     */
-    public function getAnnotation($pos)
+    public function getAnnotation(int $pos): ?Annotation
     {
         $annotations = $this->getAnnotations();
 
@@ -194,7 +182,7 @@ final class DocBlock
      *
      * @return Annotation[]
      */
-    public function getAnnotationsOfType($types)
+    public function getAnnotationsOfType($types): array
     {
         $annotations = [];
         $types = (array) $types;
@@ -213,15 +201,13 @@ final class DocBlock
 
     /**
      * Get the actual content of this docblock.
-     *
-     * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return implode('', $this->lines);
     }
 
-    private function findAnnotationLength($start)
+    private function findAnnotationLength(int $start): int
     {
         $index = $start;
 
@@ -244,10 +230,7 @@ final class DocBlock
         return $index - $start;
     }
 
-    /**
-     * @return string
-     */
-    private function getSingleLineDocBlockEntry(Line $line)
+    private function getSingleLineDocBlockEntry(Line $line): string
     {
         $lineString = $line->getContent();
 

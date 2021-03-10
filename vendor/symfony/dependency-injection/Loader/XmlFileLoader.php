@@ -35,7 +35,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
  */
 class XmlFileLoader extends FileLoader
 {
-    const NS = 'http://symfony.com/schema/dic/services';
+    public const NS = 'http://symfony.com/schema/dic/services';
 
     protected $autoRegisterAliasesForSinglyImplementedInterfaces = false;
 
@@ -82,7 +82,7 @@ class XmlFileLoader extends FileLoader
             return false;
         }
 
-        if (null === $type && 'xml' === pathinfo($resource, PATHINFO_EXTENSION)) {
+        if (null === $type && 'xml' === pathinfo($resource, \PATHINFO_EXTENSION)) {
             return true;
         }
 
@@ -373,7 +373,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * Parses a XML file to a \DOMDocument.
+     * Parses an XML file to a \DOMDocument.
      *
      * @throws InvalidArgumentException When loading of XML file returns error
      */
@@ -430,7 +430,7 @@ class XmlFileLoader extends FileLoader
 
         // resolve definitions
         uksort($definitions, 'strnatcmp');
-        foreach (array_reverse($definitions) as $id => list($domElement, $file)) {
+        foreach (array_reverse($definitions) as $id => [$domElement, $file]) {
             if (null !== $definition = $this->parseDefinition($domElement, $file, new Definition())) {
                 $this->setDefinition($id, $definition);
             }
@@ -478,7 +478,7 @@ class XmlFileLoader extends FileLoader
                     break;
                 case 'expression':
                     if (!class_exists(Expression::class)) {
-                        throw new \LogicException(sprintf('The type="expression" attribute cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".'));
+                        throw new \LogicException('The type="expression" attribute cannot be used without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
                     }
 
                     $arguments[$key] = new Expression($arg->nodeValue);
@@ -604,6 +604,8 @@ class XmlFileLoader extends FileLoader
                     array_shift($parts);
                     $locationstart = 'phar:///';
                 }
+            } elseif ('\\' === \DIRECTORY_SEPARATOR && 0 === strpos($location, '\\\\')) {
+                $locationstart = '';
             }
             $drive = '\\' === \DIRECTORY_SEPARATOR ? array_shift($parts).'/' : '';
             $location = $locationstart.$drive.implode('/', array_map('rawurlencode', $parts));
@@ -624,15 +626,48 @@ $imports
 EOF
         ;
 
-        $disableEntities = libxml_disable_entity_loader(false);
-        $valid = @$dom->schemaValidateSource($source);
-        libxml_disable_entity_loader($disableEntities);
-
+        if ($this->shouldEnableEntityLoader()) {
+            $disableEntities = libxml_disable_entity_loader(false);
+            $valid = @$dom->schemaValidateSource($source);
+            libxml_disable_entity_loader($disableEntities);
+        } else {
+            $valid = @$dom->schemaValidateSource($source);
+        }
         foreach ($tmpfiles as $tmpfile) {
             @unlink($tmpfile);
         }
 
         return $valid;
+    }
+
+    private function shouldEnableEntityLoader(): bool
+    {
+        // Version prior to 8.0 can be enabled without deprecation
+        if (\PHP_VERSION_ID < 80000) {
+            return true;
+        }
+
+        static $dom, $schema;
+        if (null === $dom) {
+            $dom = new \DOMDocument();
+            $dom->loadXML('<?xml version="1.0"?><test/>');
+
+            $tmpfile = tempnam(sys_get_temp_dir(), 'symfony');
+            register_shutdown_function(static function () use ($tmpfile) {
+                @unlink($tmpfile);
+            });
+            $schema = '<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:include schemaLocation="file:///'.str_replace('\\', '/', $tmpfile).'" />
+</xsd:schema>';
+            file_put_contents($tmpfile, '<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="test" type="testType" />
+  <xsd:complexType name="testType"/>
+</xsd:schema>');
+        }
+
+        return !@$dom->schemaValidateSource($schema);
     }
 
     private function validateAlias(\DOMElement $alias, string $file)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -23,12 +25,7 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class SwitchAnalyzer
 {
-    /**
-     * @param int $switchIndex
-     *
-     * @return SwitchAnalysis
-     */
-    public function getSwitchAnalysis(Tokens $tokens, $switchIndex)
+    public function getSwitchAnalysis(Tokens $tokens, int $switchIndex): SwitchAnalysis
     {
         if (!$tokens[$switchIndex]->isGivenKind(T_SWITCH)) {
             throw new \InvalidArgumentException(sprintf('Index %d is not "switch".', $switchIndex));
@@ -38,40 +35,23 @@ final class SwitchAnalyzer
         $casesEndIndex = $this->getCasesEnd($tokens, $casesStartIndex);
 
         $cases = [];
-        $ternaryOperatorDepth = 0;
         $index = $casesStartIndex;
         while ($index < $casesEndIndex) {
-            ++$index;
-            if ($tokens[$index]->isGivenKind(T_SWITCH)) {
-                $index = (new self())->getSwitchAnalysis($tokens, $index)->getCasesEnd();
+            $index = $this->getNextSameLevelToken($tokens, $index);
 
+            if (!$tokens[$index]->isGivenKind([T_CASE, T_DEFAULT])) {
                 continue;
             }
-            if ($tokens[$index]->equals('?')) {
-                ++$ternaryOperatorDepth;
 
-                continue;
-            }
-            if (!$tokens[$index]->equals(':')) {
-                continue;
-            }
-            if ($ternaryOperatorDepth > 0) {
-                --$ternaryOperatorDepth;
+            $caseAnalysis = $this->getCaseAnalysis($tokens, $index);
 
-                continue;
-            }
-            $cases[] = new CaseAnalysis($index);
+            $cases[] = $caseAnalysis;
         }
 
         return new SwitchAnalysis($casesStartIndex, $casesEndIndex, $cases);
     }
 
-    /**
-     * @param int $switchIndex
-     *
-     * @return int
-     */
-    private function getCasesStart(Tokens $tokens, $switchIndex)
+    private function getCasesStart(Tokens $tokens, int $switchIndex): int
     {
         /** @var int $parenthesisStartIndex */
         $parenthesisStartIndex = $tokens->getNextMeaningfulToken($switchIndex);
@@ -83,41 +63,55 @@ final class SwitchAnalyzer
         return $casesStartIndex;
     }
 
-    /**
-     * @param int $casesStartIndex
-     *
-     * @return int
-     */
-    private function getCasesEnd(Tokens $tokens, $casesStartIndex)
+    private function getCasesEnd(Tokens $tokens, int $casesStartIndex): int
     {
         if ($tokens[$casesStartIndex]->equals('{')) {
             return $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $casesStartIndex);
         }
 
-        $depth = 1;
         $index = $casesStartIndex;
-        while ($depth > 0) {
-            /** @var int $index */
-            $index = $tokens->getNextMeaningfulToken($index);
+        while ($index < $tokens->count()) {
+            $index = $this->getNextSameLevelToken($tokens, $index);
 
             if ($tokens[$index]->isGivenKind(T_ENDSWITCH)) {
-                --$depth;
-
-                continue;
-            }
-
-            if (!$tokens[$index]->isGivenKind(T_SWITCH)) {
-                continue;
-            }
-            $index = $this->getCasesStart($tokens, $index);
-            if ($tokens[$index]->equals(':')) {
-                ++$depth;
+                break;
             }
         }
 
-        /** @var int $afterEndswitchIndex */
         $afterEndswitchIndex = $tokens->getNextMeaningfulToken($index);
 
-        return $tokens[$afterEndswitchIndex]->equals(';') ? $afterEndswitchIndex : $index;
+        $afterEndswitchToken = $tokens[$afterEndswitchIndex];
+
+        return $afterEndswitchToken->equalsAny([';', [T_CLOSE_TAG]]) ? $afterEndswitchIndex : $index;
+    }
+
+    private function getCaseAnalysis(Tokens $tokens, int $index): CaseAnalysis
+    {
+        while ($index < $tokens->count()) {
+            $index = $this->getNextSameLevelToken($tokens, $index);
+
+            if ($tokens[$index]->equalsAny([':', ';'])) {
+                break;
+            }
+        }
+
+        return new CaseAnalysis($index);
+    }
+
+    private function getNextSameLevelToken(Tokens $tokens, int $index): int
+    {
+        $index = $tokens->getNextMeaningfulToken($index);
+
+        if ($tokens[$index]->isGivenKind(T_SWITCH)) {
+            return (new self())->getSwitchAnalysis($tokens, $index)->getCasesEnd();
+        }
+
+        /** @var null|array{isStart: bool, type: int} $blockType */
+        $blockType = Tokens::detectBlockType($tokens[$index]);
+        if (null !== $blockType && $blockType['isStart']) {
+            return $tokens->findBlockEnd($blockType['type'], $index) + 1;
+        }
+
+        return $index;
     }
 }

@@ -3,7 +3,7 @@
 namespace Doctrine\Persistence\Mapping;
 
 use Exception;
-use function class_exists;
+
 use function implode;
 use function sprintf;
 
@@ -94,5 +94,3 @@ class MappingException extends Exception
         return new self(sprintf("Class '%s' does not exist", $className));
     }
 }
-
-class_exists(\Doctrine\Common\Persistence\Mapping\MappingException::class);

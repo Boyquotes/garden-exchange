@@ -7,7 +7,8 @@ import 'bootstrap-sass/assets/javascripts/bootstrap/alert.js';
 import 'bootstrap-sass/assets/javascripts/bootstrap/collapse.js';
 import 'bootstrap-sass/assets/javascripts/bootstrap/dropdown.js';
 import 'bootstrap-sass/assets/javascripts/bootstrap/modal.js';
-import 'jquery'
+import 'webpack-jquery-ui';
+import 'jquery';
 
 // create global $ and jQuery variables
 global.$ = global.jQuery = $;

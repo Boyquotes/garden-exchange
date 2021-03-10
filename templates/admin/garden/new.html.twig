@@ -20,9 +20,93 @@
     {{ parent() }}
 {% endblock %}
 
-{% block cutom_javascripts %}
+{% block custom_javascripts %}
     <script>
         $(document).ready( function(){
+        // completion postcode
+        var country = $('#garden_country option:selected').val();
+
+        $("#garden_postcode").autocomplete({
+            source: function (request, response) {
+                country = $('#garden_country option:selected').val();
+                if( country == '75' ){
+                    $.ajax({
+                        url: "https://api-adresse.data.gouv.fr/search/?postcode="+$("input[name='garden[postcode]']").val()+"&type=municipality",
+                        data: { q: request.term },
+                        dataType: "json",
+                        success: function (data) {
+                            var postcodes = [];
+                            response($.map(data.features, function (item) {
+                                // Ici on est obligé d'ajouter les CP dans un array pour ne pas avoir plusieurs fois le même
+                                if ($.inArray(item.properties.city, postcodes) == -1) {
+                                    postcodes.push(item.properties.postcode);
+                                    return { label: item.properties.postcode + " - " + item.properties.city, 
+                                             city: item.properties.city,
+                                             value: item.properties.postcode
+                                    };
+                                }
+                            }));
+                        }
+                    });
+                }
+            },
+            // On remplit aussi la ville
+            select: function(event, ui) {
+                $('#garden_city').val(ui.item.city);
+                $('.error-city').hide();
+            }
+        });
+        $("#garden_city").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "https://api-adresse.data.gouv.fr/search/?q="+$("input[name='garden[city]']").val()+"&type=municipality",
+                    data: { q: request.term },
+                    dataType: "json",
+                    success: function (data) {
+                        var cities = [];
+                        var str = '';
+                        var citySearch = $("input[name='garden[city]']").val();
+                        response($.map(data.features, function (item) {
+                            cities.push(item.properties.postcode);
+                            return { label: item.properties.postcode + " - " + item.properties.city, 
+                                     postcode: item.properties.postcode,
+                                     citycode: item.properties.citycode,
+                                     value: item.properties.city
+                            };
+                        }));
+                    }
+                });
+            },
+            // On remplit aussi le CP
+            select: function(event, ui) {
+                $('#garden_postcode').val(ui.item.postcode);
+                $('#citycode').val(ui.item.citycode);
+                $('.error-postcode').hide();
+            }
+        });
+        $("#garden_street").autocomplete({
+            source: function (request, response) {
+                postcode = $('#garden_postcode').val();
+                citycode = $('#citycode').val();
+                city = $('#garden_city').val();
+                var streets = [];
+                $.ajax({
+                    url: "https://api-adresse.data.gouv.fr/search/?postcode="+postcode+"&citycode="+citycode+"&type=street",
+                    data: { q: request.term },
+                    dataType: "json",
+                    success: function (data) {
+                        response($.map(data.features, function (item) {
+                        console.log(item);
+                            //if ($.inArray(item.properties.street, streets) == -1) {
+                                //streets.push(item.properties.street);
+                                return { label: item.properties.name, value: item.properties.name};
+                            //}
+                        }));
+                    }
+                });
+            }
+        });
+        // Upload image
             var previewNode = document.querySelector("#template");
             previewNode.id = "";
             var previewTemplate = previewNode.parentNode.innerHTML;

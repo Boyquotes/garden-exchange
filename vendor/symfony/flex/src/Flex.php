@@ -120,13 +120,14 @@ class Flex implements PluginInterface, EventSubscriberInterface
         $this->config = $composer->getConfig();
         $this->options = $this->initOptions();
 
+        $symfonyRequire = preg_replace('/\.x$/', '.x-dev', getenv('SYMFONY_REQUIRE') ?: ($composer->getPackage()->getExtra()['symfony']['require'] ?? null));
+
         if ($composer2 = version_compare('2.0.0', PluginInterface::PLUGIN_API_VERSION, '<=')) {
             $rfs = Factory::createHttpDownloader($this->io, $this->config);
 
             $this->downloader = $downloader = new Downloader($composer, $io, $rfs);
             $this->downloader->setFlexId($this->getFlexId());
 
-            $symfonyRequire = getenv('SYMFONY_REQUIRE') ?: ($composer->getPackage()->getExtra()['symfony']['require'] ?? null);
             if ($symfonyRequire) {
                 $this->filter = new PackageFilter($io, $symfonyRequire, $this->downloader);
             }
@@ -136,12 +137,12 @@ class Flex implements PluginInterface, EventSubscriberInterface
             $rfs = Factory::createRemoteFilesystem($this->io, $this->config);
             $this->rfs = $rfs = new ParallelDownloader($this->io, $this->config, $rfs->getOptions(), $rfs->isTlsDisabled());
 
-            $symfonyRequire = getenv('SYMFONY_REQUIRE') ?: ($composer->getPackage()->getExtra()['symfony']['require'] ?? null);
             $this->downloader = $downloader = new Downloader($composer, $io, $this->rfs);
             $this->downloader->setFlexId($this->getFlexId());
 
+            $rootPackage = $composer->getPackage();
             $manager = RepositoryFactory::manager($this->io, $this->config, $composer->getEventDispatcher(), $this->rfs);
-            $setRepositories = \Closure::bind(function (RepositoryManager $manager) use (&$symfonyRequire, $downloader) {
+            $setRepositories = \Closure::bind(function (RepositoryManager $manager) use (&$symfonyRequire, $rootPackage, $downloader) {
                 $manager->repositoryClasses = $this->repositoryClasses;
                 $manager->setRepositoryClass('composer', TruncatedComposerRepository::class);
                 $manager->repositories = $this->repositories;
@@ -149,7 +150,7 @@ class Flex implements PluginInterface, EventSubscriberInterface
                 foreach (RepositoryFactory::defaultRepos(null, $this->config, $manager) as $repo) {
                     $manager->repositories[$i++] = $repo;
                     if ($repo instanceof TruncatedComposerRepository && $symfonyRequire) {
-                        $repo->setSymfonyRequire($symfonyRequire, $downloader, $this->io);
+                        $repo->setSymfonyRequire($symfonyRequire, $rootPackage, $downloader, $this->io);
                     }
                 }
                 $manager->setLocalRepository($this->getLocalRepository());
@@ -335,6 +336,9 @@ class Flex implements PluginInterface, EventSubscriberInterface
         // new projects are most of the time proprietary
         $manipulator->addMainKey('license', 'proprietary');
 
+        // extra.branch-alias doesn't apply to the project
+        $manipulator->removeSubNode('extra', 'branch-alias');
+
         // replace unbounded constraints for symfony/* packages by extra.symfony.require
         $config = json_decode($contents, true);
         if ($symfonyVersion = $config['extra']['symfony']['require'] ?? null) {
@@ -463,6 +467,7 @@ class Flex implements PluginInterface, EventSubscriberInterface
             copy($rootDir.'/.env.dist', $rootDir.'/.env');
         }
 
+        // Execute missing recipes
         $recipes = $this->fetchRecipes($this->operations);
         $this->operations = [];     // Reset the operation after getting recipes
 
@@ -478,6 +483,7 @@ class Flex implements PluginInterface, EventSubscriberInterface
         $this->io->writeError('');
 
         if (!$recipes) {
+            $this->synchronizePackageJson($rootDir);
             $this->lock->write();
 
             if ($this->downloader->isEnabled()) {
@@ -568,10 +574,24 @@ class Flex implements PluginInterface, EventSubscriberInterface
             );
         }
 
+        $this->synchronizePackageJson($rootDir);
         $this->lock->write();
 
         if ($this->shouldUpdateComposerLock) {
             $this->updateComposerLock();
+        }
+    }
+
+    private function synchronizePackageJson(?string $rootDir)
+    {
+        $synchronizer = new PackageJsonSynchronizer($rootDir);
+
+        if ($synchronizer->shouldSynchronize()) {
+            $packagesNames = array_column($this->composer->getLocker()->getLockData()['packages'] ?? [], 'name');
+
+            $this->io->writeError('<info>Synchronizing package.json with PHP packages</>');
+            $synchronizer->synchronize($packagesNames);
+            $this->io->writeError('Don\'t forget to run <comment>npm install --force</> or <comment>yarn install --force</> to refresh your JavaScript dependencies!');
         }
     }
 
@@ -860,7 +880,11 @@ EOPHP
         if (!$this->filter) {
             return;
         }
-        $event->setPackages($this->filter->removeLegacyPackages($event->getPackages()));
+
+        $rootPackage = $this->composer->getPackage();
+        $lockedPackages = $event->getRequest()->getFixedOrLockedPackages();
+
+        $event->setPackages($this->filter->removeLegacyPackages($event->getPackages(), $rootPackage, $lockedPackages));
     }
 
     private function initOptions(): Options

@@ -31,6 +31,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 final class JsonSchemaGenerateCommand extends Command
 {
+    protected static $defaultName = 'api:json-schema:generate';
+
     private $schemaFactory;
     private $formats;
 
@@ -48,7 +50,6 @@ final class JsonSchemaGenerateCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('api:json-schema:generate')
             ->setDescription('Generates the JSON Schema for a resource operation.')
             ->addArgument('resource', InputArgument::REQUIRED, 'The Fully Qualified Class Name (FQCN) of the resource')
             ->addOption('itemOperation', null, InputOption::VALUE_REQUIRED, 'The item operation')
@@ -109,7 +110,7 @@ final class JsonSchemaGenerateCommand extends Command
             return 1;
         }
 
-        $io->text((string) json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $io->text((string) json_encode($schema, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
 
         return 0;
     }

@@ -1,7 +1,7 @@
 {
     "name": "symfony/expression-language",
     "type": "library",
-    "description": "Symfony ExpressionLanguage Component",
+    "description": "Provides an engine that can compile and evaluate expressions",
     "keywords": [],
     "homepage": "https://symfony.com",
     "license": "MIT",
@@ -27,10 +27,5 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "5.1-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

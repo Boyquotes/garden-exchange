@@ -38,7 +38,7 @@ final class OperationPathResolver implements OperationPathResolverInterface
     public function resolveOperationPath(string $resourceShortName, array $operation, $operationType/*, string $operationName = null*/): string
     {
         if (\func_num_args() < 4) {
-            @trigger_error(sprintf('Method %s() will have a 4th `string $operationName` argument in version 3.0. Not defining it is deprecated since 2.1.', __METHOD__), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Method %s() will have a 4th `string $operationName` argument in version 3.0. Not defining it is deprecated since 2.1.', __METHOD__), \E_USER_DEPRECATED);
         }
 
         $operationType = OperationTypeDeprecationHelper::getOperationType($operationType);
@@ -50,7 +50,13 @@ final class OperationPathResolver implements OperationPathResolverInterface
         $path = '/'.$this->pathSegmentNameGenerator->getSegmentName($resourceShortName);
 
         if (OperationType::ITEM === $operationType) {
-            $path .= '/{id}';
+            if (isset($operation['identifiers']) && (\count($operation['identifiers']) <= 1 || false === ($operation['has_composite_identifier'] ?? true))) {
+                foreach ($operation['identifiers'] as $parameterName => $identifier) {
+                    $path .= sprintf('/{%s}', \is_string($parameterName) ? $parameterName : $identifier);
+                }
+            } else {
+                $path .= '/{id}';
+            }
         }
 
         $path .= '.{_format}';

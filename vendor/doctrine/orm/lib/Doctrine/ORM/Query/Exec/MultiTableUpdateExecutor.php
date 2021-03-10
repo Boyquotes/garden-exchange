@@ -1,4 +1,5 @@
 <?php
+
 /*
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -21,43 +22,37 @@ namespace Doctrine\ORM\Query\Exec;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\Query\ParameterTypeInferer;
 use Doctrine\ORM\Query\AST;
+use Doctrine\ORM\Query\AST\UpdateStatement;
+use Doctrine\ORM\Query\ParameterTypeInferer;
+use Doctrine\ORM\Query\SqlWalker;
 use Doctrine\ORM\Utility\PersisterHelper;
 use Throwable;
+
+use function array_merge;
+use function array_reverse;
+use function array_slice;
+use function implode;
 
 /**
  * Executes the SQL statements for bulk DQL UPDATE statements on classes in
  * Class Table Inheritance (JOINED).
- *
- * @author Roman Borschel <roman@code-factory.org>
- * @since 2.0
  */
 class MultiTableUpdateExecutor extends AbstractSqlExecutor
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $_createTempTableSql;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $_dropTempTableSql;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $_insertSql;
 
-    /**
-     * @var array
-     */
+    /** @var mixed[] */
     private $_sqlParameters = [];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $_numParametersInUpdateClause = 0;
 
     /**
@@ -66,25 +61,25 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
      * Internal note: Any SQL construction and preparation takes place in the constructor for
      *                best performance. With a query cache the executor will be cached.
      *
-     * @param \Doctrine\ORM\Query\AST\Node  $AST The root AST node of the DQL query.
-     * @param \Doctrine\ORM\Query\SqlWalker $sqlWalker The walker used for SQL generation from the AST.
+     * @param UpdateStatement $AST       The root AST node of the DQL query.
+     * @param SqlWalker       $sqlWalker The walker used for SQL generation from the AST.
      */
     public function __construct(AST\Node $AST, $sqlWalker)
     {
-        $em             = $sqlWalker->getEntityManager();
-        $conn           = $em->getConnection();
-        $platform       = $conn->getDatabasePlatform();
-        $quoteStrategy  = $em->getConfiguration()->getQuoteStrategy();
+        $em            = $sqlWalker->getEntityManager();
+        $conn          = $em->getConnection();
+        $platform      = $conn->getDatabasePlatform();
+        $quoteStrategy = $em->getConfiguration()->getQuoteStrategy();
 
-        $updateClause   = $AST->updateClause;
-        $primaryClass   = $sqlWalker->getEntityManager()->getClassMetadata($updateClause->abstractSchemaName);
-        $rootClass      = $em->getClassMetadata($primaryClass->rootEntityName);
+        $updateClause = $AST->updateClause;
+        $primaryClass = $sqlWalker->getEntityManager()->getClassMetadata($updateClause->abstractSchemaName);
+        $rootClass    = $em->getClassMetadata($primaryClass->rootEntityName);
 
-        $updateItems    = $updateClause->updateItems;
+        $updateItems = $updateClause->updateItems;
 
-        $tempTable      = $platform->getTemporaryTableName($rootClass->getTemporaryIdTableName());
-        $idColumnNames  = $rootClass->getIdentifierColumnNames();
-        $idColumnList   = implode(', ', $idColumnNames);
+        $tempTable     = $platform->getTemporaryTableName($rootClass->getTemporaryIdTableName());
+        $idColumnNames = $rootClass->getIdentifierColumnNames();
+        $idColumnList  = implode(', ', $idColumnNames);
 
         // 1. Create an INSERT INTO temptable ... SELECT identifiers WHERE $AST->getWhereClause()
         $sqlWalker->setSQLTableAlias($primaryClass->getTableName(), 't0', $updateClause->aliasIdentificationVariable);
@@ -92,7 +87,7 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
         $this->_insertSql = 'INSERT INTO ' . $tempTable . ' (' . $idColumnList . ')'
                 . ' SELECT t0.' . implode(', t0.', $idColumnNames);
 
-        $rangeDecl = new AST\RangeVariableDeclaration($primaryClass->name, $updateClause->aliasIdentificationVariable);
+        $rangeDecl  = new AST\RangeVariableDeclaration($primaryClass->name, $updateClause->aliasIdentificationVariable);
         $fromClause = new AST\FromClause([new AST\IdentificationVariableDeclaration($rangeDecl, null, [])]);
 
         $this->_insertSql .= $sqlWalker->walkFromClause($fromClause);
@@ -102,21 +97,23 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
 
         // 3. Create and store UPDATE statements
         $classNames = array_merge($primaryClass->parentClasses, [$primaryClass->name], $primaryClass->subClasses);
-        $i = -1;
+        $i          = -1;
 
         foreach (array_reverse($classNames) as $className) {
-            $affected = false;
-            $class = $em->getClassMetadata($className);
+            $affected  = false;
+            $class     = $em->getClassMetadata($className);
             $updateSql = 'UPDATE ' . $quoteStrategy->getTableName($class, $platform) . ' SET ';
 
             foreach ($updateItems as $updateItem) {
                 $field = $updateItem->pathExpression->field;
 
-                if ((isset($class->fieldMappings[$field]) && ! isset($class->fieldMappings[$field]['inherited'])) ||
-                    (isset($class->associationMappings[$field]) && ! isset($class->associationMappings[$field]['inherited']))) {
+                if (
+                    (isset($class->fieldMappings[$field]) && ! isset($class->fieldMappings[$field]['inherited'])) ||
+                    (isset($class->associationMappings[$field]) && ! isset($class->associationMappings[$field]['inherited']))
+                ) {
                     $newValue = $updateItem->newValue;
 
-                    if ( ! $affected) {
+                    if (! $affected) {
                         $affected = true;
                         ++$i;
                     } else {
@@ -161,6 +158,8 @@ class MultiTableUpdateExecutor extends AbstractSqlExecutor
 
     /**
      * {@inheritDoc}
+     *
+     * @return int
      */
     public function execute(Connection $conn, array $params, array $types)
     {

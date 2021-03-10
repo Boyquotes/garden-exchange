@@ -16,6 +16,7 @@ namespace ApiPlatform\Core\Serializer;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
@@ -63,9 +64,10 @@ abstract class AbstractConstraintViolationListNormalizer implements NormalizerIn
             $violationData = [
                 'propertyPath' => $this->nameConverter ? $this->nameConverter->normalize($violation->getPropertyPath(), $class, static::FORMAT) : $violation->getPropertyPath(),
                 'message' => $violation->getMessage(),
+                'code' => $violation->getCode(),
             ];
 
-            $constraint = $violation->getConstraint();
+            $constraint = $violation instanceof ConstraintViolation ? $violation->getConstraint() : null;
             if (
                 [] !== $this->serializePayloadFields &&
                 $constraint &&

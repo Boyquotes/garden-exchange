@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -15,6 +17,7 @@ namespace PhpCsFixer\Fixer\FunctionNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Preg;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -27,27 +30,27 @@ final class SingleLineThrowFixer extends AbstractFixer
     /**
      * @internal
      */
-    const REMOVE_WHITESPACE_AFTER_TOKENS = ['['];
+    public const REMOVE_WHITESPACE_AFTER_TOKENS = ['['];
 
     /**
      * @internal
      */
-    const REMOVE_WHITESPACE_AROUND_TOKENS = ['(', [T_OBJECT_OPERATOR], [T_DOUBLE_COLON]];
+    public const REMOVE_WHITESPACE_AROUND_TOKENS = ['(', [T_OBJECT_OPERATOR], [T_DOUBLE_COLON]];
 
     /**
      * @internal
      */
-    const REMOVE_WHITESPACE_BEFORE_TOKENS = [')',  ']', ',', ';'];
+    public const REMOVE_WHITESPACE_BEFORE_TOKENS = [')',  ']', ',', ';'];
 
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'Throwing exception must be done in single line.',
             [
-                new CodeSample("<?php\nthrow new Exception(\n    'Error',\n    500\n);\n"),
+                new CodeSample("<?php\nthrow new Exception(\n    'Error.',\n    500\n);\n"),
             ]
         );
     }
@@ -55,7 +58,7 @@ final class SingleLineThrowFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
+    public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(T_THROW);
     }
@@ -65,7 +68,7 @@ final class SingleLineThrowFixer extends AbstractFixer
      *
      * Must run before ConcatSpaceFixer.
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         // must be fun before ConcatSpaceFixer
         return 1;
@@ -74,7 +77,7 @@ final class SingleLineThrowFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = 0, $count = $tokens->count(); $index < $count; ++$index) {
             if (!$tokens[$index]->isGivenKind(T_THROW)) {
@@ -87,6 +90,7 @@ final class SingleLineThrowFixer extends AbstractFixer
             while ($tokens[$openingBraceCandidateIndex]->equals('(')) {
                 /** @var int $closingBraceIndex */
                 $closingBraceIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $openingBraceCandidateIndex);
+
                 /** @var int $openingBraceCandidateIndex */
                 $openingBraceCandidateIndex = $tokens->getNextTokenOfKind($closingBraceIndex, [';', '(']);
             }
@@ -95,11 +99,7 @@ final class SingleLineThrowFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param int $startIndex
-     * @param int $endIndex
-     */
-    private function trimNewLines(Tokens $tokens, $startIndex, $endIndex)
+    private function trimNewLines(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($index = $startIndex; $index < $endIndex; ++$index) {
             $content = $tokens[$index]->getContent();
@@ -114,6 +114,7 @@ final class SingleLineThrowFixer extends AbstractFixer
                 } elseif (false !== Preg::match('/\R/', $content)) {
                     $content = Preg::replace('/\R/', ' ', $content);
                 }
+
                 $tokens[$index] = new Token([T_COMMENT, $content]);
 
                 continue;
@@ -128,6 +129,7 @@ final class SingleLineThrowFixer extends AbstractFixer
             }
 
             $prevIndex = $tokens->getNonEmptySibling($index, -1);
+
             if ($tokens[$prevIndex]->equalsAny(array_merge(self::REMOVE_WHITESPACE_AFTER_TOKENS, self::REMOVE_WHITESPACE_AROUND_TOKENS))) {
                 $tokens->clearAt($index);
 
@@ -135,12 +137,14 @@ final class SingleLineThrowFixer extends AbstractFixer
             }
 
             $nextIndex = $tokens->getNonEmptySibling($index, 1);
-            if ($tokens[$nextIndex]->equalsAny(array_merge(self::REMOVE_WHITESPACE_AROUND_TOKENS, self::REMOVE_WHITESPACE_BEFORE_TOKENS))) {
-                if (!$tokens[$prevIndex]->isGivenKind(T_FUNCTION)) {
-                    $tokens->clearAt($index);
 
-                    continue;
-                }
+            if (
+                $tokens[$nextIndex]->equalsAny(array_merge(self::REMOVE_WHITESPACE_AROUND_TOKENS, self::REMOVE_WHITESPACE_BEFORE_TOKENS))
+                && !$tokens[$prevIndex]->isGivenKind(T_FUNCTION)
+            ) {
+                $tokens->clearAt($index);
+
+                continue;
             }
 
             $tokens[$index] = new Token([T_WHITESPACE, ' ']);

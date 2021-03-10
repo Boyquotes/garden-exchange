@@ -31,7 +31,7 @@ class ExpressionLanguage extends BaseExpressionLanguage
      */
     public function __construct(CacheItemPoolInterface $cache = null, array $providers = [])
     {
-        @trigger_error('Using the ExpressionLanguage class directly is deprecated since API Platform 2.4 and will not be possible anymore in API Platform 3. Use the "api_platform.security.expression_language" service instead.', E_USER_DEPRECATED);
+        @trigger_error('Using the ExpressionLanguage class directly is deprecated since API Platform 2.4 and will not be possible anymore in API Platform 3. Use the "api_platform.security.expression_language" service instead.', \E_USER_DEPRECATED);
 
         parent::__construct($cache, $providers);
     }
@@ -40,9 +40,9 @@ class ExpressionLanguage extends BaseExpressionLanguage
     {
         parent::registerFunctions();
 
-        $this->register('is_granted', function ($attributes, $object = 'null') {
+        $this->register('is_granted', static function ($attributes, $object = 'null') {
             return sprintf('$auth_checker->isGranted(%s, %s)', $attributes, $object);
-        }, function (array $variables, $attributes, $object = null) {
+        }, static function (array $variables, $attributes, $object = null) {
             return $variables['auth_checker']->isGranted($attributes, $object);
         });
     }

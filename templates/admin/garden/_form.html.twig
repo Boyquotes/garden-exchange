@@ -100,10 +100,10 @@
 </div>
 <div class="row d-flex jc-center">
     <div class="col-md-3 txt-center">
-        {{ form_label(form.street) }}
-        {{ form_widget(form.street) }}
-        <div class="form-group has-error error-street">
-            {{ form_errors(form.street) }}
+        {{ form_label(form.country) }}
+        {{ form_widget(form.country) }}
+        <div class="form-group has-error error-country">
+            {{ form_errors(form.country) }}
         </div>
     </div>
     <div class="col-md-3 txt-center">
@@ -123,12 +123,13 @@
         </div>
     </div>
     <div class="col-md-3 txt-center">
-        {{ form_label(form.country) }}
-        {{ form_widget(form.country) }}
-        <div class="form-group has-error error-country">
-            {{ form_errors(form.country) }}
+        {{ form_label(form.street) }}
+        {{ form_widget(form.street) }}
+        <div class="form-group has-error error-street">
+            {{ form_errors(form.street) }}
         </div>
     </div>
+    <input id="citycode" type="hidden" />
 </div>
 
 <hr />

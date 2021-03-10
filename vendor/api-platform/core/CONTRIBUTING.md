@@ -18,11 +18,6 @@ Then, if it appears that it's a real bug, you may report it using GitHub by foll
 
 > _NOTE:_ Don't hesitate giving as much information as you can (OS, PHP version extensions...)
 
-### Security Issues
-
-If you find a security issue, send a mail to Kévin Dunglas <dunglas@gmail.com>. **Please do not report security problems
-publicly**. We will disclose details of the issue and credit you after having released a new version including a fix.
-
 ## Pull Requests
 
 ### Writing a Pull Request
@@ -50,7 +45,7 @@ Alternatively, you can also work with the test application we provide:
 ### Matching Coding Standards
 
 The API Platform project follows [Symfony coding standards](https://symfony.com/doc/current/contributing/code/standards.html).
-But don't worry, you can fix CS issues automatically using the [PHP CS Fixer](http://cs.sensiolabs.org/) tool:
+But don't worry, you can fix CS issues automatically using the [PHP CS Fixer](https://cs.sensiolabs.org/) tool:
 
     php-cs-fixer.phar fix
 
@@ -67,9 +62,6 @@ When you send a PR, just make sure that:
 * You make the PR on the same branch you based your changes on. If you see commits
 that you did not make in your PR, you're doing it wrong.
 * Also don't forget to add a comment when you update a PR with a ping to [the maintainers](https://github.com/orgs/api-platform/people), so he/she will get a notification.
-* Squash your commits into one commit (see the next chapter).
-
-All Pull Requests must include [this header](.github/PULL_REQUEST_TEMPLATE.md).
 
 ### Tests
 
@@ -97,35 +89,15 @@ Coverage will be available in `coverage/index.html`.
 
 The command to launch Behat tests is:
 
-    php -d memory_limit=-1 ./vendor/bin/behat --suite=default --stop-on-failure --format=progress
+    php -d memory_limit=-1 ./vendor/bin/behat --profile=default --stop-on-failure --format=progress
 
 If you want to launch Behat tests for MongoDB, the command is:
 
-    APP_ENV=mongodb php -d memory_limit=-1 ./vendor/bin/behat --suite=mongodb --stop-on-failure --format=progress
+    MONGODB_URL=mongodb://localhost:27017 APP_ENV=mongodb php -d memory_limit=-1 ./vendor/bin/behat --profile=mongodb --stop-on-failure --format=progress
 
-To get more details about an error, replace `--format=progress` by `-vvv`.
+To get more details about an error, replace `--format=progress` by `-vvv`. You may run a mongo instance using docker:
 
-## Squash your Commits
-
-If you have 3 commits, start with:
-
-    git rebase -i HEAD~3
-
-An editor will be opened with your 3 commits, all prefixed by `pick`.
-
-Replace all `pick` prefixes by `fixup` (or `f`) **except the first commit** of the list.
-
-Save and quit the editor.
-
-After that, all your commits will be squashed into the first one and the commit message will be the first one.
-
-If you would like to rename your commit message, type:
-
-    git commit --amend
-
-Now force push to update your PR:
-
-    git push --force-with-lease
+	docker run -p 27017:27017 mongo:latest
 
 # License and Copyright Attribution
 

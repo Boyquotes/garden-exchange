@@ -61,7 +61,7 @@ class HttpBrowser extends AbstractBrowser
      */
     private function getBodyAndExtraHeaders(Request $request, array $headers): array
     {
-        if (\in_array($request->getMethod(), ['GET', 'HEAD'])) {
+        if (\in_array($request->getMethod(), ['GET', 'HEAD']) && !isset($headers['content-type'])) {
             return ['', []];
         }
 
@@ -91,10 +91,10 @@ class HttpBrowser extends AbstractBrowser
             return ['', []];
         }
 
-        return [http_build_query($fields, '', '&', PHP_QUERY_RFC1738), ['Content-Type' => 'application/x-www-form-urlencoded']];
+        return [http_build_query($fields, '', '&', \PHP_QUERY_RFC1738), ['Content-Type' => 'application/x-www-form-urlencoded']];
     }
 
-    private function getHeaders(Request $request): array
+    protected function getHeaders(Request $request): array
     {
         $headers = [];
         foreach ($request->getServer() as $key => $value) {

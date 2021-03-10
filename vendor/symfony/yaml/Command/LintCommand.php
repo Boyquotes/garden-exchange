@@ -53,7 +53,7 @@ class LintCommand extends Command
     protected function configure()
     {
         $this
-            ->setDescription('Lints a file and outputs encountered errors')
+            ->setDescription('Lint a file and outputs encountered errors')
             ->addArgument('filename', InputArgument::IS_ARRAY, 'A file, a directory or "-" for reading from STDIN')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format', 'txt')
             ->addOption('parse-tags', null, InputOption::VALUE_NONE, 'Parse custom tags')
@@ -112,7 +112,7 @@ EOF
     private function validate(string $content, int $flags, string $file = null)
     {
         $prevErrorHandler = set_error_handler(function ($level, $message, $file, $line) use (&$prevErrorHandler) {
-            if (E_USER_DEPRECATED === $level) {
+            if (\E_USER_DEPRECATED === $level) {
                 throw new ParseException($message, $this->getParser()->getRealCurrentLineNb() + 1);
             }
 
@@ -186,7 +186,7 @@ EOF
             }
         });
 
-        $io->writeln(json_encode($filesInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $io->writeln(json_encode($filesInfo, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES));
 
         return min($errors, 1);
     }

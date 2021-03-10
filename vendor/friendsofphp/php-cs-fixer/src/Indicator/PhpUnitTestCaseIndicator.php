@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -20,10 +22,10 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class PhpUnitTestCaseIndicator
 {
-    public function isPhpUnitClass(Tokens $tokens, $index)
+    public function isPhpUnitClass(Tokens $tokens, int $index): bool
     {
         if (!$tokens[$index]->isGivenKind(T_CLASS)) {
-            throw new \LogicException(sprintf('No T_CLASS at given index %d, got %s.', $index, $tokens[$index]->getName()));
+            throw new \LogicException(sprintf('No "T_CLASS" at given index %d, got "%s".', $index, $tokens[$index]->getName()));
         }
 
         $index = $tokens->getNextMeaningfulToken($index);
@@ -49,15 +51,11 @@ final class PhpUnitTestCaseIndicator
     }
 
     /**
-     * @param bool $beginAtBottom whether we should start yielding PHPUnit classes from the bottom of the file
-     *
      * @return \Generator array of [int start, int end] indexes from sooner to later classes
      */
-    public function findPhpUnitClasses(Tokens $tokens, $beginAtBottom = true)
+    public function findPhpUnitClasses(Tokens $tokens): \Generator
     {
-        $direction = $beginAtBottom ? -1 : 1;
-
-        for ($index = 1 === $direction ? 0 : $tokens->count() - 1; $tokens->offsetExists($index); $index += $direction) {
+        for ($index = $tokens->count() - 1; $tokens->offsetExists($index); --$index) {
             if (!$tokens[$index]->isGivenKind(T_CLASS) || !$this->isPhpUnitClass($tokens, $index)) {
                 continue;
             }

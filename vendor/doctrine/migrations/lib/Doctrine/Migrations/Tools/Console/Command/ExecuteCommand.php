@@ -10,7 +10,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function assert;
 use function getcwd;
+use function is_string;
 
 /**
  * The ExecutCommand class is responsible for executing a single migration version up or down.
@@ -20,7 +23,7 @@ class ExecuteCommand extends AbstractCommand
     /** @var string */
     protected static $defaultName = 'migrations:execute';
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this
             ->setAliases(['execute'])
@@ -90,9 +93,10 @@ EOT
         parent::configure();
     }
 
-    public function execute(InputInterface $input, OutputInterface $output) : ?int
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $version        = $input->getArgument('version');
+        $version = $input->getArgument('version');
+        assert(is_string($version));
         $timeAllQueries = (bool) $input->getOption('query-time');
         $dryRun         = (bool) $input->getOption('dry-run');
         $path           = $input->getOption('write-sql');
@@ -104,6 +108,7 @@ EOT
 
         if ($path !== false) {
             $path = $path ?? getcwd();
+            assert(is_string($path));
 
             $version->writeSqlFile($path, $direction);
 

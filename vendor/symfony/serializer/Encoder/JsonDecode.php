@@ -25,14 +25,14 @@ class JsonDecode implements DecoderInterface
     /**
      * True to return the result as an associative array, false for a nested stdClass hierarchy.
      */
-    const ASSOCIATIVE = 'json_decode_associative';
+    public const ASSOCIATIVE = 'json_decode_associative';
 
-    const OPTIONS = 'json_decode_options';
+    public const OPTIONS = 'json_decode_options';
 
     /**
      * Specifies the recursion depth.
      */
-    const RECURSION_DEPTH = 'json_decode_recursion_depth';
+    public const RECURSION_DEPTH = 'json_decode_recursion_depth';
 
     private $defaultContext = [
         self::ASSOCIATIVE => false,
@@ -84,11 +84,11 @@ class JsonDecode implements DecoderInterface
             throw new NotEncodableValueException($e->getMessage(), 0, $e);
         }
 
-        if (\PHP_VERSION_ID >= 70300 && (JSON_THROW_ON_ERROR & $options)) {
+        if (\PHP_VERSION_ID >= 70300 && (\JSON_THROW_ON_ERROR & $options)) {
             return $decodedData;
         }
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
+        if (\JSON_ERROR_NONE !== json_last_error()) {
             throw new NotEncodableValueException(json_last_error_msg());
         }
 

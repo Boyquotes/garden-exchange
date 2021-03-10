@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -11,6 +13,8 @@
  */
 
 namespace PhpCsFixer\Tokenizer;
+
+use PhpCsFixer\Tokenizer\Analyzer\GotoLabelAnalyzer;
 
 /**
  * Analyzer of Tokens collection.
@@ -32,6 +36,11 @@ final class TokensAnalyzer
      */
     private $tokens;
 
+    /**
+     * @var ?GotoLabelAnalyzer
+     */
+    private $gotoLabelAnalyzer;
+
     public function __construct(Tokens $tokens)
     {
         $this->tokens = $tokens;
@@ -42,9 +51,8 @@ final class TokensAnalyzer
      *
      * @return array[]
      */
-    public function getClassyElements()
+    public function getClassyElements(): array
     {
-        $this->tokens->rewind();
         $elements = [];
 
         for ($index = 1, $count = \count($this->tokens) - 2; $index < $count; ++$index) {
@@ -66,11 +74,9 @@ final class TokensAnalyzer
      *
      * @return int[]|int[][]
      */
-    public function getImportUseIndexes($perNamespace = false)
+    public function getImportUseIndexes(bool $perNamespace = false): array
     {
         $tokens = $this->tokens;
-
-        $tokens->rewind();
 
         $uses = [];
         $namespaceIndex = 0;
@@ -107,12 +113,8 @@ final class TokensAnalyzer
 
     /**
      * Check if there is an array at given index.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isArray($index)
+    public function isArray(int $index): bool
     {
         return $this->tokens[$index]->isGivenKind([T_ARRAY, CT::T_ARRAY_SQUARE_BRACE_OPEN]);
     }
@@ -121,12 +123,8 @@ final class TokensAnalyzer
      * Check if the array at index is multiline.
      *
      * This only checks the root-level of the array.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isArrayMultiLine($index)
+    public function isArrayMultiLine(int $index): bool
     {
         if (!$this->isArray($index)) {
             throw new \InvalidArgumentException(sprintf('Not an array at given index %d.', $index));
@@ -156,9 +154,9 @@ final class TokensAnalyzer
             }
 
             if (
-                $token->isWhitespace() &&
-                !$tokens[$index - 1]->isGivenKind(T_END_HEREDOC) &&
-                false !== strpos($token->getContent(), "\n")
+                $token->isWhitespace()
+                && !$tokens[$index - 1]->isGivenKind(T_END_HEREDOC)
+                && false !== strpos($token->getContent(), "\n")
             ) {
                 return true;
             }
@@ -177,16 +175,14 @@ final class TokensAnalyzer
      * 'final'      bool
      *
      * @param int $index Token index of the method (T_FUNCTION)
-     *
-     * @return array
      */
-    public function getMethodAttributes($index)
+    public function getMethodAttributes(int $index): array
     {
         $tokens = $this->tokens;
         $token = $tokens[$index];
 
         if (!$token->isGivenKind(T_FUNCTION)) {
-            throw new \LogicException(sprintf('No T_FUNCTION at given index %d, got %s.', $index, $token->getName()));
+            throw new \LogicException(sprintf('No T_FUNCTION at given index %d, got "%s".', $index, $token->getName()));
         }
 
         $attributes = [
@@ -250,41 +246,30 @@ final class TokensAnalyzer
 
     /**
      * Check if there is an anonymous class under given index.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isAnonymousClass($index)
+    public function isAnonymousClass(int $index): bool
     {
-        $tokens = $this->tokens;
-        $token = $tokens[$index];
-
-        if (!$token->isClassy()) {
+        if (!$this->tokens[$index]->isClassy()) {
             throw new \LogicException(sprintf('No classy token at given index %d.', $index));
         }
 
-        if (!$token->isGivenKind(T_CLASS)) {
+        if (!$this->tokens[$index]->isGivenKind(T_CLASS)) {
             return false;
         }
 
-        return $tokens[$tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_NEW);
+        return $this->tokens[$this->tokens->getPrevMeaningfulToken($index)]->isGivenKind(T_NEW);
     }
 
     /**
      * Check if the function under given index is a lambda.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isLambda($index)
+    public function isLambda(int $index): bool
     {
         if (
             !$this->tokens[$index]->isGivenKind(T_FUNCTION)
             && (\PHP_VERSION_ID < 70400 || !$this->tokens[$index]->isGivenKind(T_FN))
         ) {
-            throw new \LogicException(sprintf('No T_FUNCTION or T_FN at given index %d, got %s.', $index, $this->tokens[$index]->getName()));
+            throw new \LogicException(sprintf('No T_FUNCTION or T_FN at given index %d, got "%s".', $index, $this->tokens[$index]->getName()));
         }
 
         $startParenthesisIndex = $this->tokens->getNextMeaningfulToken($index);
@@ -301,22 +286,18 @@ final class TokensAnalyzer
 
     /**
      * Check if the T_STRING under given index is a constant invocation.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isConstantInvocation($index)
+    public function isConstantInvocation(int $index): bool
     {
         if (!$this->tokens[$index]->isGivenKind(T_STRING)) {
-            throw new \LogicException(sprintf('No T_STRING at given index %d, got %s.', $index, $this->tokens[$index]->getName()));
+            throw new \LogicException(sprintf('No T_STRING at given index %d, got "%s".', $index, $this->tokens[$index]->getName()));
         }
 
         $nextIndex = $this->tokens->getNextMeaningfulToken($index);
 
         if (
-            $this->tokens[$nextIndex]->equalsAny(['(', '{']) ||
-            $this->tokens[$nextIndex]->isGivenKind([T_AS, T_DOUBLE_COLON, T_ELLIPSIS, T_NS_SEPARATOR, CT::T_RETURN_REF, CT::T_TYPE_ALTERNATION, T_VARIABLE])
+            $this->tokens[$nextIndex]->equalsAny(['(', '{'])
+            || $this->tokens[$nextIndex]->isGivenKind([T_AS, T_DOUBLE_COLON, T_ELLIPSIS, T_NS_SEPARATOR, CT::T_RETURN_REF, CT::T_TYPE_ALTERNATION, T_VARIABLE])
         ) {
             return false;
         }
@@ -368,8 +349,14 @@ final class TokensAnalyzer
         }
 
         // check for goto label
-        if ($this->tokens[$nextIndex]->equals(':') && $this->tokens[$prevIndex]->equalsAny([';', '}', [T_OPEN_TAG], [T_OPEN_TAG_WITH_ECHO]])) {
-            return false;
+        if ($this->tokens[$nextIndex]->equals(':')) {
+            if (null === $this->gotoLabelAnalyzer) {
+                $this->gotoLabelAnalyzer = new GotoLabelAnalyzer();
+            }
+
+            if ($this->gotoLabelAnalyzer->belongsToGoToLabel($this->tokens, $nextIndex)) {
+                return false;
+            }
         }
 
         return true;
@@ -377,12 +364,8 @@ final class TokensAnalyzer
 
     /**
      * Checks if there is an unary successor operator under given index.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isUnarySuccessorOperator($index)
+    public function isUnarySuccessorOperator(int $index): bool
     {
         static $allowedPrevToken = [
             ']',
@@ -407,12 +390,8 @@ final class TokensAnalyzer
 
     /**
      * Checks if there is an unary predecessor operator under given index.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isUnaryPredecessorOperator($index)
+    public function isUnaryPredecessorOperator(int $index): bool
     {
         static $potentialSuccessorOperator = [T_INC, T_DEC];
 
@@ -493,12 +472,8 @@ final class TokensAnalyzer
 
     /**
      * Checks if there is a binary operator under given index.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isBinaryOperator($index)
+    public function isBinaryOperator(int $index): bool
     {
         static $nonArrayOperators = [
             '=' => true,
@@ -549,16 +524,11 @@ final class TokensAnalyzer
                 T_SR_EQUAL => true,             // >>=
                 T_XOR_EQUAL => true,            // ^=
                 CT::T_TYPE_ALTERNATION => true, // |
+                T_SPACESHIP => true,            // <=>
+                T_COALESCE => true,             // ??
             ];
 
-            if (\defined('T_SPACESHIP')) {
-                $arrayOperators[T_SPACESHIP] = true; // <=>
-            }
-
-            if (\defined('T_COALESCE')) {
-                $arrayOperators[T_COALESCE] = true;  // ??
-            }
-
+            // @TODO: drop condition when PHP 7.4+ is required
             if (\defined('T_COALESCE_EQUAL')) {
                 $arrayOperators[T_COALESCE_EQUAL] = true;  // ??=
             }
@@ -585,18 +555,14 @@ final class TokensAnalyzer
     /**
      * Check if `T_WHILE` token at given index is `do { ... } while ();` syntax
      * and not `while () { ...}`.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    public function isWhilePartOfDoWhile($index)
+    public function isWhilePartOfDoWhile(int $index): bool
     {
         $tokens = $this->tokens;
         $token = $tokens[$index];
 
         if (!$token->isGivenKind(T_WHILE)) {
-            throw new \LogicException(sprintf('No T_WHILE at given index %d, got %s.', $index, $token->getName()));
+            throw new \LogicException(sprintf('No T_WHILE at given index %d, got "%s".', $index, $token->getName()));
         }
 
         $endIndex = $tokens->getPrevMeaningfulToken($index);
@@ -610,12 +576,7 @@ final class TokensAnalyzer
         return $tokens[$beforeStartIndex]->isGivenKind(T_DO);
     }
 
-    /**
-     * @param int $index
-     *
-     * @return bool
-     */
-    public function isSuperGlobal($index)
+    public function isSuperGlobal(int $index): bool
     {
         static $superNames = [
             '$_COOKIE' => true,
@@ -645,11 +606,8 @@ final class TokensAnalyzer
      * Returns an array; first value is the index until the method has analysed (int), second the found classy elements (array).
      *
      * @param int $classIndex classy index
-     * @param int $index
-     *
-     * @return array
      */
-    private function findClassyElements($classIndex, $index)
+    private function findClassyElements(int $classIndex, int $index): array
     {
         $elements = [];
         $curlyBracesLevel = 0;
@@ -761,6 +719,12 @@ final class TokensAnalyzer
                 $elements[$index] = [
                     'token' => $token,
                     'type' => 'const',
+                    'classIndex' => $classIndex,
+                ];
+            } elseif ($token->isGivenKind(CT::T_USE_TRAIT)) {
+                $elements[$index] = [
+                    'token' => $token,
+                    'type' => 'trait_import',
                     'classIndex' => $classIndex,
                 ];
             }

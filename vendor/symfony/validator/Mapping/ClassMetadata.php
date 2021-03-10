@@ -12,8 +12,11 @@
 namespace Symfony\Component\Validator\Mapping;
 
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Cascade;
+use Symfony\Component\Validator\Constraints\Composite;
 use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\Constraints\Traverse;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\GroupDefinitionException;
 
@@ -170,12 +173,21 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
 
     /**
      * {@inheritdoc}
+     *
+     * If the constraint {@link Cascade} is added, the cascading strategy will be
+     * changed to {@link CascadingStrategy::CASCADE}.
+     *
+     * If the constraint {@link Traverse} is added, the traversal strategy will be
+     * changed. Depending on the $traverse property of that constraint,
+     * the traversal strategy will be set to one of the following:
+     *
+     *  - {@link TraversalStrategy::IMPLICIT} by default
+     *  - {@link TraversalStrategy::NONE} if $traverse is disabled
+     *  - {@link TraversalStrategy::TRAVERSE} if $traverse is enabled
      */
     public function addConstraint(Constraint $constraint)
     {
-        if (!\in_array(Constraint::CLASS_CONSTRAINT, (array) $constraint->getTargets())) {
-            throw new ConstraintDefinitionException(sprintf('The constraint "%s" cannot be put on classes.', get_debug_type($constraint)));
-        }
+        $this->checkConstraint($constraint);
 
         if ($constraint instanceof Traverse) {
             if ($constraint->traverse) {
@@ -184,6 +196,23 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
             } else {
                 // If traverse is false, traversal should be explicitly disabled
                 $this->traversalStrategy = TraversalStrategy::NONE;
+            }
+
+            // The constraint is not added
+            return $this;
+        }
+
+        if ($constraint instanceof Cascade) {
+            if (\PHP_VERSION_ID < 70400) {
+                throw new ConstraintDefinitionException(sprintf('The constraint "%s" requires PHP 7.4.', Cascade::class));
+            }
+
+            $this->cascadingStrategy = CascadingStrategy::CASCADE;
+
+            foreach ($this->getReflectionClass()->getProperties() as $property) {
+                if ($property->hasType() && (('array' === $type = $property->getType()->getName()) || class_exists(($type)))) {
+                    $this->addPropertyConstraint($property->getName(), new Valid());
+                }
             }
 
             // The constraint is not added
@@ -459,13 +488,11 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
     }
 
     /**
-     * Class nodes are never cascaded.
-     *
      * {@inheritdoc}
      */
     public function getCascadingStrategy()
     {
-        return CascadingStrategy::NONE;
+        return $this->cascadingStrategy;
     }
 
     private function addPropertyMetadata(PropertyMetadataInterface $metadata)
@@ -473,5 +500,18 @@ class ClassMetadata extends GenericMetadata implements ClassMetadataInterface
         $property = $metadata->getPropertyName();
 
         $this->members[$property][] = $metadata;
+    }
+
+    private function checkConstraint(Constraint $constraint)
+    {
+        if (!\in_array(Constraint::CLASS_CONSTRAINT, (array) $constraint->getTargets(), true)) {
+            throw new ConstraintDefinitionException(sprintf('The constraint "%s" cannot be put on classes.', get_debug_type($constraint)));
+        }
+
+        if ($constraint instanceof Composite) {
+            foreach ($constraint->getNestedContraints() as $nestedContraint) {
+                $this->checkConstraint($nestedContraint);
+            }
+        }
     }
 }

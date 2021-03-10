@@ -6,7 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Collator' => $vendorDir . '/symfony/intl/Resources/stubs/Collator.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'IntlDateFormatter' => $vendorDir . '/symfony/intl/Resources/stubs/IntlDateFormatter.php',
     'IntlException' => $vendorDir . '/symfony/polyfill-intl-messageformatter/Resources/stubs/IntlException.php',
     'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
@@ -30,16 +32,6 @@ return array(
     'PhpCsFixer\\Diff\\Output\\UnifiedDiffOutputBuilder' => $vendorDir . '/php-cs-fixer/diff/src/Output/UnifiedDiffOutputBuilder.php',
     'PhpCsFixer\\Diff\\Parser' => $vendorDir . '/php-cs-fixer/diff/src/Parser.php',
     'PhpCsFixer\\Diff\\TimeEfficientLongestCommonSubsequenceCalculator' => $vendorDir . '/php-cs-fixer/diff/src/TimeEfficientLongestCommonSubsequenceCalculator.php',
-    'PhpCsFixer\\Tests\\TestCase' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/TestCase.php',
-    'PhpCsFixer\\Tests\\Test\\AbstractFixerTestCase' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/AbstractFixerTestCase.php',
-    'PhpCsFixer\\Tests\\Test\\AbstractIntegrationCaseFactory' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationCaseFactory.php',
-    'PhpCsFixer\\Tests\\Test\\AbstractIntegrationTestCase' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationTestCase.php',
-    'PhpCsFixer\\Tests\\Test\\Assert\\AssertTokensTrait' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/Assert/AssertTokensTrait.php',
-    'PhpCsFixer\\Tests\\Test\\IntegrationCase' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCase.php',
-    'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactory' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactory.php',
-    'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactoryInterface' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactoryInterface.php',
-    'PhpCsFixer\\Tests\\Test\\InternalIntegrationCaseFactory' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/InternalIntegrationCaseFactory.php',
-    'PhpCsFixer\\Tests\\Test\\IsIdenticalConstraint' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IsIdenticalConstraint.php',
     'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
     'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',

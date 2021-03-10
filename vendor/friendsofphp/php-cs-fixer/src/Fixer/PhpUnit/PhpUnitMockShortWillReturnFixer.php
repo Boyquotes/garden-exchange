@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -12,10 +14,10 @@
 
 namespace PhpCsFixer\Fixer\PhpUnit;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\AbstractPhpUnitFixer;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -23,12 +25,12 @@ use PhpCsFixer\Tokenizer\Tokens;
  * @author Michał Adamski <michal.adamski@gmail.com>
  * @author Kuba Werłos <werlos@gmail.com>
  */
-final class PhpUnitMockShortWillReturnFixer extends AbstractFixer
+final class PhpUnitMockShortWillReturnFixer extends AbstractPhpUnitFixer
 {
     /**
      * @internal
      */
-    const RETURN_METHODS_MAP = [
+    public const RETURN_METHODS_MAP = [
         'returnargument' => 'willReturnArgument',
         'returncallback' => 'willReturnCallback',
         'returnself' => 'willReturnSelf',
@@ -39,7 +41,7 @@ final class PhpUnitMockShortWillReturnFixer extends AbstractFixer
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'Usage of PHPUnit\'s mock e.g. `->will($this->returnValue(..))` must be replaced by its shorter equivalent such as `->willReturn(...)`.',
@@ -67,15 +69,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isAllTokenKindsFound([T_CLASS, T_OBJECT_OPERATOR, T_STRING]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRisky()
+    public function isRisky(): bool
     {
         return true;
     }
@@ -83,19 +77,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
-    {
-        $phpUnitTestCaseIndicator = new PhpUnitTestCaseIndicator();
-        foreach ($phpUnitTestCaseIndicator->findPhpUnitClasses($tokens) as $indexes) {
-            $this->fixWillReturn($tokens, $indexes[0], $indexes[1]);
-        }
-    }
-
-    /**
-     * @param int $startIndex
-     * @param int $endIndex
-     */
-    private function fixWillReturn(Tokens $tokens, $startIndex, $endIndex)
+    protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($index = $startIndex; $index < $endIndex; ++$index) {
             if (!$tokens[$index]->isGivenKind(T_OBJECT_OPERATOR)) {

@@ -53,7 +53,7 @@ final class DocumentationNormalizer implements NormalizerInterface, CacheableSup
     public function __construct(ResourceMetadataFactoryInterface $resourceMetadataFactory, PropertyNameCollectionFactoryInterface $propertyNameCollectionFactory, PropertyMetadataFactoryInterface $propertyMetadataFactory, ResourceClassResolverInterface $resourceClassResolver, OperationMethodResolverInterface $operationMethodResolver = null, UrlGeneratorInterface $urlGenerator, SubresourceOperationFactoryInterface $subresourceOperationFactory = null, NameConverterInterface $nameConverter = null)
     {
         if ($operationMethodResolver) {
-            @trigger_error(sprintf('Passing an instance of %s to %s() is deprecated since version 2.5 and will be removed in 3.0.', OperationMethodResolverInterface::class, __METHOD__), E_USER_DEPRECATED);
+            @trigger_error(sprintf('Passing an instance of %s to %s() is deprecated since version 2.5 and will be removed in 3.0.', OperationMethodResolverInterface::class, __METHOD__), \E_USER_DEPRECATED);
         }
 
         $this->resourceMetadataFactory = $resourceMetadataFactory;
@@ -236,7 +236,7 @@ final class DocumentationNormalizer implements NormalizerInterface, CacheableSup
         if (null !== $this->subresourceOperationFactory) {
             foreach ($this->subresourceOperationFactory->create($resourceClass) as $operationId => $operation) {
                 $subresourceMetadata = $this->resourceMetadataFactory->create($operation['resource_class']);
-                $propertyMetadata = $this->propertyMetadataFactory->create(end($operation['identifiers'])[1], $operation['property']);
+                $propertyMetadata = $this->propertyMetadataFactory->create(end($operation['identifiers'])[0], $operation['property']);
                 $hydraOperations[] = $this->getHydraOperation($resourceClass, $subresourceMetadata, $operation['route_name'], $operation, "#{$subresourceMetadata->getShortName()}", OperationType::SUBRESOURCE, $propertyMetadata->getSubresource());
             }
         }
@@ -347,7 +347,7 @@ final class DocumentationNormalizer implements NormalizerInterface, CacheableSup
             return null;
         }
 
-        if ($type->isCollection() && null !== $collectionType = $type->getCollectionValueType()) {
+        if ($type->isCollection() && null !== $collectionType = method_exists(Type::class, 'getCollectionValueTypes') ? ($type->getCollectionValueTypes()[0] ?? null) : $type->getCollectionValueType()) {
             $type = $collectionType;
         }
 

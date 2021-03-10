@@ -21,9 +21,17 @@ file:
 # config/packages/webpack_encore.yaml
 webpack_encore:
     # The path where Encore is building the assets - i.e. Encore.setOutputPath()
+    # if you customize this, you will also need to change framework.assets.json_manifest_path (it usually lives in assets.yaml)
     output_path: '%kernel.project_dir%/public/build'
     # If multiple builds are defined (as shown below), you can disable the default build:
     # output_path: false
+
+    # Set attributes that will be rendered on all script and link tags
+    script_attributes:
+        defer: true
+        # referrerpolicy: origin
+    # link_attributes:
+    #     referrerpolicy: origin
     
     # if using Encore.enableIntegrityHashes() and need the crossorigin attribute (default: false, or use 'anonymous' or 'use-credentials')
     # crossorigin: 'anonymous'
@@ -84,6 +92,13 @@ For example, to render all of the `script` and `link` tags for a specific
     {{ parent() }}
 
     {{ encore_entry_script_tags('entry1') }}
+
+    {# or render a custom attribute #}
+    {#
+    {{ encore_entry_script_tags('entry1', attributes={
+        defer: true
+    }) }}
+    #}
 {% endblock %}
 
 {% block stylesheets %}
@@ -144,3 +159,83 @@ class SomeController
 If you have multiple builds, you can also autowire
 `Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollectionInterface`
 and use it to get the `EntrypointLookupInterface` object for any build.
+
+## Custom Attributes on script and link Tags
+
+Custom attributes can be added to rendered `script` or `link` in 3
+different ways:
+
+1. Via global config (`script_attributes` and `link_attributes`) - see the
+   config example above.
+
+1. When rendering in Twig - see the `attributes` option in the docs above.
+
+1. By listening to the `Symfony\WebpackEncoreBundle\Event\RenderAssetTagEvent`
+   event. For example:
+
+```php
+<?php
+
+namespace App\EventSubscriber;
+
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\WebpackEncoreBundle\Event\RenderAssetTagEvent;
+
+class ScriptNonceSubscriber implements EventSubscriberInterface
+{
+    public static function getSubscribedEvents()
+    {
+        return [
+            RenderAssetTagEvent::class => 'onRenderAssetTag'
+        ];
+    }
+
+    public function onRenderAssetTag(RenderAssetTagEvent $event)
+    {
+        if ($event->isScriptTag()) {
+            $event->setAttribute('nonce', 'lookup nonce');
+        }
+    }
+}
+```
+
+## Stimulus / Symfony UX Helper: stimulus_controller
+
+This bundle also ships with a special `stimulus_controller()` Twig function
+that can be used to render [Stimulus Controllers & Values](https://stimulus.hotwire.dev/reference/values).
+See [stimulus-bridge](https://github.com/symfony/stimulus-bridge) for more details.
+
+For example:
+
+```twig
+<div {{ stimulus_controller('chart', { 'name': 'Likes', 'data': [1, 2, 3, 4] }) }}>
+    Hello
+</div>
+
+<!-- would render -->
+<div
+   data-controller="chart"
+   data-chart-name-value="Likes"
+   data-chart-name-data="&#x5B;1,2,3,4&#x5D;"
+>
+   Hello
+</div>
+```
+
+Any non-scalar values (like `data: [1, 2, 3, 4]`) are JSON-encoded. And all
+values are properly escaped (the string `&#x5B;` is an escaped
+`[` character, so the attribute is really `[1,2,3,4]`).
+
+If you have multiple controllers on the same element, pass them all as an
+associative array in the first argument:
+
+```twig
+<div {{ stimulus_controller({
+    'chart': { 'name': 'Likes' },
+    'other-controller': { },
+) }}>
+    Hello
+</div>
+```
+
+Ok, have fun!

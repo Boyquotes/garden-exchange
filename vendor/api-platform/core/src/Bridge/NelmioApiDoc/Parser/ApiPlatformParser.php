@@ -52,7 +52,7 @@ final class ApiPlatformParser implements ParserInterface
 
     public function __construct(ResourceMetadataFactoryInterface $resourceMetadataFactory, PropertyNameCollectionFactoryInterface $propertyNameCollectionFactory, PropertyMetadataFactoryInterface $propertyMetadataFactory, NameConverterInterface $nameConverter = null)
     {
-        @trigger_error('The '.__CLASS__.' class is deprecated since version 2.2 and will be removed in 3.0. NelmioApiDocBundle 3 has native support for API Platform.', E_USER_DEPRECATED);
+        @trigger_error('The '.__CLASS__.' class is deprecated since version 2.2 and will be removed in 3.0. NelmioApiDocBundle 3 has native support for API Platform.', \E_USER_DEPRECATED);
 
         $this->resourceMetadataFactory = $resourceMetadataFactory;
         $this->propertyNameCollectionFactory = $propertyNameCollectionFactory;
@@ -213,7 +213,7 @@ final class ApiPlatformParser implements ParserInterface
         if ($type->isCollection()) {
             $data['actualType'] = DataTypes::COLLECTION;
 
-            if ($collectionType = $type->getCollectionValueType()) {
+            if ($collectionType = method_exists(Type::class, 'getCollectionValueTypes') ? ($type->getCollectionValueTypes()[0] ?? null) : $type->getCollectionValueType()) {
                 $subProperty = $this->parseProperty($resourceMetadata, $propertyMetadata, $io, $collectionType, $visited);
                 if (self::TYPE_IRI === $subProperty['dataType']) {
                     $data['dataType'] = 'array of IRIs';

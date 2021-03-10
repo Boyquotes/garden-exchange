@@ -6,16 +6,23 @@ namespace Doctrine\Migrations\Tools\Console\Command;
 
 use Doctrine\Migrations\Generator\DiffGenerator;
 use Doctrine\Migrations\Generator\Exception\NoChangesDetected;
+use Doctrine\Migrations\Provider\EmptySchemaProvider;
 use Doctrine\Migrations\Provider\OrmSchemaProvider;
 use Doctrine\Migrations\Provider\SchemaProviderInterface;
 use Doctrine\Migrations\Tools\Console\Exception\InvalidOptionUsage;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use const FILTER_VALIDATE_BOOLEAN;
+
+use function assert;
 use function class_exists;
 use function filter_var;
+use function is_array;
+use function is_bool;
+use function is_string;
 use function sprintf;
+
+use const FILTER_VALIDATE_BOOLEAN;
 
 /**
  * The DiffCommand class is responsible for generating a migration by comparing your current database schema to
@@ -29,6 +36,9 @@ class DiffCommand extends AbstractCommand
     /** @var SchemaProviderInterface|null */
     protected $schemaProvider;
 
+    /** @var EmptySchemaProvider|null */
+    private $emptySchemaProvider;
+
     public function __construct(?SchemaProviderInterface $schemaProvider = null)
     {
         $this->schemaProvider = $schemaProvider;
@@ -36,7 +46,7 @@ class DiffCommand extends AbstractCommand
         parent::__construct();
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         parent::configure();
 
@@ -90,6 +100,12 @@ EOT
                 null,
                 InputOption::VALUE_NONE,
                 'Do not throw an exception when no changes are detected.'
+            )
+            ->addOption(
+                'from-empty-schema',
+                null,
+                InputOption::VALUE_NONE,
+                'Generate a full migration as if the current database was empty.'
             );
     }
 
@@ -99,12 +115,16 @@ EOT
     public function execute(
         InputInterface $input,
         OutputInterface $output
-    ) : ?int {
+    ): ?int {
         $filterExpression = $input->getOption('filter-expression') ?? null;
-        $formatted        = (bool) $input->getOption('formatted');
-        $lineLength       = (int) $input->getOption('line-length');
-        $allowEmptyDiff   = (bool) $input->getOption('allow-empty-diff');
-        $checkDbPlatform  = filter_var($input->getOption('check-database-platform'), FILTER_VALIDATE_BOOLEAN);
+        assert(is_string($filterExpression) || $filterExpression === null);
+        $formatted  = (bool) $input->getOption('formatted');
+        $lineLength = $input->getOption('line-length');
+        assert(! is_array($lineLength) && ! is_bool($lineLength));
+        $lineLength      = (int) $lineLength;
+        $allowEmptyDiff  = (bool) $input->getOption('allow-empty-diff');
+        $checkDbPlatform = filter_var($input->getOption('check-database-platform'), FILTER_VALIDATE_BOOLEAN);
+        $fromEmptySchema = (bool) $input->getOption('from-empty-schema');
 
         if ($formatted) {
             if (! class_exists('SqlFormatter')) {
@@ -122,7 +142,8 @@ EOT
                 $filterExpression,
                 $formatted,
                 $lineLength,
-                $checkDbPlatform
+                $checkDbPlatform,
+                $fromEmptySchema
             );
         } catch (NoChangesDetected $exception) {
             if ($allowEmptyDiff) {
@@ -130,10 +151,12 @@ EOT
 
                 return 0;
             }
+
             throw $exception;
         }
 
         $editorCommand = $input->getOption('editor-cmd');
+        assert(is_string($editorCommand) || $editorCommand === null);
 
         if ($editorCommand !== null) {
             $this->procOpen($editorCommand, $path);
@@ -156,7 +179,7 @@ EOT
         return 0;
     }
 
-    protected function createMigrationDiffGenerator() : DiffGenerator
+    protected function createMigrationDiffGenerator(): DiffGenerator
     {
         return new DiffGenerator(
             $this->connection->getConfiguration(),
@@ -164,11 +187,12 @@ EOT
             $this->getSchemaProvider(),
             $this->connection->getDatabasePlatform(),
             $this->dependencyFactory->getMigrationGenerator(),
-            $this->dependencyFactory->getMigrationSqlGenerator()
+            $this->dependencyFactory->getMigrationSqlGenerator(),
+            $this->getEmptySchemaProvider()
         );
     }
 
-    private function getSchemaProvider() : SchemaProviderInterface
+    private function getSchemaProvider(): SchemaProviderInterface
     {
         if ($this->schemaProvider === null) {
             $this->schemaProvider = new OrmSchemaProvider(
@@ -177,5 +201,16 @@ EOT
         }
 
         return $this->schemaProvider;
+    }
+
+    private function getEmptySchemaProvider(): EmptySchemaProvider
+    {
+        if ($this->emptySchemaProvider === null) {
+            $this->emptySchemaProvider = new EmptySchemaProvider(
+                $this->connection->getSchemaManager()
+            );
+        }
+
+        return $this->emptySchemaProvider;
     }
 }

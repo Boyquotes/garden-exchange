@@ -1,7 +1,7 @@
 {
     "name": "symfony/debug-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony DebugBundle",
+    "description": "Provides a tight integration of the Symfony Debug component into the Symfony full-stack framework",
     "keywords": [],
     "homepage": "https://symfony.com",
     "license": "MIT",
@@ -29,7 +29,7 @@
     },
     "conflict": {
         "symfony/config": "<4.4",
-        "symfony/dependency-injection": "<4.4"
+        "symfony/dependency-injection": "<5.2"
     },
     "suggest": {
         "symfony/config": "For service container configuration",
@@ -41,10 +41,5 @@
             "/Tests/"
         ]
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "5.1-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }

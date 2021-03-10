@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -12,22 +14,24 @@
 
 namespace PhpCsFixer\Fixer\PhpUnit;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\AbstractPhpUnitFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
-use PhpCsFixer\Indicator\PhpUnitTestCaseIndicator;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Analyzer\ArgumentsAnalyzer;
+use PhpCsFixer\Tokenizer\Analyzer\WhitespacesAnalyzer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
-final class PhpUnitExpectationFixer extends AbstractFixer implements ConfigurableFixerInterface, WhitespacesAwareFixerInterface
+final class PhpUnitExpectationFixer extends AbstractPhpUnitFixer implements ConfigurableFixerInterface, WhitespacesAwareFixerInterface
 {
     /**
      * @var array<string, string>
@@ -37,7 +41,7 @@ final class PhpUnitExpectationFixer extends AbstractFixer implements Configurabl
     /**
      * {@inheritdoc}
      */
-    public function configure(array $configuration)
+    public function configure(array $configuration): void
     {
         parent::configure($configuration);
 
@@ -58,7 +62,7 @@ final class PhpUnitExpectationFixer extends AbstractFixer implements Configurabl
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'Usages of `->setExpectedException*` methods MUST be replaced by `->expectException*` methods.',
@@ -149,7 +153,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
      *
      * Must run after PhpUnitNoExpectationAnnotationFixer.
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return 0;
     }
@@ -157,15 +161,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isTokenKindFound(T_CLASS);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRisky()
+    public function isRisky(): bool
     {
         return true;
     }
@@ -173,18 +169,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
-    {
-        $phpUnitTestCaseIndicator = new PhpUnitTestCaseIndicator();
-        foreach ($phpUnitTestCaseIndicator->findPhpUnitClasses($tokens) as $indexes) {
-            $this->fixExpectation($tokens, $indexes[0], $indexes[1]);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function createConfigurationDefinition()
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('target', 'Target version of PHPUnit.'))
@@ -195,7 +180,10 @@ final class MyTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    private function fixExpectation(Tokens $tokens, $startIndex, $endIndex)
+    /**
+     * {@inheritdoc}
+     */
+    protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
 
@@ -231,7 +219,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
 
             $argumentsReplacements = ['expectException', $this->methodMap[$tokens[$index]->getContent()], 'expectExceptionCode'];
 
-            $indent = $this->whitespacesConfig->getLineEnding().$this->detectIndent($tokens, $thisIndex);
+            $indent = $this->whitespacesConfig->getLineEnding().WhitespacesAnalyzer::detectIndent($tokens, $thisIndex);
 
             $isMultilineWhitespace = false;
 
@@ -244,8 +232,8 @@ final class MyTest extends \PHPUnit_Framework_TestCase
                     $afterParamIndicatorIndex = $tokens->getNextMeaningfulToken($paramIndicatorIndex);
 
                     if (
-                        $tokens[$paramIndicatorIndex]->equals([T_STRING, 'null'], false) &&
-                        $tokens[$afterParamIndicatorIndex]->equals(')')
+                        $tokens[$paramIndicatorIndex]->equals([T_STRING, 'null'], false)
+                        && $tokens[$afterParamIndicatorIndex]->equals(')')
                     ) {
                         if ($tokens[$argBefore + 1]->isWhitespace()) {
                             $tokens->clearTokenAndMergeSurroundingWhitespace($argBefore + 1);
@@ -290,21 +278,5 @@ final class MyTest extends \PHPUnit_Framework_TestCase
             }
             $tokens[$index] = new Token([T_STRING, $methodName]);
         }
-    }
-
-    /**
-     * @param int $index
-     *
-     * @return string
-     */
-    private function detectIndent(Tokens $tokens, $index)
-    {
-        if (!$tokens[$index - 1]->isWhitespace()) {
-            return ''; // cannot detect indent
-        }
-
-        $explodedContent = explode("\n", $tokens[$index - 1]->getContent());
-
-        return end($explodedContent);
     }
 }

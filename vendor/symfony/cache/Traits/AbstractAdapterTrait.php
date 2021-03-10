@@ -14,6 +14,7 @@ namespace Symfony\Component\Cache\Traits;
 use Psr\Cache\CacheItemInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Cache\CacheItem;
+use Symfony\Component\Cache\Exception\InvalidArgumentException;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
@@ -27,14 +28,15 @@ trait AbstractAdapterTrait
     /**
      * @var \Closure needs to be set by class, signature is function(string <key>, mixed <value>, bool <isHit>)
      */
-    private $createCacheItem;
+    private static $createCacheItem;
 
     /**
      * @var \Closure needs to be set by class, signature is function(array <deferred>, string <namespace>, array <&expiredIds>)
      */
-    private $mergeByLifetime;
+    private static $mergeByLifetime;
 
-    private $namespace;
+    private $namespace = '';
+    private $defaultLifetime;
     private $namespaceVersion = '';
     private $versioningIsEnabled = false;
     private $deferred = [];
@@ -128,7 +130,7 @@ trait AbstractAdapterTrait
                 }
             }
             $namespaceToClear = $this->namespace.$namespaceVersionToClear;
-            $namespaceVersion = substr_replace(base64_encode(pack('V', mt_rand())), static::NS_SEPARATOR, 5);
+            $namespaceVersion = strtr(substr_replace(base64_encode(pack('V', mt_rand())), static::NS_SEPARATOR, 5), '/', '_');
             try {
                 $cleared = $this->doSave([static::NS_SEPARATOR.$this->namespace => $namespaceVersion], 0);
             } catch (\Exception $e) {
@@ -211,7 +213,6 @@ trait AbstractAdapterTrait
         }
         $id = $this->getId($key);
 
-        $f = $this->createCacheItem;
         $isHit = false;
         $value = null;
 
@@ -220,12 +221,12 @@ trait AbstractAdapterTrait
                 $isHit = true;
             }
 
-            return $f($key, $value, $isHit);
+            return (self::$createCacheItem)($key, $value, $isHit);
         } catch (\Exception $e) {
             CacheItem::log($this->logger, 'Failed to fetch key "{key}": '.$e->getMessage(), ['key' => $key, 'exception' => $e, 'cache-adapter' => get_debug_type($this)]);
         }
 
-        return $f($key, null, false);
+        return (self::$createCacheItem)($key, null, false);
     }
 
     /**
@@ -335,12 +336,12 @@ trait AbstractAdapterTrait
 
     private function generateItems(iterable $items, array &$keys): iterable
     {
-        $f = $this->createCacheItem;
+        $f = self::$createCacheItem;
 
         try {
             foreach ($items as $id => $value) {
                 if (!isset($keys[$id])) {
-                    $id = key($keys);
+                    throw new InvalidArgumentException(sprintf('Could not match value id "%s" to keys "%s".', $id, implode('", "', $keys)));
                 }
                 $key = $keys[$id];
                 unset($keys[$id]);
@@ -365,7 +366,7 @@ trait AbstractAdapterTrait
                     $this->namespaceVersion = $v;
                 }
                 if ('1'.static::NS_SEPARATOR === $this->namespaceVersion) {
-                    $this->namespaceVersion = substr_replace(base64_encode(pack('V', time())), static::NS_SEPARATOR, 5);
+                    $this->namespaceVersion = strtr(substr_replace(base64_encode(pack('V', time())), static::NS_SEPARATOR, 5), '/', '_');
                     $this->doSave([static::NS_SEPARATOR.$this->namespace => $this->namespaceVersion], 0);
                 }
             } catch (\Exception $e) {
@@ -375,7 +376,7 @@ trait AbstractAdapterTrait
         if (\is_string($key) && isset($this->ids[$key])) {
             return $this->namespace.$this->namespaceVersion.$this->ids[$key];
         }
-        CacheItem::validateKey($key);
+        \assert('' !== CacheItem::validateKey($key));
         $this->ids[$key] = $key;
 
         if (null === $this->maxIdLength) {

@@ -17,6 +17,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+
+use function assert;
 use function escapeshellarg;
 use function proc_open;
 use function str_repeat;
@@ -42,24 +44,24 @@ abstract class AbstractCommand extends Command
     /** @var Configuration|null */
     protected $migrationConfiguration;
 
-    public function setMigrationConfiguration(Configuration $configuration) : void
+    public function setMigrationConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;
 
         $this->initializeDependencies();
     }
 
-    public function setConnection(Connection $connection) : void
+    public function setConnection(Connection $connection): void
     {
         $this->connection = $connection;
     }
 
-    public function setDependencyFactory(DependencyFactory $dependencyFactory) : void
+    public function setDependencyFactory(DependencyFactory $dependencyFactory): void
     {
         $this->dependencyFactory = $dependencyFactory;
     }
 
-    public function setMigrationRepository(MigrationRepository $migrationRepository) : void
+    public function setMigrationRepository(MigrationRepository $migrationRepository): void
     {
         $this->migrationRepository = $migrationRepository;
     }
@@ -67,7 +69,7 @@ abstract class AbstractCommand extends Command
     public function initialize(
         InputInterface $input,
         OutputInterface $output
-    ) : void {
+    ): void {
         $this->configuration = $this->getMigrationConfiguration($input, $output);
 
         $this->initializeDependencies();
@@ -76,7 +78,7 @@ abstract class AbstractCommand extends Command
         $this->configuration->createMigrationTable();
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->addOption(
             'configuration',
@@ -95,7 +97,7 @@ abstract class AbstractCommand extends Command
 
     protected function outputHeader(
         OutputInterface $output
-    ) : void {
+    ): void {
         $name = $this->configuration->getName();
         $name = $name ?? 'Doctrine Database Migrations';
         $name = str_repeat(' ', 20) . $name . str_repeat(' ', 20);
@@ -108,11 +110,13 @@ abstract class AbstractCommand extends Command
     protected function getMigrationConfiguration(
         InputInterface $input,
         OutputInterface $output
-    ) : Configuration {
+    ): Configuration {
         if ($this->migrationConfiguration === null) {
             if ($this->hasConfigurationHelper()) {
-                /** @var ConfigurationHelper $configHelper */
-                $configHelper = $this->getHelperSet()->get('configuration');
+                $helperSet = $this->getHelperSet();
+                assert($helperSet !== null);
+                $configHelper = $helperSet->get('configuration');
+                assert($configHelper instanceof ConfigurationHelper);
             } else {
                 $configHelper = new ConfigurationHelper(
                     $this->getConnection($input),
@@ -123,7 +127,7 @@ abstract class AbstractCommand extends Command
             $this->migrationConfiguration = $configHelper->getMigrationConfig($input);
 
             $this->migrationConfiguration->getOutputWriter()->setCallback(
-                static function (string $message) use ($output) : void {
+                static function (string $message) use ($output): void {
                     $output->writeln($message);
                 }
             );
@@ -140,7 +144,7 @@ abstract class AbstractCommand extends Command
         string $question,
         InputInterface $input,
         OutputInterface $output
-    ) : bool {
+    ): bool {
         return $this->getHelper('question')->ask(
             $input,
             $output,
@@ -152,26 +156,26 @@ abstract class AbstractCommand extends Command
         string $question,
         InputInterface $input,
         OutputInterface $output
-    ) : bool {
+    ): bool {
         return ! $input->isInteractive() || $this->askConfirmation($question, $input, $output);
     }
 
-    protected function procOpen(string $editorCommand, string $path) : void
+    protected function procOpen(string $editorCommand, string $path): void
     {
         proc_open($editorCommand . ' ' . escapeshellarg($path), [], $pipes);
     }
 
-    private function initializeDependencies() : void
+    private function initializeDependencies(): void
     {
         $this->connection          = $this->configuration->getConnection();
         $this->dependencyFactory   = $this->configuration->getDependencyFactory();
         $this->migrationRepository = $this->dependencyFactory->getMigrationRepository();
     }
 
-    private function hasConfigurationHelper() : bool
+    private function hasConfigurationHelper(): bool
     {
-        /** @var HelperSet|null $helperSet */
         $helperSet = $this->getHelperSet();
+        assert($helperSet instanceof HelperSet || $helperSet === null);
 
         if ($helperSet === null) {
             return false;
@@ -184,11 +188,13 @@ abstract class AbstractCommand extends Command
         return $helperSet->get('configuration') instanceof ConfigurationHelperInterface;
     }
 
-    private function getConnection(InputInterface $input) : Connection
+    private function getConnection(InputInterface $input): Connection
     {
         if ($this->connection === null) {
+            $helperSet = $this->getHelperSet();
+            assert($helperSet !== null);
             $this->connection = (new ConnectionLoader($this->configuration))
-                ->getConnection($input, $this->getHelperSet());
+                ->getConnection($input, $helperSet);
         }
 
         return $this->connection;

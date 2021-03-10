@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -12,12 +14,14 @@
 
 namespace PhpCsFixer\Fixer\PhpUnit;
 
-use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\Fixer\AbstractPhpUnitFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\Tokenizer\Analyzer\FunctionsAnalyzer;
 use PhpCsFixer\Tokenizer\Token;
 use PhpCsFixer\Tokenizer\Tokens;
@@ -26,7 +30,7 @@ use PhpCsFixer\Tokenizer\Tokens;
  * @author SpacePossum
  * @author Dariusz Rumiński <dariusz.ruminski@gmail.com>
  */
-final class PhpUnitDedicateAssertFixer extends AbstractFixer implements ConfigurableFixerInterface
+final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements ConfigurableFixerInterface
 {
     private static $fixMap = [
         'array_key_exists' => ['assertArrayNotHasKey', 'assertArrayHasKey'],
@@ -62,7 +66,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    public function configure(array $configuration)
+    public function configure(array $configuration): void
     {
         parent::configure($configuration);
 
@@ -116,15 +120,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
-    {
-        return $tokens->isTokenKindFound(T_STRING);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRisky()
+    public function isRisky(): bool
     {
         return true;
     }
@@ -132,22 +128,34 @@ final class PhpUnitDedicateAssertFixer extends AbstractFixer implements Configur
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'PHPUnit assertions like `assertInternalType`, `assertFileExists`, should be used over `assertTrue`.',
             [
                 new CodeSample(
                     '<?php
-$this->assertTrue(is_float( $a), "my message");
-$this->assertTrue(is_nan($a));
+final class MyTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSomeTest()
+    {
+        $this->assertTrue(is_float( $a), "my message");
+        $this->assertTrue(is_nan($a));
+    }
+}
 '
                 ),
                 new CodeSample(
                     '<?php
-$this->assertTrue(is_dir($a));
-$this->assertTrue(is_writable($a));
-$this->assertTrue(is_readable($a));
+final class MyTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSomeTest()
+    {
+        $this->assertTrue(is_dir($a));
+        $this->assertTrue(is_writable($a));
+        $this->assertTrue(is_readable($a));
+    }
+}
 ',
                     ['target' => PhpUnitTargetVersion::VERSION_5_6]
                 ),
@@ -163,7 +171,7 @@ $this->assertTrue(is_readable($a));
      * Must run before PhpUnitDedicateAssertInternalTypeFixer.
      * Must run after NoAliasFunctionsFixer, PhpUnitConstructFixer.
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         return -15;
     }
@@ -171,9 +179,9 @@ $this->assertTrue(is_readable($a));
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
-        foreach ($this->getPreviousAssertCall($tokens) as $assertCall) {
+        foreach ($this->getPreviousAssertCall($tokens, $startIndex, $endIndex) as $assertCall) {
             // test and fix for assertTrue/False to dedicated asserts
             if ('asserttrue' === $assertCall['loweredName'] || 'assertfalse' === $assertCall['loweredName']) {
                 $this->fixAssertTrueFalse($tokens, $assertCall);
@@ -197,7 +205,7 @@ $this->assertTrue(is_readable($a));
     /**
      * {@inheritdoc}
      */
-    protected function createConfigurationDefinition()
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('target', 'Target version of PHPUnit.'))
@@ -214,7 +222,7 @@ $this->assertTrue(is_readable($a));
         ]);
     }
 
-    private function fixAssertTrueFalse(Tokens $tokens, array $assertCall)
+    private function fixAssertTrueFalse(Tokens $tokens, array $assertCall): void
     {
         $testDefaultNamespaceTokenIndex = false;
         $testIndex = $tokens->getNextMeaningfulToken($assertCall['openBraceIndex']);
@@ -278,7 +286,7 @@ $this->assertTrue(is_readable($a));
         }
     }
 
-    private function fixAssertSameEquals(Tokens $tokens, array $assertCall)
+    private function fixAssertSameEquals(Tokens $tokens, array $assertCall): void
     {
         // @ $this->/self::assertEquals/Same([$nextIndex])
         $expectedIndex = $tokens->getNextMeaningfulToken($assertCall['openBraceIndex']);
@@ -342,11 +350,11 @@ $this->assertTrue(is_readable($a));
         ]);
     }
 
-    private function getPreviousAssertCall(Tokens $tokens)
+    private function getPreviousAssertCall(Tokens $tokens, int $startIndex, int $endIndex): iterable
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
 
-        for ($index = $tokens->count(); $index > 0; --$index) {
+        for ($index = $endIndex; $index > $startIndex; --$index) {
             $index = $tokens->getPrevTokenOfKind($index, [[T_STRING]]);
             if (null === $index) {
                 return;
@@ -379,11 +387,8 @@ $this->assertTrue(is_readable($a));
 
     /**
      * @param false|int $callNSIndex
-     * @param int       $callIndex
-     * @param int       $openIndex
-     * @param int       $closeIndex
      */
-    private function removeFunctionCall(Tokens $tokens, $callNSIndex, $callIndex, $openIndex, $closeIndex)
+    private function removeFunctionCall(Tokens $tokens, $callNSIndex, int $callIndex, int $openIndex, int $closeIndex): void
     {
         $tokens->clearTokenAndMergeSurroundingWhitespace($callIndex);
         if (false !== $callNSIndex) {

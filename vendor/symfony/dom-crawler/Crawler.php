@@ -34,6 +34,11 @@ class Crawler implements \Countable, \IteratorAggregate
     private $namespaces = [];
 
     /**
+     * @var \ArrayObject A map of cached namespaces
+     */
+    private $cachedNamespaces;
+
+    /**
      * @var string The base href value
      */
     private $baseHref;
@@ -68,6 +73,7 @@ class Crawler implements \Countable, \IteratorAggregate
         $this->uri = $uri;
         $this->baseHref = $baseHref ?: $uri;
         $this->html5Parser = class_exists(HTML5::class) ? new HTML5(['disable_html_ns' => true]) : null;
+        $this->cachedNamespaces = new \ArrayObject();
 
         $this->add($node);
     }
@@ -99,6 +105,7 @@ class Crawler implements \Countable, \IteratorAggregate
     {
         $this->nodes = [];
         $this->document = null;
+        $this->cachedNamespaces = new \ArrayObject();
     }
 
     /**
@@ -182,8 +189,7 @@ class Crawler implements \Countable, \IteratorAggregate
      */
     public function addHtmlContent(string $content, string $charset = 'UTF-8')
     {
-        // Use HTML5 parser if the content is HTML5 and the library is available
-        $dom = null !== $this->html5Parser && strspn($content, " \t\r\n") === stripos($content, '<!doctype html>') ? $this->parseHtml5($content, $charset) : $this->parseXhtml($content, $charset);
+        $dom = $this->parseHtmlString($content, $charset);
         $this->addDocument($dom);
 
         $base = $this->filterRelativeXPath('descendant-or-self::base')->extract(['href']);
@@ -215,7 +221,7 @@ class Crawler implements \Countable, \IteratorAggregate
      *                     LIBXML_PARSEHUGE is dangerous, see
      *                     http://symfony.com/blog/security-release-symfony-2-0-17-released
      */
-    public function addXmlContent(string $content, string $charset = 'UTF-8', int $options = LIBXML_NONET)
+    public function addXmlContent(string $content, string $charset = 'UTF-8', int $options = \LIBXML_NONET)
     {
         // remove the default namespace if it's the only namespace to make XPath expressions simpler
         if (!preg_match('/xmlns:/', $content)) {
@@ -223,7 +229,9 @@ class Crawler implements \Countable, \IteratorAggregate
         }
 
         $internalErrors = libxml_use_internal_errors(true);
-        $disableEntities = libxml_disable_entity_loader(true);
+        if (\LIBXML_VERSION < 20900) {
+            $disableEntities = libxml_disable_entity_loader(true);
+        }
 
         $dom = new \DOMDocument('1.0', $charset);
         $dom->validateOnParse = true;
@@ -233,7 +241,9 @@ class Crawler implements \Countable, \IteratorAggregate
         }
 
         libxml_use_internal_errors($internalErrors);
-        libxml_disable_entity_loader($disableEntities);
+        if (\LIBXML_VERSION < 20900) {
+            libxml_disable_entity_loader($disableEntities);
+        }
 
         $this->addDocument($dom);
 
@@ -439,7 +449,7 @@ class Crawler implements \Countable, \IteratorAggregate
 
         $domNode = $this->getNode(0);
 
-        while (XML_ELEMENT_NODE === $domNode->nodeType) {
+        while (\XML_ELEMENT_NODE === $domNode->nodeType) {
             $node = $this->createSubCrawler($domNode);
             if ($node->matches($selector)) {
                 return $node;
@@ -484,13 +494,27 @@ class Crawler implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Returns the parents nodes of the current selection.
+     * Returns the parent nodes of the current selection.
      *
      * @return static
      *
      * @throws \InvalidArgumentException When current node is empty
      */
     public function parents()
+    {
+        trigger_deprecation('symfony/dom-crawler', '5.3', 'The %s() method is deprecated, use ancestors() instead.', __METHOD__);
+
+        return $this->ancestors();
+    }
+
+    /**
+     * Returns the ancestors of the current selection.
+     *
+     * @return static
+     *
+     * @throws \InvalidArgumentException When the current node is empty
+     */
+    public function ancestors()
     {
         if (!$this->nodes) {
             throw new \InvalidArgumentException('The current node list is empty.');
@@ -500,7 +524,7 @@ class Crawler implements \Countable, \IteratorAggregate
         $nodes = [];
 
         while ($node = $node->parentNode) {
-            if (XML_ELEMENT_NODE === $node->nodeType) {
+            if (\XML_ELEMENT_NODE === $node->nodeType) {
                 $nodes[] = $node;
             }
         }
@@ -964,12 +988,14 @@ class Crawler implements \Countable, \IteratorAggregate
      */
     private function filterRelativeXPath(string $xpath): object
     {
-        $prefixes = $this->findNamespacePrefixes($xpath);
-
         $crawler = $this->createSubCrawler(null);
+        if (null === $this->document) {
+            return $crawler;
+        }
+
+        $domxpath = $this->createDOMXPath($this->document, $this->findNamespacePrefixes($xpath));
 
         foreach ($this->nodes as $node) {
-            $domxpath = $this->createDOMXPath($node->ownerDocument, $prefixes);
             $crawler->add($domxpath->query($xpath, $node));
         }
 
@@ -1071,7 +1097,7 @@ class Crawler implements \Countable, \IteratorAggregate
      */
     public function getNode(int $position)
     {
-        return isset($this->nodes[$position]) ? $this->nodes[$position] : null;
+        return $this->nodes[$position] ?? null;
     }
 
     /**
@@ -1101,7 +1127,7 @@ class Crawler implements \Countable, \IteratorAggregate
 
         $currentNode = $this->getNode(0);
         do {
-            if ($node !== $currentNode && XML_ELEMENT_NODE === $node->nodeType) {
+            if ($node !== $currentNode && \XML_ELEMENT_NODE === $node->nodeType) {
                 $nodes[] = $node;
             }
         } while ($node = $node->$siblingDir);
@@ -1119,7 +1145,9 @@ class Crawler implements \Countable, \IteratorAggregate
         $htmlContent = $this->convertToHtmlEntities($htmlContent, $charset);
 
         $internalErrors = libxml_use_internal_errors(true);
-        $disableEntities = libxml_disable_entity_loader(true);
+        if (\LIBXML_VERSION < 20900) {
+            $disableEntities = libxml_disable_entity_loader(true);
+        }
 
         $dom = new \DOMDocument('1.0', $charset);
         $dom->validateOnParse = true;
@@ -1129,7 +1157,9 @@ class Crawler implements \Countable, \IteratorAggregate
         }
 
         libxml_use_internal_errors($internalErrors);
-        libxml_disable_entity_loader($disableEntities);
+        if (\LIBXML_VERSION < 20900) {
+            libxml_disable_entity_loader($disableEntities);
+        }
 
         return $dom;
     }
@@ -1178,14 +1208,18 @@ class Crawler implements \Countable, \IteratorAggregate
      */
     private function discoverNamespace(\DOMXPath $domxpath, string $prefix): ?string
     {
-        if (isset($this->namespaces[$prefix])) {
+        if (\array_key_exists($prefix, $this->namespaces)) {
             return $this->namespaces[$prefix];
+        }
+
+        if ($this->cachedNamespaces->offsetExists($prefix)) {
+            return $this->cachedNamespaces[$prefix];
         }
 
         // ask for one namespace, otherwise we'd get a collection with an item for each node
         $namespaces = $domxpath->query(sprintf('(//namespace::*[name()="%s"])[last()]', $this->defaultNamespacePrefix === $prefix ? '' : $prefix));
 
-        return ($node = $namespaces->item(0)) ? $node->nodeValue : null;
+        return $this->cachedNamespaces[$prefix] = ($node = $namespaces->item(0)) ? $node->nodeValue : null;
     }
 
     private function findNamespacePrefixes(string $xpath): array
@@ -1210,6 +1244,7 @@ class Crawler implements \Countable, \IteratorAggregate
         $crawler->isHtml = $this->isHtml;
         $crawler->document = $this->document;
         $crawler->namespaces = $this->namespaces;
+        $crawler->cachedNamespaces = $this->cachedNamespaces;
         $crawler->html5Parser = $this->html5Parser;
 
         return $crawler;
@@ -1225,5 +1260,36 @@ class Crawler implements \Countable, \IteratorAggregate
         }
 
         return new CssSelectorConverter($this->isHtml);
+    }
+
+    /**
+     * Parse string into DOMDocument object using HTML5 parser if the content is HTML5 and the library is available.
+     * Use libxml parser otherwise.
+     */
+    private function parseHtmlString(string $content, string $charset): \DOMDocument
+    {
+        if ($this->canParseHtml5String($content)) {
+            return $this->parseHtml5($content, $charset);
+        }
+
+        return $this->parseXhtml($content, $charset);
+    }
+
+    private function canParseHtml5String(string $content): bool
+    {
+        if (null === $this->html5Parser) {
+            return false;
+        }
+        if (false === ($pos = stripos($content, '<!doctype html>'))) {
+            return false;
+        }
+        $header = substr($content, 0, $pos);
+
+        return '' === $header || $this->isValidHtml5Heading($header);
+    }
+
+    private function isValidHtml5Heading(string $heading): bool
+    {
+        return 1 === preg_match('/^\x{FEFF}?\s*(<!--[^>]*?-->\s*)*$/u', $heading);
     }
 }

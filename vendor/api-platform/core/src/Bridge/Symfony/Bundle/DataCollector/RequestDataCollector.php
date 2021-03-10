@@ -23,6 +23,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\SubresourceDataProviderInterface;
 use ApiPlatform\Core\Metadata\Resource\Factory\ResourceMetadataFactoryInterface;
 use ApiPlatform\Core\Util\RequestAttributesExtractor;
+use PackageVersions\Versions;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,15 +72,20 @@ final class RequestDataCollector extends DataCollector
             ++$counters['ignored_filters'];
         }
 
+        $requestAttributes = RequestAttributesExtractor::extractAttributes($request);
+        if (isset($requestAttributes['previous_data'])) {
+            $requestAttributes['previous_data'] = $this->cloneVar($requestAttributes['previous_data']);
+        }
+
         $this->data = [
             'resource_class' => $resourceClass,
             'resource_metadata' => $resourceMetadata ? $this->cloneVar($resourceMetadata) : null,
             'acceptable_content_types' => $request->getAcceptableContentTypes(),
-            'request_attributes' => RequestAttributesExtractor::extractAttributes($request),
             'filters' => $filters,
             'counters' => $counters,
             'dataProviders' => [],
             'dataPersisters' => ['responses' => []],
+            'request_attributes' => $requestAttributes,
         ];
 
         if ($this->collectionDataProvider instanceof TraceableChainCollectionDataProvider) {
@@ -156,6 +162,18 @@ final class RequestDataCollector extends DataCollector
     public function getDataPersisters(): array
     {
         return $this->data['dataPersisters'] ?? ['responses' => []];
+    }
+
+    public function getVersion(): ?string
+    {
+        if (!class_exists(Versions::class)) {
+            return null;
+        }
+
+        $version = Versions::getVersion('api-platform/core');
+        preg_match('/^v(.*?)@/', $version, $output);
+
+        return $output[1] ?? strtok($version, '@');
     }
 
     /**

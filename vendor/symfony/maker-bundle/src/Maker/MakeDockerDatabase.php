@@ -64,10 +64,15 @@ final class MakeDockerDatabase extends AbstractMaker
         return 'make:docker:database';
     }
 
+    public static function getCommandDescription(): string
+    {
+        return 'Adds a database container to your docker-compose.yaml file';
+    }
+
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
-            ->setDescription('Adds a database container to your docker-compose.yaml file')
+            ->setHelp(file_get_contents(__DIR__.'/../Resources/help/MakeDockerDatabase.txt'))
         ;
     }
 
@@ -141,7 +146,7 @@ final class MakeDockerDatabase extends AbstractMaker
         $ports = DockerDatabaseServices::getDefaultPorts($this->databaseChoice);
         $closing[] = 'Next:';
         $closing[] = sprintf(' A) Run <fg=yellow>docker-compose up -d %s</> to start your database container', $this->serviceName);
-        $closing[] = sprintf('    or <fg=yellow>docker-compose up -d</> to start all of them.');
+        $closing[] = '    or <fg=yellow>docker-compose up -d</> to start all of them.';
         $closing[] = '';
         $closing[] = ' B) If you are using the Symfony Binary, it will detect the new service automatically.';
         $closing[] = '    Run <fg=yellow>symfony var:export --multiline</> to see the environment variables the binary is exposing.';

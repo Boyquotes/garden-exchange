@@ -90,6 +90,11 @@ class Country
     private $resident;
 
     /**
+     * @ORM\OneToMany(targetEntity=City::class, mappedBy="country")
+     */
+    private $cities;
+
+    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $enabled;
@@ -104,6 +109,7 @@ class Country
         $this->gardens = new ArrayCollection();
         $this->profiles = new ArrayCollection();
         $this->resident = new ArrayCollection();
+        $this->cities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -313,6 +319,34 @@ class Country
         if ($this->resident->contains($resident)) {
             $this->resident->removeElement($resident);
             $resident->removeCountryResidence($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|City[]
+     */
+    public function getCities(): Collection
+    {
+        return $this->cities;
+    }
+
+    public function addCity(City $city): self
+    {
+        if (!$this->city->contains($city)) {
+            $this->city[] = $city;
+            $city->addCountry($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCity(City $city): self
+    {
+        if ($this->city->contains($city)) {
+            $this->city->removeElement($city);
+            $city->removeCountry($this);
         }
 
         return $this;

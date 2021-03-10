@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of PHP CS Fixer.
  *
@@ -15,9 +17,11 @@ namespace PhpCsFixer\Fixer\FunctionNotation;
 use PhpCsFixer\AbstractFixer;
 use PhpCsFixer\Fixer\ConfigurableFixerInterface;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolver;
+use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverInterface;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
+use PhpCsFixer\FixerDefinition\FixerDefinitionInterface;
 use PhpCsFixer\FixerDefinition\VersionSpecification;
 use PhpCsFixer\FixerDefinition\VersionSpecificCodeSample;
 use PhpCsFixer\Tokenizer\CT;
@@ -34,12 +38,12 @@ final class FunctionDeclarationFixer extends AbstractFixer implements Configurab
     /**
      * @internal
      */
-    const SPACING_NONE = 'none';
+    public const SPACING_NONE = 'none';
 
     /**
      * @internal
      */
-    const SPACING_ONE = 'one';
+    public const SPACING_ONE = 'one';
 
     private $supportedSpacings = [self::SPACING_NONE, self::SPACING_ONE];
 
@@ -48,7 +52,7 @@ final class FunctionDeclarationFixer extends AbstractFixer implements Configurab
     /**
      * {@inheritdoc}
      */
-    public function isCandidate(Tokens $tokens)
+    public function isCandidate(Tokens $tokens): bool
     {
         if (\PHP_VERSION_ID >= 70400 && $tokens->isTokenKindFound(T_FN)) {
             return true;
@@ -60,7 +64,7 @@ final class FunctionDeclarationFixer extends AbstractFixer implements Configurab
     /**
      * {@inheritdoc}
      */
-    public function getDefinition()
+    public function getDefinition(): FixerDefinitionInterface
     {
         return new FixerDefinition(
             'Spaces should be properly placed in a function declaration.',
@@ -102,7 +106,7 @@ $f = fn () => null;
     /**
      * {@inheritdoc}
      */
-    protected function applyFix(\SplFileInfo $file, Tokens $tokens)
+    protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
 
@@ -129,10 +133,10 @@ $f = fn () => null;
             // eg: `function foo()   {}` => `function foo() {}`
             // eg: `fn()   =>` => `fn() =>`
             if (
-                $tokens[$startBraceIndex]->equalsAny(['{', [T_DOUBLE_ARROW]]) &&
-                (
-                    !$tokens[$startBraceIndex - 1]->isWhitespace() ||
-                    $tokens[$startBraceIndex - 1]->isWhitespace($this->singleLineWhitespaceOptions)
+                $tokens[$startBraceIndex]->equalsAny(['{', [T_DOUBLE_ARROW]])
+                && (
+                    !$tokens[$startBraceIndex - 1]->isWhitespace()
+                    || $tokens[$startBraceIndex - 1]->isWhitespace($this->singleLineWhitespaceOptions)
                 )
             ) {
                 $tokens->ensureWhitespaceAtIndex($startBraceIndex - 1, 1, ' ');
@@ -192,7 +196,7 @@ $f = fn () => null;
     /**
      * {@inheritdoc}
      */
-    protected function createConfigurationDefinition()
+    protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
         return new FixerConfigurationResolver([
             (new FixerOptionBuilder('closure_function_spacing', 'Spacing to use before open parenthesis for closures.'))
@@ -202,7 +206,7 @@ $f = fn () => null;
         ]);
     }
 
-    private function fixParenthesisInnerEdge(Tokens $tokens, $start, $end)
+    private function fixParenthesisInnerEdge(Tokens $tokens, int $start, int $end): void
     {
         // remove single-line whitespace before )
         if ($tokens[$end - 1]->isWhitespace($this->singleLineWhitespaceOptions)) {

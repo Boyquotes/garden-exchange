@@ -19,6 +19,7 @@ use ApiPlatform\Core\Metadata\Property\PropertyMetadata;
 use ApiPlatform\Core\Metadata\Property\SubresourceMetadata;
 use ApiPlatform\Core\Util\Reflection;
 use Doctrine\Common\Annotations\Reader;
+use Symfony\Component\PropertyInfo\Type;
 
 /**
  * Adds subresources to the properties metadata from {@see ApiResource} annotations.
@@ -50,8 +51,12 @@ final class AnnotationSubresourceMetadataFactory implements PropertyMetadataFact
         }
 
         if ($reflectionClass->hasProperty($property)) {
-            $annotation = $this->reader->getPropertyAnnotation($reflectionClass->getProperty($property), ApiSubresource::class);
+            $reflectionProperty = $reflectionClass->getProperty($property);
+            if (\PHP_VERSION_ID >= 80000 && $attributes = $reflectionProperty->getAttributes(ApiSubresource::class)) {
+                return $this->updateMetadata($attributes[0]->newInstance(), $propertyMetadata, $resourceClass, $property);
+            }
 
+            $annotation = $this->reader->getPropertyAnnotation($reflectionProperty, ApiSubresource::class);
             if ($annotation instanceof ApiSubresource) {
                 return $this->updateMetadata($annotation, $propertyMetadata, $resourceClass, $property);
             }
@@ -68,8 +73,11 @@ final class AnnotationSubresourceMetadataFactory implements PropertyMetadataFact
                 continue;
             }
 
-            $annotation = $this->reader->getMethodAnnotation($reflectionMethod, ApiSubresource::class);
+            if (\PHP_VERSION_ID >= 80000 && $attributes = $reflectionMethod->getAttributes(ApiSubresource::class)) {
+                return $this->updateMetadata($attributes[0]->newInstance(), $propertyMetadata, $resourceClass, $property);
+            }
 
+            $annotation = $this->reader->getMethodAnnotation($reflectionMethod, ApiSubresource::class);
             if ($annotation instanceof ApiSubresource) {
                 return $this->updateMetadata($annotation, $propertyMetadata, $resourceClass, $property);
             }
@@ -85,7 +93,16 @@ final class AnnotationSubresourceMetadataFactory implements PropertyMetadataFact
             throw new InvalidResourceException(sprintf('Property "%s" on resource "%s" is declared as a subresource, but its type could not be determined.', $propertyName, $originResourceClass));
         }
         $isCollection = $type->isCollection();
-        $resourceClass = $isCollection && ($collectionValueType = $type->getCollectionValueType()) ? $collectionValueType->getClassName() : $type->getClassName();
+
+        if (
+            $isCollection &&
+            $collectionValueType = method_exists(Type::class, 'getCollectionValueTypes') ? ($type->getCollectionValueTypes()[0] ?? null) : $type->getCollectionValueType()
+        ) {
+            $resourceClass = $collectionValueType->getClassName();
+        } else {
+            $resourceClass = $type->getClassName();
+        }
+
         $maxDepth = $annotation->maxDepth;
         // @ApiSubresource is on the class identifier (/collection/{id}/subcollection/{subcollectionId})
         if (null === $resourceClass) {

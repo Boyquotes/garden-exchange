@@ -4,11 +4,10 @@ namespace Doctrine\Persistence\Mapping\Driver;
 
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\MappingException;
+
 use function array_keys;
 use function array_merge;
 use function array_unique;
-use function class_exists;
-use function interface_exists;
 use function is_file;
 use function str_replace;
 
@@ -194,6 +193,3 @@ abstract class FileDriver implements MappingDriver
         $this->locator = $locator;
     }
 }
-
-class_exists(\Doctrine\Common\Persistence\Mapping\Driver\FileDriver::class);
-interface_exists(FileLocator::class);

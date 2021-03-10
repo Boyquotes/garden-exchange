@@ -15,6 +15,7 @@ use Symfony\Bridge\Twig\Node\TransNode;
 use Twig\Environment;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\FilterExpression;
+use Twig\Node\Expression\FunctionExpression;
 use Twig\Node\Node;
 use Twig\NodeVisitor\AbstractNodeVisitor;
 
@@ -25,7 +26,7 @@ use Twig\NodeVisitor\AbstractNodeVisitor;
  */
 final class TranslationNodeVisitor extends AbstractNodeVisitor
 {
-    const UNDEFINED_DOMAIN = '_undefined';
+    public const UNDEFINED_DOMAIN = '_undefined';
 
     private $enabled = false;
     private $messages = [];
@@ -68,14 +69,18 @@ final class TranslationNodeVisitor extends AbstractNodeVisitor
             ];
         } elseif (
             $node instanceof FilterExpression &&
-            'transchoice' === $node->getNode('filter')->getAttribute('value') &&
-            $node->getNode('node') instanceof ConstantExpression
+            'trans' === $node->getNode('filter')->getAttribute('value') &&
+            $node->getNode('node') instanceof FunctionExpression &&
+            't' === $node->getNode('node')->getAttribute('name')
         ) {
-            // extract constant nodes with a trans filter
-            $this->messages[] = [
-                $node->getNode('node')->getAttribute('value'),
-                $this->getReadDomainFromArguments($node->getNode('arguments'), 2),
-            ];
+            $nodeArguments = $node->getNode('node')->getNode('arguments');
+
+            if ($nodeArguments->getIterator()->current() instanceof ConstantExpression) {
+                $this->messages[] = [
+                    $this->getReadMessageFromArguments($nodeArguments, 0),
+                    $this->getReadDomainFromArguments($nodeArguments, 2),
+                ];
+            }
         } elseif ($node instanceof TransNode) {
             // extract trans nodes
             $this->messages[] = [
@@ -101,6 +106,28 @@ final class TranslationNodeVisitor extends AbstractNodeVisitor
     public function getPriority(): int
     {
         return 0;
+    }
+
+    private function getReadMessageFromArguments(Node $arguments, int $index): ?string
+    {
+        if ($arguments->hasNode('message')) {
+            $argument = $arguments->getNode('message');
+        } elseif ($arguments->hasNode($index)) {
+            $argument = $arguments->getNode($index);
+        } else {
+            return null;
+        }
+
+        return $this->getReadMessageFromNode($argument);
+    }
+
+    private function getReadMessageFromNode(Node $node): ?string
+    {
+        if ($node instanceof ConstantExpression) {
+            return $node->getAttribute('value');
+        }
+
+        return null;
     }
 
     private function getReadDomainFromArguments(Node $arguments, int $index): ?string

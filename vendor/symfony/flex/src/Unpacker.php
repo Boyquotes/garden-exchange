@@ -23,6 +23,7 @@ use Composer\Package\Version\VersionSelector;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositorySet;
+use Composer\Semver\VersionParser;
 use Symfony\Flex\Unpack\Operation;
 use Symfony\Flex\Unpack\Result;
 
@@ -31,22 +32,20 @@ class Unpacker
     private $composer;
     private $resolver;
     private $dryRun;
-    private $jsonPath;
-    private $manipulator;
+    private $versionParser;
 
     public function __construct(Composer $composer, PackageResolver $resolver, bool $dryRun)
     {
         $this->composer = $composer;
         $this->resolver = $resolver;
         $this->dryRun = $dryRun;
+        $this->versionParser = new VersionParser();
     }
 
-    public function unpack(Operation $op, Result $result = null): Result
+    public function unpack(Operation $op, Result $result = null, &$links = []): Result
     {
         if (null === $result) {
             $result = new Result();
-            $this->jsonPath = Factory::getComposerFile();
-            $this->manipulator = new JsonManipulator(file_get_contents($this->jsonPath));
         }
 
         $localRepo = $this->composer->getRepositoryManager()->getLocalRepository();
@@ -83,7 +82,7 @@ class Unpacker
                     if ('symfony-pack' === $subPkg->getType()) {
                         $subOp = new Operation(true, $op->shouldSort());
                         $subOp->addPackage($subPkg->getName(), $constraint, $package['dev']);
-                        $result = $this->unpack($subOp, $result);
+                        $result = $this->unpack($subOp, $result, $links);
                         continue;
                     }
 
@@ -99,15 +98,60 @@ class Unpacker
                     }
                 }
 
-                if (!$this->manipulator->addLink($package['dev'] ? 'require-dev' : 'require', $link->getTarget(), $constraint, $op->shouldSort())) {
-                    throw new \RuntimeException(sprintf('Unable to unpack package "%s".', $link->getTarget()));
+                $linkName = $link->getTarget();
+                $linkType = $package['dev'] ? 'require-dev' : 'require';
+                $constraint = $this->versionParser->parseConstraints($constraint);
+
+                if (isset($links[$linkName])) {
+                    $links[$linkName]['constraints'][] = $constraint;
+                    if ('require' === $linkType) {
+                        $links[$linkName]['type'] = 'require';
+                    }
+                } else {
+                    $links[$linkName] = [
+                        'type' => $linkType,
+                        'name' => $linkName,
+                        'constraints' => [$constraint],
+                    ];
                 }
             }
         }
 
-        if (!$this->dryRun && 1 === \func_num_args()) {
-            file_put_contents($this->jsonPath, $this->manipulator->getContents());
+        if ($this->dryRun || 1 < \func_num_args()) {
+            return $result;
         }
+
+        $jsonPath = Factory::getComposerFile();
+        $jsonContent = file_get_contents($jsonPath);
+        $jsonStored = json_decode($jsonContent, true);
+        $jsonManipulator = new JsonManipulator($jsonContent);
+
+        foreach ($links as $link) {
+            // nothing to do, package is already present in the "require" section
+            if (isset($jsonStored['require'][$link['name']])) {
+                continue;
+            }
+
+            if (isset($jsonStored['require-dev'][$link['name']])) {
+                // nothing to do, package is already present in the "require-dev" section
+                if ('require-dev' === $link['type']) {
+                    continue;
+                }
+
+                // removes package from "require-dev", because it will be moved to "require"
+                // save stored constraint
+                $link['constraints'][] = $this->versionParser->parseConstraints($jsonStored['require-dev'][$link['name']]);
+                $jsonManipulator->removeSubNode('require-dev', $link['name']);
+            }
+
+            $constraint = end($link['constraints']);
+
+            if (!$jsonManipulator->addLink($link['type'], $link['name'], $constraint->getPrettyString(), $op->shouldSort())) {
+                throw new \RuntimeException(sprintf('Unable to unpack package "%s".', $link['name']));
+            }
+        }
+
+        file_put_contents($jsonPath, $jsonManipulator->getContents());
 
         return $result;
     }

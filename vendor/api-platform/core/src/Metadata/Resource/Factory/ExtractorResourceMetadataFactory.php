@@ -27,11 +27,13 @@ final class ExtractorResourceMetadataFactory implements ResourceMetadataFactoryI
 {
     private $extractor;
     private $decorated;
+    private $defaults;
 
-    public function __construct(ExtractorInterface $extractor, ResourceMetadataFactoryInterface $decorated = null)
+    public function __construct(ExtractorInterface $extractor, ResourceMetadataFactoryInterface $decorated = null, array $defaults = [])
     {
         $this->extractor = $extractor;
         $this->decorated = $decorated;
+        $this->defaults = $defaults + ['attributes' => []];
     }
 
     /**
@@ -50,6 +52,21 @@ final class ExtractorResourceMetadataFactory implements ResourceMetadataFactoryI
 
         if (!(class_exists($resourceClass) || interface_exists($resourceClass)) || !$resource = $this->extractor->getResources()[$resourceClass] ?? false) {
             return $this->handleNotFound($parentResourceMetadata, $resourceClass);
+        }
+
+        $resource['description'] = $resource['description'] ?? $this->defaults['description'] ?? null;
+        $resource['iri'] = $resource['iri'] ?? $this->defaults['iri'] ?? null;
+        $resource['itemOperations'] = $resource['itemOperations'] ?? $this->defaults['item_operations'] ?? null;
+        $resource['collectionOperations'] = $resource['collectionOperations'] ?? $this->defaults['collection_operations'] ?? null;
+        $resource['graphql'] = $resource['graphql'] ?? $this->defaults['graphql'] ?? null;
+
+        if (null !== $resource['attributes'] || [] !== $this->defaults['attributes']) {
+            $resource['attributes'] = (array) $resource['attributes'];
+            foreach ($this->defaults['attributes'] as $key => $value) {
+                if (!isset($resource['attributes'][$key])) {
+                    $resource['attributes'][$key] = $value;
+                }
+            }
         }
 
         return $this->update($parentResourceMetadata ?: new ResourceMetadata(), $resource);
