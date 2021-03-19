@@ -1,5 +1,10 @@
 monolog:
     handlers:
+        bigb:
+            type: stream
+            path: "%kernel.logs_dir%/bigb-%kernel.environment%.log"
+            level: debug
+            channels: [bigb]
         main:
             type: fingers_crossed
             action_level: error
