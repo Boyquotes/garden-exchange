@@ -28,6 +28,8 @@
                 </div>
                 {{ form_widget(contactForm.content,{ 'attr': {'rows': '10', 'cols': '50'} }) }}
 
+                <input type="hidden" name="_target_path" value="{{ app.request.headers.get('host') }}"/>
+                <input type="hidden" name="_checkT" class="checkT" value="0"/>
                 
                 <div class="sendMail">
                     <button type="submit" class="{{ button_css|default("btn btn-primary") }} margin-top-2">{{ 'user.contact.send'|trans }}</button>

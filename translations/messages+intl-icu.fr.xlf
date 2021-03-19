@@ -915,9 +915,13 @@
                 <source>contact.sended_successfully</source>
                 <target>Votre message a bien été transmis</target>
             </trans-unit>
+            <trans-unit id="contact.spam_tag_detected">
+                <source>contact.spam_tag_detected</source>
+                <target>Votre message ne doit pas contenir de lien commencant par http://</target>
+            </trans-unit>
             <trans-unit id="contact.spam_detected">
                 <source>contact.spam_detected</source>
-                <target>Votre message ne doit pas contenir de lien commencant par http://</target>
+                <target>Votre demande a échouée</target>
             </trans-unit>
             <trans-unit id="footer.contact">
                 <source>footer.contact</source>

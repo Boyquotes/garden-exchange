@@ -7,9 +7,7 @@
 {% block class_body %}col-sm-12{% endblock %}
 
 {% block main %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
+    {{ include('default/_flash_messages.html.twig') }}
 
     <div class="formulaire-registration">
         <div class="well">
@@ -29,7 +27,10 @@
                 <div class="form-group d-flex">
                     {{ form_widget(registrationForm.agreeTerms) }}<span>{{ 'label.agreeTerms'|trans }}<a href="{{ asset('/uploads/documents/CGU-Garden-exchange.pdf') }}" target="_blank" >{{ 'label.agreeTerms.cgu'|trans }}</a></span>
                 </div>
-
+                
+                <input type="hidden" name="_target_path" value="{{ app.request.headers.get('host') }}"/>
+                <input type="hidden" name="_checkT" class="checkT" value="0"/>
+                
                 <button type="submit" class="{{ button_css|default("btn btn-primary") }} pull-right">{{ 'user.register'|trans }}</button>
             {{ form_end(registrationForm) }}
         </div>

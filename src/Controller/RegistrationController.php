@@ -6,7 +6,9 @@ use App\Entity\Profile;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Utils\AntiBots;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +34,9 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer, TranslatorInterface $translator): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger, AntiBots $antibots): Response
     {
+        $checkTime = true;
         $user = new User();
         $profile = new Profile();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -41,6 +44,57 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (true === $form['agreeTerms']->getData()) {
+                $token = $request->request->get('registration_form')['_token'];
+                
+                //~ AntiBots
+                if($_SERVER['ANTI_SPAM']){
+                    $referer = $request->get('_target_path');
+                    $checkReferer = $antibots->checkReferer($referer);
+                    
+                    $time = $request->get('_checkT');
+
+                    if($time <= $_SERVER['TIME_NOT_BOT']){
+                        $checkTime = false;
+                    }
+
+                    if($checkReferer == false || $checkTime == false){
+                        $logger->error("Problème pour l'inscription de cet utilisateur pris pour un.e bot.e : ");
+                        $this->addFlash('error', 'Votre inscription est impossible pour le moment.');
+
+                        return $this->render('registration/register.html.twig', [
+                            'registrationForm' => $form->createView(),
+                        ]);
+                    }
+                }
+                
+                if($_SERVER['SEND_LOG_SPAM'] || ($checkReferer == false || $checkTime == false) ){
+                    $emailLogAdmin = (new TemplatedEmail())
+                        ->from(new Address('share@garden-exchange.org', 'Garden Exchange Tech Mail'))
+                        ->to(new Address('tech@garden-exchange.org', 'Garden Exchange Tech Mail'))
+                        //->cc('cc@example.com')
+                        //->replyTo('fabien@example.com')
+                        //->priority(Email::PRIORITY_HIGH)
+                        ->subject($translator->trans('email.inscription'))
+                        // path of the Twig template to render
+                        ->htmlTemplate('emails/admin/signup_admin.html.twig')
+
+                        // pass variables (name => value) to the template
+                        ->context([
+                            'expiration_date' => new \DateTime('+7 days'),
+                            'username' => $user->getUsername(),
+                            'referer' => $referer,
+                            'time' => $time,
+                            'token' => $token,
+                        ]);
+
+                    try {
+                        $mailer->send($emailLogAdmin);
+                    } catch (TransportExceptionInterface $e) {
+                        // some error prevented the email sending; display an
+                        // error message or try to resend the message
+                    }
+                }
+                
                 $firstName = $form->get('firstname')->getData();
                 $lastName = $form->get('lastname')->getData();
                 $email = $form->get('email')->getData();
@@ -68,7 +122,7 @@ class RegistrationController extends AbstractController
                 $this->get('security.token_storage')->setToken($token);
 
                 $emailRegistration = (new TemplatedEmail())
-                    ->from('share@garden-exchange.org')
+                    ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
                     ->to($email)
                     //->cc('cc@example.com')
                     ->bcc('share@garden-exchange.org')

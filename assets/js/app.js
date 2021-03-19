@@ -116,4 +116,12 @@ $(document).ready( function(){
     
     $('#joinModal').modal('show');
     
+    function myTimer() {
+      var d = $('.checkT').val();
+      $('.checkT').val(parseInt(d)+1);
+    }
+    $('.formulaire-registration, .form-contact').find('.checkT').each( function(){
+        var myVar = setInterval(myTimer ,1000);
+    });
+    
 });

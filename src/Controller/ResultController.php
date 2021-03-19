@@ -34,7 +34,7 @@ class ResultController extends AbstractController
         $allGardens = $gardens->findAllGardensEnabled();
         $langs = $countries->findAllCountriesEnabled();
         $where = '';
-        dump($allGardens);
+        //~ dump($allGardens);
         $form = $this->createForm(SimpleSearchType::class);
         $form->handleRequest($request);
 

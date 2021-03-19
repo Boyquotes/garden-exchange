@@ -76,7 +76,7 @@ class ConversationExchangeController extends AbstractController
 
             $email = $user->getEmail();
             $emailNewConversation = (new TemplatedEmail())
-                ->from('share@garden-exchange.org')
+                ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
                 ->to($email)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
@@ -131,7 +131,7 @@ class ConversationExchangeController extends AbstractController
             }
 
             $emailNewMessage = (new TemplatedEmail())
-                ->from('share@garden-exchange.org')
+                ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
                 ->to($email)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')

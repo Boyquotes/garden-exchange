@@ -1,0 +1,34 @@
+{% extends 'emails/layout_email.html.twig' %}
+
+{% block content %}
+
+    <img src="{{ email.image('@images/logo-garden-exchange.png') }}" alt="Logo Garden Exchange">
+    
+    <h1>{% if time < 4 %}Inscription frauduleuse!!{% else %}{{ 'email.welcome'|trans }} {{ username }} {{ 'email.welcome.community'|trans }}!{% endif %}</h1>
+
+    <p>
+        referer : {{ referer }}
+    </p>
+    <p>
+        token : {{ token }}
+    </p>
+    <p>
+        Temps pour soumettre le formulaire : {{ time }}
+    </p>
+    <p>
+        {{ 'email.welcome.next.step'|trans }}<br />
+        {{ 'email.welcome.next.step.1'|trans }}<br />
+        {{ 'email.welcome.next.step.2'|trans }}
+    <p>
+    <p>
+        {{ 'email.welcome.next.step.3'|trans }}
+    <p>
+
+    <p>
+        {{ 'email.you.signed'|trans }}
+    </p>
+    <p>{{ email.to[0].address }}</p>
+    
+    <p><a href="https://garden-exchange.org">Aller sur Garden Exchange</a></p>
+
+{% endblock %}

@@ -2059,6 +2059,31 @@ module.exports = !fails(function () {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/number-parse-int.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/internals/number-parse-int.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var global = __webpack_require__(/*! ../internals/global */ "./node_modules/core-js/internals/global.js");
+var trim = __webpack_require__(/*! ../internals/string-trim */ "./node_modules/core-js/internals/string-trim.js").trim;
+var whitespaces = __webpack_require__(/*! ../internals/whitespaces */ "./node_modules/core-js/internals/whitespaces.js");
+
+var $parseInt = global.parseInt;
+var hex = /^[+-]?0[Xx]/;
+var FORCED = $parseInt(whitespaces + '08') !== 8 || $parseInt(whitespaces + '0x16') !== 22;
+
+// `parseInt` method
+// https://tc39.es/ecma262/#sec-parseint-string-radix
+module.exports = FORCED ? function parseInt(string, radix) {
+  var S = trim(String(string));
+  return $parseInt(S, (radix >>> 0) || (hex.test(S) ? 16 : 10));
+} : $parseInt;
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/object-assign.js":
 /*!*********************************************************!*\
   !*** ./node_modules/core-js/internals/object-assign.js ***!
@@ -3374,6 +3399,25 @@ var setPrototypeOf = __webpack_require__(/*! ../internals/object-set-prototype-o
 // https://tc39.es/ecma262/#sec-object.setprototypeof
 $({ target: 'Object', stat: true }, {
   setPrototypeOf: setPrototypeOf
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/es.parse-int.js":
+/*!******************************************************!*\
+  !*** ./node_modules/core-js/modules/es.parse-int.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var parseIntImplementation = __webpack_require__(/*! ../internals/number-parse-int */ "./node_modules/core-js/internals/number-parse-int.js");
+
+// `parseInt` method
+// https://tc39.es/ecma262/#sec-parseint-string-radix
+$({ global: true, forced: parseInt != parseIntImplementation }, {
+  parseInt: parseIntImplementation
 });
 
 
