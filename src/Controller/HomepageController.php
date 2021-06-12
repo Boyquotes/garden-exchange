@@ -33,7 +33,6 @@ class HomepageController extends AbstractController
         $allGardens = $gardens->findAll();
         $encartPosts = $posts->findThreeFisrt();
         $introPost = $posts->findIntro();
-        $nuiteesPost = $posts->findNuitees();
 
         $form = $this->createForm(SimpleSearchType::class);
         $form->handleRequest($request);
@@ -48,7 +47,6 @@ class HomepageController extends AbstractController
             'allGardens' => $allGardens,
             'encartPosts' => $encartPosts,
             'introPost' => $introPost,
-            'nuiteesPost' => $nuiteesPost,
         ]);
     }
 

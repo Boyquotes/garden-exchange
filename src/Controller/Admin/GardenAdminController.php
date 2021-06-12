@@ -15,6 +15,7 @@ use App\Entity\GardenImage;
 use App\Form\GardenType;
 use App\Repository\GardenRepository;
 use App\Security\GardenVoter;
+use App\Utils\Nigth;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -25,6 +26,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -311,7 +313,7 @@ class GardenAdminController extends AbstractController
     /**
      * @Route("/{id}/publish", name="publish_garden", methods={"POST"})
      */
-    public function publishGarden(Request $request, MailerInterface $mailer, TranslatorInterface $translator, Garden $garden){
+    public function publishGarden(Request $request, MailerInterface $mailer, TranslatorInterface $translator, Garden $garden, Nigth $nigth){
         $token = $request->request->get('_token');
         $user = $this->getUser();
         
@@ -351,6 +353,7 @@ class GardenAdminController extends AbstractController
                 // error message or try to resend the message
             }
 
+            $nigth->addProfilNight($user, '1', 'garden_profil_ok', 'available');
 
             $routeReload = array( '#garden'.$garden->getId() => $this->generateUrl( 'actions_garden', array('id' => $garden->getId()) ) );
             $response = array(

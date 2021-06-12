@@ -9,7 +9,15 @@
     <div class="col-md-3">
         {{ include('garden/_garden_result.html.twig') }}
     </div>
-    <div class="col-md-9">
-        {{ include('admin/conversation_exchange/_form_conversation.html.twig') }}
-    </div>
+    
+    {% if ( app.user.profile.emailVerified or app.user.profile.phoneVerified or app.user.profile.identityVerified) is not empty%}
+        <div class="col-md-9">
+            {{ include('admin/conversation_exchange/_form_conversation.html.twig') }}
+        </div>
+    {% else %}
+        <div class="col-md-9">
+            Vous devez avoir votre compte activé pour pouvoir contacter ce membre.
+            {{ include('user/confirmation_email.html.twig') }}
+        </div>
+    {% endif %}
 {% endblock %}

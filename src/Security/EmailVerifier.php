@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Utils\Nigth;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,11 +18,12 @@ class EmailVerifier
     private $mailer;
     private $entityManager;
 
-    public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer, EntityManagerInterface $manager)
+    public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer, EntityManagerInterface $manager, Nigth $nigth)
     {
         $this->verifyEmailHelper = $helper;
         $this->mailer = $mailer;
         $this->entityManager = $manager;
+        $this->nigth = $nigth;
     }
 
     public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void
@@ -53,5 +56,8 @@ class EmailVerifier
         $profile->setEmailVerified(true);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+        
+        $this->nigth->addProfilNight($user, '1', 'newCamper', 'available');
+        
     }
 }

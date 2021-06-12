@@ -54,7 +54,7 @@
 
             <trans-unit id="title.homepage">
                 <source>title.homepage</source>
-                <target><![CDATA[The community to camp alternatively]]></target>
+                <target><![CDATA[Another way to camp, with simplicity]]></target>
             </trans-unit>
             <trans-unit id="title.source_code">
                 <source>title.source_code</source>
@@ -561,6 +561,10 @@
                 <source>nb.photos.mandatory.for.publication</source>
                 <target>You must add at least 1 garden photo</target>
             </trans-unit>
+            <trans-unit id="profil.not.verified.for.publication">
+                <source>profil.not.verified.for.publication</source>
+                <target>Votre compte doit etre vérifié(regardé le lien dans votre mail d'inscription) avant de pouvoir publier cette annonce</target>
+            </trans-unit>
             <trans-unit id="garden_incomplete">
                 <source>garden_incomplete</source>
                 <target>Offline</target>
@@ -983,8 +987,8 @@
                 <source>close</source>
                 <target>Fermer</target>
             </trans-unit>
-            <trans-unit id="no_garden_near_modal">
-                <source>no_garden_near_modal</source>
+            <trans-unit id="no.garden.near.modal">
+                <source>no.garden.near.modal</source>
                 <target>Pas encore de jardin dans le secteur...flûte!</target>
             </trans-unit>
             <trans-unit id="solution_no_garden_modal">
@@ -1022,6 +1026,14 @@
             <trans-unit id="mail.confirmation.explication.confirm.email">
                 <source>mail.confirmation.explication.confirm.email</source>
                 <target>Please confirm your email address by clicking the following link:</target>
+            </trans-unit>
+            <trans-unit id="resend.verification.mail">
+                <source>resend.verification.mail</source>
+                <target>Send you a new email verification link</target>
+            </trans-unit>
+            <trans-unit id="notice.verification.mail.mandatory">
+                <source>notice.verification.mail.mandatory</source>
+                <target>Votre compte m'est pas encore verifié, cliquez sur le lien contenu dans le mail qui vous a été envoyé lors de votre inscription, vous n'avez pas reçu ce mail ?</target>
             </trans-unit>
         </body>
     </file>

@@ -720,6 +720,7 @@ a.index-content-conversation{
 .users-list{
     display: flex;
     flex-direction: column;
+    border: 1px solid #DDD;
 }
 .user-list:hover{
     background: #dadada;
@@ -753,6 +754,13 @@ a.index-content-conversation{
 .profile-view-description{
     width: 80%;
     margin: 4em auto;
+}
+.contact-verified .btn{
+    cursor: auto;
+}
+.contact-verified .btn-warning:hover{
+    background: #F39C12;
+    border-color: #F39C12;
 }
 
 /* Homepage   ------------------------------------------------------------------------- */
@@ -794,9 +802,7 @@ a.index-content-conversation{
     text-align: center;
 }
 .homepage-intro{
-    padding: 2em 0em;
-}
-.homepage-intro{
+    padding: .5em 0em;
     font-size: 1.5em;
 }
 .homepage-encart{
@@ -826,7 +832,7 @@ a.index-content-conversation{
 .homepage-video{
     background: rgba(0, 0, 0, 0.2);
     font-size: 1.5em;
-    padding: 0 0 0 0;
+    padding: 2em 0; 
 }
 .homepage-central-links{
     margin: 3em 0 0 0;
@@ -958,7 +964,7 @@ gardensCarte{
     text-align: center;
 }
 .contact{
-    position: sticky;
+    position: fixed;
     top: 100px;
     margin: 100px 0 0 0;
     float: right;
@@ -1198,4 +1204,12 @@ footer p {
 p, ul, ol {
     font-size: 1em;
 }
-
+/* NOTIFICATION   ------------------------------------------------------------------------- */
+.notification{
+    width: 100%;
+    background: #59F;
+    color: #FFF;
+    padding: 2rem;
+    font-size: 2rem;
+    font-weight: bold;
+}

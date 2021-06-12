@@ -91,7 +91,7 @@ function initAjaxPost(){
                         $.each( msg.route, function( key, value ) {
                             $.ajax({
                               url: value,
-                              method: 'POST'
+                              method: 'GET'
                             })
                             .done(function(data) {
                                 $(key).html(data);
@@ -117,7 +117,7 @@ function initAjaxPost(){
                         $.each( msg.route, function( key, value ) {
                             $.ajax({
                               url: value,
-                              method: 'POST'
+                              method: 'GET'
                             })
                             .done(function(data) {
                                 $(key).html(data);
@@ -396,6 +396,18 @@ $(document).ready( function(){
             initAjaxDelete('.modal-footer');
         });
         $('#baseModal').modal('show');
+    });
+    
+    $('#main').find('.ajaxLink').click(function () {
+        // requete ajax
+        var urlAction = $(this).attr('data-action');
+        $.ajax({
+          url: urlAction,
+          method: 'GET'
+        })
+        .done(function(data) {
+            $('.notification').html(data.success);
+        });
     });
     
 });

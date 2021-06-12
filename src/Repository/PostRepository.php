@@ -57,18 +57,6 @@ class PostRepository extends ServiceEntityRepository
         
         return $resultat;
     }
-    
-    public function findNuitees()
-    {
-        $qb = $this->createQueryBuilder('p')
-            ->setFirstResult(4)
-            ->setMaxResults(1)
-        ;
-        $query = $qb->getQuery();
-        $resultat = $query->getResult();
-        
-        return $resultat;
-    }
 
     /**
      * @return Post[]

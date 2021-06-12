@@ -491,7 +491,7 @@ class Garden
 
     /**
      * @param string $status
-     * @return GroupItem
+     * @return Garden
      */
     public function setStatus($status)
     {

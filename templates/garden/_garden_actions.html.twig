@@ -11,7 +11,7 @@
             <i class="fa fa-times" aria-hidden="true"></i> {{ 'action.offline_garden'|trans }}
         </a>
     {% else %}
-        {% if garden.description|length > 50 %}
+        {% if garden.description|length > 50 and ( app.user.isVerified == true ) %}
             <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('publish_garden', {id: garden.id}) }}" data-post data-element="garden" data-classes="btn-success|btn-danger" data-token="{{ csrf_token('publish' ~ garden.id )}}" class="btn btn-sm btn-success garden{{garden.id}}">
                 <i class="fa fa-power-off" aria-hidden="true"></i> {{ 'action.publish_garden'|trans }}
             </a>
@@ -25,6 +25,9 @@
             {% endif %}
             {% if garden.latCity is null %}
                 <div class="helperPublish">{{ 'garden.not.geolocalised.for.publication'|trans }}</div>
+            {% endif %}
+            {% if app.user.isVerified == false %}
+                <div class="helperPublish">{{ 'profil.not.verified.for.publication'|trans }}</div>
             {% endif %}
         {% endif %}
     {% endif %}

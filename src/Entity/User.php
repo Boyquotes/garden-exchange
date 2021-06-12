@@ -108,17 +108,17 @@ class User implements UserInterface, \Serializable
     private $profile;
 
     /**
-     * @ORM\OneToMany(targetEntity=MessageExchange::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=MessageExchange::class, mappedBy="user", cascade={"remove"})
      */
     private $messageExchanges;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="host", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="host", fetch="EAGER", cascade={"remove"})
      */
     private $conversationExchanges;
 
     /**
-     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="camper")
+     * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="camper", cascade={"remove"})
      */
     private $conversationCamperExchanges;
 
@@ -138,6 +138,11 @@ class User implements UserInterface, \Serializable
     private $posts;
 
     /**
+     * @ORM\OneToMany(targetEntity=ProfilNight::class, mappedBy="user", fetch="EAGER")
+     */
+    private $profilNights;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
@@ -149,6 +154,7 @@ class User implements UserInterface, \Serializable
         $this->conversationExchanges = new ArrayCollection();
         $this->conversationCamperExchanges = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->profilNights = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -449,6 +455,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($conversationCamperExchange->getCamper() === $this) {
                 $conversationCamperExchange->setCamper(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProfilNight[]
+     */
+    public function getProfilNights(): Collection
+    {
+        return $this->profilNights;
+    }
+
+    public function addProfilNights(ProfilNight $profilNights): self
+    {
+        if (!$this->profilNights->contains($profilNights)) {
+            $this->profilNights[] = $profilNights;
+            $profilNights->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfilNights(ProfilNight $profilNights): self
+    {
+        if ($this->profilNights->contains($profilNights)) {
+            $this->profilNights->removeElement($profilNights);
+            // set the owning side to null (unless already changed)
+            if ($profilNights->getUser() === $this) {
+                $profilNights->setUser(null);
             }
         }
 

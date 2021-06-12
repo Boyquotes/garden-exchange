@@ -1,0 +1,6 @@
+<div class="notification notificationCheckEmail">
+    {{ 'notice.verification.mail.mandatory'|trans }}
+    <button type="button" class="btn btn-primary ajaxLink" id="btnCheckEmail" data-action="{{ path('resend_verification_mail')}}">
+        <i class="fa fa-envelope" aria-hidden="true"></i> {{ 'resend.verification.mail'|trans }}
+    </button>
+</div>

@@ -36,14 +36,6 @@
                 <div><i class="fa fa-user" aria-hidden="true"></i> {{ 'see.profile'|trans }}</div>
             </a>
         </div>
-        <div class="contact-verified d-flex">
-            <a href="#" class="btn btn-lg btn-warning">
-                <div>{% if ( garden.user.profile.emailVerified or garden.user.profile.phoneVerified or garden.user.profile.identityVerified) is not empty%}<span>{{ 'verified.member'|trans }}{% else %}{{ 'new.member'|trans }}{% endif %} :</span></div>
-                <div>{% if garden.user.profile.emailVerified %}{{ 'verified.email.member'|trans }}{% else %}{{ 'not.verified.email.member'|trans }}{% endif %}</div>
-                <div>{% if garden.user.profile.phoneVerified %}{{ 'verified.phone.member'|trans }}{% else %}{{ 'not.verified.phone.member'|trans }}{% endif %}</div>
-                <div>{% if garden.user.profile.identityVerified %}{{ 'verified.identity.member'|trans }}{% else %}{{ 'not.verified.identity.member'|trans }}{% endif %}</div>
-            </a>
-        </div>
     </div>
 
     <div class="contact is-hidden-desktop">
@@ -63,14 +55,6 @@
         <div class="contact-profile">
             <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}" class="btn btn-lg btn-warning">
                 <div><i class="fa fa-user" aria-hidden="true"></i> {{ 'see.profile'|trans }}</div>
-            </a>
-        </div>
-        <div class="contact-verified">
-            <a href="#" class="btn btn-lg btn-warning">
-                <div>{% if ( garden.user.profile.emailVerified or garden.user.profile.phoneVerified or garden.user.profile.identityVerified) is not empty%}<span>{{ 'verified.member'|trans }}{% else %}{{ 'new.member'|trans }}{% endif %} :</span></div>
-                <div>{% if garden.user.profile.emailVerified %}{{ 'verified.email.member'|trans }}{% else %}{{ 'not.verified.email.member'|trans }}{% endif %}</div>
-                <div>{% if garden.user.profile.phoneVerified %}{{ 'verified.phone.member'|trans }}{% else %}{{ 'not.verified.phone.member'|trans }}{% endif %}</div>
-                <div>{% if garden.user.profile.identityVerified %}{{ 'verified.identity.member'|trans }}{% else %}{{ 'not.verified.identity.member'|trans }}{% endif %}</div>
             </a>
         </div>
     </div>

@@ -351,7 +351,29 @@ class Profile
 
         return $this;
     }
+
+    public function getNumberByStatusNight($profilNights, $status){
+        $nightAvailable = 0;
+        foreach($profilNights as $profilNight){
+            dump($profilNight->getStatus());
+            if($profilNight->getStatus() == $status){
+                $nightAvailable++;
+            }
+        }
+        return $nightAvailable;
+    }
     
+
+    public function getNumberTypeNight($profilNights, $type){
+        $nightAvailable = 0;
+        foreach($profilNights as $profilNight){
+            dump($profilNight->getStatus());
+            if($profilNight->getStatus() == $type){
+                $nightAvailable++;
+            }
+        }
+        return $nightAvailable;
+    }
     /**
      * Gets triggered only on insert
      * @ORM\PrePersist

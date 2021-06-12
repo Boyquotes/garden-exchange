@@ -427,6 +427,16 @@ $(document).ready(function () {
     });
     $('#baseModal').modal('show');
   });
+  $('#main').find('.ajaxLink').click(function () {
+    // requete ajax
+    var urlAction = $(this).attr('data-action');
+    $.ajax({
+      url: urlAction,
+      method: 'GET'
+    }).done(function (data) {
+      $('.notification').html(data.success);
+    });
+  });
 });
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 

@@ -98,3 +98,9 @@ hr{
 .hidden{
     display: none;
 }
+.notAlink{
+    cursor: auto;
+}
+.navbar-default .navbar-nav > li > a.notAlink:hover{
+    background: #FFF;
+}

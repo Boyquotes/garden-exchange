@@ -54,7 +54,7 @@
 
             <trans-unit id="title.homepage">
                 <source>title.homepage</source>
-                <target><![CDATA[La communauté pour camper autrement]]></target>
+                <target><![CDATA[Pour camper autrement, en toute simplicité]]></target>
             </trans-unit>
             <trans-unit id="title.source_code">
                 <source>title.source_code</source>
@@ -485,6 +485,10 @@
                 <source>menu.garden_list</source>
                 <target>Vos jardins</target>
             </trans-unit>
+            <trans-unit id="title.night">
+                <source>title.night</source>
+                <target>nuitée(s) disponible</target>
+            </trans-unit>
             <trans-unit id="title.garden_list">
                 <source>title.garden_list</source>
                 <target>Vos annonces</target>
@@ -560,6 +564,10 @@
             <trans-unit id="nb.photos.mandatory.for.publication">
                 <source>nb.photos.mandatory.for.publication</source>
                 <target>Vous devez avoir au moins 2 photos afin de pouvoir publier votre annonce</target>
+            </trans-unit>
+            <trans-unit id="profil.not.verified.for.publication">
+                <source>profil.not.verified.for.publication</source>
+                <target>Votre compte doit etre vérifié(regardé le lien dans votre mail d'inscription) avant de pouvoir publier cette annonce</target>
             </trans-unit>
             <trans-unit id="garden_incomplete">
                 <source>garden_incomplete</source>
@@ -983,8 +991,8 @@
                 <source>close</source>
                 <target>Fermer</target>
             </trans-unit>
-            <trans-unit id="no_garden_near_modal">
-                <source>no_garden_near_modal</source>
+            <trans-unit id="no.garden.near.modal">
+                <source>no.garden.near.modal</source>
                 <target>Pas encore de jardin dans le secteur...flûte!</target>
             </trans-unit>
             <trans-unit id="solution_no_garden_modal">
@@ -1026,6 +1034,30 @@
             <trans-unit id="camper.link.verified">
                 <source>camper.link.verified</source>
                 <target>Lien verifié</target>
+            </trans-unit>
+            <trans-unit id="resend.verification.mail">
+                <source>resend.verification.mail</source>
+                <target>Renvoyer le mail de vérification</target>
+            </trans-unit>
+            <trans-unit id="resend.mail.verification.email.user">
+                <source>resend.mail.verification.email.user</source>
+                <target>Regardez dans votre boite mail, un lien pour vérifier votre compte vous y attends</target>
+            </trans-unit>
+            <trans-unit id="notice.verification.mail.mandatory">
+                <source>notice.verification.mail.mandatory</source>
+                <target>Votre compte m'est pas encore verifié, cliquez sur le lien contenu dans le mail qui vous a été envoyé lors de votre inscription, vous n'avez pas reçu ce mail ?</target>
+            </trans-unit>
+            <trans-unit id="camper.delete.popup">
+                <source>camper.delete.popup</source>
+                <target>Supprimer ce camper</target>
+            </trans-unit>
+            <trans-unit id="camper.delete">
+                <source>camper.delete</source>
+                <target>Supprimer ce compte</target>
+            </trans-unit>
+            <trans-unit id="camper.all.delete">
+                <source>camper.all.delete</source>
+                <target>Supprimer le compte et ces annonces</target>
             </trans-unit>
         </body>
     </file>

@@ -5,7 +5,10 @@
 {% block class_body %}col-md-10 col-md-offset-1{% endblock %}
 
 {% block main %}
-    <h1>{% if is_granted('ROLE_ADMIN') %}{{ conversation_exchange.id }}{% endif %} {{ 'message.conversation.with'|trans }} {{ conversation_exchange.camper.firstname }} {{ 'conversation.garden.at'|trans }} {{ conversation_exchange.garden.city }}</h1>
+    <h1>
+        {% if is_granted('ROLE_ADMIN') %}#{{ conversation_exchange.id }}.{% endif %}
+        {{ 'message.conversation.with'|trans }} {{ conversation_exchange.camper.firstname }} {{ 'conversation.garden.at'|trans }} {{ conversation_exchange.garden.city }} <a href="{{ path('admin_garden_show', {id: conversation_exchange.garden.id}) }}" >Voir le jardin</a>
+    </h1>
     {% for image in conversation_exchange.garden.gardenImages %}
         {% if loop.index == 1 %}
             <div class="image{{image.id}} first-photo col-md-12">
@@ -60,11 +63,21 @@
             </div>
         {% endfor %}
     </div>
-    <div class="tchat">
-        {{ include('admin/message/_form_message.html.twig') }}
-    </div>
-    <div>
-        <a href="javascript:void(0);" data-id="{{ conversation_exchange.id }}" data-action="{{ path('garden_exchange_accepted', {conversationExchangeId: conversation_exchange.id})}}" data-post data-token="{{ csrf_token('acceptedExchange' ~ conversation_exchange.id )}}" data-element="conversationExchange" class="btn btn-sm btn-primary">Accepter l'echange</a>
-    </div>
+
+    {% if ( app.user.profile.emailVerified or app.user.profile.phoneVerified or app.user.profile.identityVerified) is not empty%}
+        <div class="tchat">
+            {{ include('admin/message/_form_message.html.twig') }}
+        </div>
+
+        <div>
+            <a href="javascript:void(0);" data-id="{{ conversation_exchange.id }}" data-action="{{ path('garden_exchange_accepted', {conversationExchangeId: conversation_exchange.id})}}" data-post data-token="{{ csrf_token('acceptedExchange' ~ conversation_exchange.id )}}" data-element="conversationExchange" class="btn btn-sm btn-primary">Accepter le bivouac</a>
+        </div>
+
+    {% else %}
+        <div class="tchat">
+            Vous devez avoir votre compte activé pour pouvoir contacter ce membre ou accepter le bivouac.
+            {{ include('user/confirmation_email.html.twig') }}
+        </div>
+    {% endif %}
 
 {% endblock %}

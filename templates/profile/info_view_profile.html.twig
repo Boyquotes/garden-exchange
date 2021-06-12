@@ -5,72 +5,88 @@
 {% block class_body %}col-md-10 col-md-offset-1{% endblock %}
 
 {% block main %}
-    <h1>{{ 'title.info.profile'|trans }}</h1>
+    <h1>{{ 'title.info.profile'|trans }} :</h1>
     {% if app.user == profile.user %}
         <a href="{{ path('user_profile_info_edit', {id: profile.id}) }}" class="btn btn-sm btn-primary">
             <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
         </a>
     {% endif %}
-    <div class="profile-view-photo-name d-flex">
-        {% if profile.profileImage is not null %}
-            <div class="img-profile-view">
-                <img src="{{ asset('/uploads/profiles/'~profile.profileImage) }}" alt='{{ profile.user.firstname }}' />
-            </div>
-        {% endif %}
-        <div class="profile-view-name">
-            {{ profile.user.firstname }}
-        </div>
-        {% if profile.langs|length > 0 %}
-            <div class="profile-view-langs">
-                <h2>{{ 'label.profil.langs'|trans }}</h2>
-                {% for lang in profile.langs %}
-                    {{ lang }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    {% if profile.description != '' %}
-        <h2>{{ 'Description'|trans }} :</h2>
-        <div class="profile-view-description">
-            {{ profile.description }}
-        </div>
-    {% endif %}
-    {% if profile.campingTypes|length > 0 %}
-        <h2>Campe en :</h2>
-        <div class="campingTypes-garden-listing">
-            {% for campingType in profile.campingTypes %}
-                <div class="campingType_choice campingType_selected">
-                    <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    {% if profile.user.gardens|length > 0 %}
-        {% if app.user == profile.user %}
-            <h2>{% if profile.user.gardens|length == 1 %}Votre annonce{% else %}Vos annonces{% endif%} :</h2>
-        {% else %}
-            <h2>{% if profile.user.gardens|length == 1 %}Son annonce{% else %}Ses annonces{% endif%} :</h2>
-        {% endif %}
-        <div class="profile-garden-listing">
-            {% for garden in profile.user.gardens %}
-                {% if garden.enabled %}
-                    <div class="col-md-6">
-                        {{ include('garden/_garden_result.html.twig') }}
+    
+    <div class="d-flex">
+        <div class="col-md-6">
+            <div class="profile-view-photo-name d-flex">
+                {% if profile.profileImage is not null %}
+                    <div class="img-profile-view">
+                        <img src="{{ asset('/uploads/profiles/'~profile.profileImage) }}" alt='{{ profile.user.firstname }}' />
                     </div>
-                {% else %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <div class="col-md-6">
-                            ADMIN {{ include('garden/_garden_result.html.twig') }}
-                        </div>
-                    {% else %}
-                        <div class="col-md-6">
-                            {{ 'annonce.offline'|trans }}{% if app.user == profile.user %} <a href="{{ path('admin_garden_index') }}">{{ 'edit.garden'|trans }}</a>{% endif %}
-                        </div>
-                    {% endif %}
                 {% endif %}
-            {% endfor %}
+                <div class="profile-view-name">
+                    {{ profile.user.firstname }}
+                </div>
+                {% if profile.langs|length > 0 %}
+                    <div class="profile-view-langs">
+                        <h2>{{ 'label.profil.langs'|trans }}</h2>
+                        {% for lang in profile.langs %}
+                            {{ lang }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="contact-verified d-flex">
+                <div class="btn btn-lg btn-warning">
+                    <div>{% if ( profile.emailVerified or profile.phoneVerified or profile.identityVerified) is not empty%}<span>{{ 'verified.member'|trans }}{% else %}{{ 'new.member'|trans }}{% endif %} :</span></div>
+                    <div>{% if profile.emailVerified %}{{ 'verified.email.member'|trans }}{% else %}{{ 'not.verified.email.member'|trans }}{% endif %}</div>
+                    <div>{% if profile.phoneVerified %}{{ 'verified.phone.member'|trans }}{% else %}{{ 'not.verified.phone.member'|trans }}{% endif %}</div>
+                    <div>{% if profile.identityVerified %}{{ 'verified.identity.member'|trans }}{% else %}{{ 'not.verified.identity.member'|trans }}{% endif %}</div>
+                </div>
+            </div>
         </div>
-    {% endif %}
+        
+        <div class="col-md-6">
+            {% if profile.description != '' %}
+                <h2>{{ 'Description'|trans }} :</h2>
+                <div class="profile-view-description">
+                    {{ profile.description }}
+                </div>
+            {% endif %}
+            
+            {% if profile.campingTypes|length > 0 %}
+                <h2>Campe en :</h2>
+                <div class="campingTypes-garden-listing">
+                    {% for campingType in profile.campingTypes %}
+                        <div class="campingType_choice campingType_selected">
+                            <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            {% if profile.user.gardens|length > 0 %}
+                {% if app.user == profile.user %}
+                    <h2>{% if profile.user.gardens|length == 1 %}Votre annonce{% else %}Vos annonces{% endif%} :</h2>
+                {% else %}
+                    <h2>{% if profile.user.gardens|length == 1 %}Son annonce{% else %}Ses annonces{% endif%} :</h2>
+                {% endif %}
+                <div class="profile-garden-listing">
+                    <div class="col-md-12 d-flex">
+                    {% for garden in profile.user.gardens %}
+                        {% if garden.enabled %}
+                                {{ include('garden/_garden_result.html.twig') }}
+                        {% else %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                    {{ include('garden/_garden_result.html.twig') }}
+                            {% else %}
+                                    {{ 'annonce.offline'|trans }}{% if app.user == profile.user %} <a href="{{ path('admin_garden_index') }}">{{ 'edit.garden'|trans }}</a>{% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
     {% if is_granted('ROLE_ADMIN') %}
         <h2>Conversation(s) :</h2>
         <div class="profile-conversation-listing">
@@ -99,6 +115,23 @@
                         </div>
                 </div>
             {% endfor %}
+        </div>
+        <h2>Nuitée(s) :</h2>
+        <div class="night-listing">
+            {{ profile.user.profilNights|length }} nuitée(s) dont :
+            <ul>
+                <li>{{ profile.getNumberByStatusNight(profile.user.profilNights, 'available') }} disponible(s)</li>
+                <li>{{ profile.getNumberByStatusNight(profile.user.profilNights, 'suspended') }} retirée</li>
+                <li>{{ profile.getNumberByStatusNight(profile.user.profilNights, 'booked') }} en réservation</li>
+                <li>{{ profile.getNumberByStatusNight(profile.user.profilNights, 'in_use') }}  en cours d'utilisation</li>
+                <li>{{ profile.getNumberByStatusNight(profile.user.profilNights, 'used') }} deja utilisées</li>
+            </ul>
+            
+            <ul>
+                {% for profilNight in profile.user.profilNights %}
+                    <li>{{ profilNight.status}}:{{profilNight.type}}</li>
+                {% endfor %}
+            </ul>
         </div>
     {% endif %}
 {% endblock %}

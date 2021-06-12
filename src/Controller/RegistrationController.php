@@ -11,6 +11,7 @@ use App\Utils\AntiBots;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -46,12 +47,12 @@ class RegistrationController extends AbstractController
             if (true === $form['agreeTerms']->getData()) {
                 $token = $request->request->get('registration_form')['_token'];
                 
+                $time = $request->get('_checkT');
+                $referer = $request->get('_target_path');
+                
                 //~ AntiBots
                 if($_SERVER['ANTI_SPAM']){
-                    $referer = $request->get('_target_path');
                     $checkReferer = $antibots->checkReferer($referer);
-                    
-                    $time = $request->get('_checkT');
 
                     if($time <= $_SERVER['TIME_NOT_BOT']){
                         $checkTime = false;
@@ -186,5 +187,27 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'mail.verification.email.user');
 
         return $this->redirectToRoute('admin_index');
+    }
+
+    /**
+     * @Route("/resend/verify/email", name="resend_verification_mail")
+     */
+    public function resendVerificationMail(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
+    {
+        $user = $this->getUser();
+        // generate a signed url and email it to the user
+        $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            (new TemplatedEmail())
+                ->from(new Address('verify@garden-exchange.org', 'Garden Exchange'))
+                ->to($user->getEmail())
+                ->bcc('share@garden-exchange.org')
+                ->subject($translator->trans('mail.confirm.subject'))
+                ->htmlTemplate('registration/confirmation_email.html.twig')
+        );
+
+        // @TODO Change the redirect on success and handle or remove the flash message in your templates
+        //~ $this->addFlash('success', 'resend.mail.verification.email.user');
+
+        return new JsonResponse(['success' => $translator->trans('resend.mail.verification.email.user')]);
     }
 }

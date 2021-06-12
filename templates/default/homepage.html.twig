@@ -50,7 +50,7 @@
                         Tranquille
                     </div>
                     <div class="homepage-encart-content">
-                        <p>Les échanges vous permettent de profiter seul du jardin de votre hôte.</p>
+                        <p>Profitez de façon privative du jardin de votre hôte.</p>
                     </div>
                 </div>
                 <div class="col-sm-3 step">
@@ -58,7 +58,7 @@
                         Sûr
                     </div>
                     <div class="homepage-encart-content">
-                        <p>Avant votre premier échange, chaque membre de la communauté est vérifié : email, téléphone, papiers de propriétés et d'identités.</p>
+                        <p>Chaque membre de la communauté est vérifié : email, téléphone, papiers de propriétés et/ou d'identités.</p>
                     </div>
                 </div>
                 <div class="col-sm-3 step">
@@ -66,7 +66,7 @@
                         Economique
                     </div>
                     <div class="homepage-encart-content">
-                        <p>L'abonnement annuel vous donne accès a un nombre d'échanges illimité, sans aucun coût supplémentaire.</p>
+                        <p>Totalement gratuit et pas d'abonnement à payer.</p>
                     </div>
                 </div>
         </div>
@@ -110,8 +110,7 @@
 
         <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
                 <div class="col-sm-8">
-                    <p>Entrez dans l'économie collaborative du camping entre particuliers grâce à cette offre de lancement :</p>
-                    <p>L'abonnement d'<b>1 an</b> est offert, échangez votre jardin toute l'année 2021 gratuitement.(Pas besoin de CB donc)</p>
+                    <p>Entrez dans l'économie collaborative du camping entre particuliers.</p>
                     <p>
                         <a href="{{ path('register') }}" class="btn btn-lg btn-success">
                             {{ 'user.want.register'|trans }}
@@ -122,23 +121,19 @@
         
         <div class="homepage-video col-sm-12 no-padding txt-center d-flex jc-space-around">
                 <div class="col-sm-8 is-hidden-mobile">
-                    <p>L'inscription ne prend que quelques minutes :</p>
-                        <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
+                    <p>
+                        L'inscription ne prend que 3 minutes.<br />
+                        Vidéo explicative : 
                     </p>
+                        <video  width="600" height="333" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
                 </div>
                 <div class="col-sm-8 is-hidden-desktop">
-                    <p>L'inscription ne prend que quelques minutes :</p>
-                        <video  width="400" height="222" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
+                    <p>
+                        L'inscription ne prend que 3 minutes.<br />
+                        Vidéo explicative : 
                     </p>
+                        <video  width="400" height="222" controls src="{{ asset('/uploads/videos/story_add_garden.webm') }}" poster="{{ asset('/uploads/images/story_add_garden.png') }}">Add a garden</video>
                 </div>
-        </div>
-
-        <div class="homepage-intro col-sm-12 no-padding txt-center d-flex jc-space-around">
-            {% for post in nuiteesPost %}
-                <div class="col-sm-8">
-                    {{ post.content|raw }}
-                </div>
-            {% endfor %}
         </div>
 
     </div>
