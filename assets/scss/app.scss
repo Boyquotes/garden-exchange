@@ -104,7 +104,9 @@ header .locales .active small,
 header .locales a:hover small {
   color: inherit;
 }
-
+.container {
+    max-width: none;
+}
 .body-container {
   flex: 1;
   /* needed to prevent pages with a very small height and browsers not supporting flex */
@@ -112,7 +114,7 @@ header .locales a:hover small {
 }
 
 .body-container #main h1, .body-container #main h2 {
-  margin-top: 0
+  margin-top: 3vh;
 }
 
 #sidebar .section {
@@ -498,6 +500,9 @@ header ul.nav li:hover {
 }
 .add-garden{
     background-color: $vert;
+    border-width: 3px;
+    border-radius: 10px;
+    border: none;
 }
 header ul.nav li.add-garden:hover {
     background-color: #FFF;
@@ -538,17 +543,19 @@ header ul.nav li.add-garden:hover {
 }
 .navbar-default .navbar-nav > li > a {
     border: 1px solid #FFF;
+
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-right ul li a:hover {
     /* border: 1px solid $liHover; */
 }
 .navbar-default .navbar-nav > li.add-garden > a {
     color: #FFF;
-    border: 1px solid $vert;
 }
 .navbar-default .navbar-nav > li.add-garden > a:hover {
     color: $vert;
     border: 1px solid $vert;
+    border-width: 1px;
+    border-radius: 10px;
 }
 form[name='simple_search']{
     display: flex;
@@ -612,6 +619,10 @@ body#admin_post_show .post-tags .label-default i {
     margin: 0;
     line-height: 2em;
 }
+.liste-errors{
+    width: 50%;
+    margin: 0 auto;
+    }
 /* Photos   ------------------------------------------------------------------------- */
 
 .image-upload{
@@ -752,8 +763,7 @@ a.index-content-conversation{
     float: right;
 }
 .profile-view-description{
-    width: 80%;
-    margin: 4em auto;
+    width: 60%;
 }
 .contact-verified .btn{
     cursor: auto;
@@ -762,7 +772,11 @@ a.index-content-conversation{
     background: #F39C12;
     border-color: #F39C12;
 }
-
+.profile-garden-listing{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
 /* Homepage   ------------------------------------------------------------------------- */
 #homepage .homedream-container{
     position: relative;
@@ -802,7 +816,7 @@ a.index-content-conversation{
     text-align: center;
 }
 .homepage-intro{
-    padding: .5em 0em;
+    padding: 1.5em 0em;
     font-size: 1.5em;
 }
 .homepage-encart{
@@ -1206,10 +1220,21 @@ p, ul, ol {
 }
 /* NOTIFICATION   ------------------------------------------------------------------------- */
 .notification{
-    width: 100%;
+    width: 80%;
     background: #59F;
     color: #FFF;
     padding: 2rem;
+    margin: 2rem;
     font-size: 2rem;
     font-weight: bold;
+}
+.notification p{
+    margin: 1rem;
+}
+/* VOS ANNONCES   ------------------------------------------------------------------------- */
+.carte-listings-no-annonce{
+    padding: 2rem;
+}
+.go-result{
+    padding: 2rem;
 }

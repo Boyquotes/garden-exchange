@@ -1,10 +1,4 @@
 <div class="row">
-        <div class="d-flex col-md-4 jc-space-between">
-            <div><h1>{{ 'title.garden_list'|trans }}</h1></div>
-            <div><a href="{{ path('admin_garden_new') }}" class="btn btn-success">{{'garden.new.another.one'|trans}}</a></div>
-        </div>
-</div>
-<div class="row">
     {% if app.user.profile.emailVerified == false %}
         {{ include('user/confirmation_email.html.twig') }}
     {% endif %}
@@ -58,18 +52,18 @@
         <div class="carte-listings col-md-6">
             {{ include('maps/_map_gardens_listing.html.twig' , { 'allGardens': allGardens }, with_context = false) }}
         </div>
-    {% else %}
-        <div class="col-md-10 col-md-offset-1">
-            <h1>{{ 'title.garden_list'|trans }}</h1>
-            <div class="carte-listings-no-annonce col-md-6 col-md-offset-3">
-                {{ 'no.annonce.warning'|trans }}
-                <div class="add-garden-and-result d-flex jc-center">
-                    <div>
-                        <a href="{{ path('admin_garden_new') }}" class="btn btn-success">{{'title.garden_new'|trans}}</a>
+        {% else %}
+            <div class="col-md-10 col-md-offset-1">
+                <h1>{{ 'title.garden_list'|trans }}</h1>
+                <div class="carte-listings-no-annonce col-md-6 col-md-offset-3">
+                    {{ 'no.annonce.warning'|trans }}
+                    <div class="add-garden-and-result d-flex jc-center">
+                        <div>
+                            <a href="{{ path('admin_garden_new') }}" class="btn btn-success">{{'garden.new.another.one'|trans}}</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
 
 </div>

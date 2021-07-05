@@ -20,12 +20,15 @@
                 </div>
                 <div class="form-group has-error error-lastname">
                     {{ form_errors(registrationForm.lastname) }}
-                </div>                
+                </div>
                 {{ form_row(registrationForm.firstname) }}
                 {{ form_row(registrationForm.email) }}
                 {{ form_row(registrationForm.password) }}
                 <div class="form-group d-flex">
-                    {{ form_widget(registrationForm.agreeTerms) }}<span>{{ 'label.agreeTerms'|trans }}<a href="{{ asset('/uploads/documents/CGU-Garden-exchange.pdf') }}" target="_blank" >{{ 'label.agreeTerms.cgu'|trans }}</a></span>
+                    <div class="form-group has-error error-agreeTerms">
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                    {{ form_widget(registrationForm.agreeTerms) }}<span>{{ 'label.agreeTerms'|trans }}<a href="{{ asset('/uploads/documents/CGU-Garden-bivouac.pdf') }}" target="_blank" >{{ 'label.agreeTerms.cgu'|trans }}</a></span>
                 </div>
                 
                 <input type="hidden" name="_target_path" value="{{ app.request.headers.get('host') }}"/>

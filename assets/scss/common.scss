@@ -101,6 +101,11 @@ hr{
 .notAlink{
     cursor: auto;
 }
+.navbar-default .navbar-nav > li > a.notAlink{
+    color: #FFF;
+    background: #303434;
+}
 .navbar-default .navbar-nav > li > a.notAlink:hover{
-    background: #FFF;
+    color: #FFF;
+    background: #303434;
 }

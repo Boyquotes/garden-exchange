@@ -120,7 +120,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\OneToMany(targetEntity=ConversationExchange::class, mappedBy="camper", cascade={"remove"})
      */
-    private $conversationCamperExchanges;
+    private $conversationCamperBivouacs;
 
     /**
      * @ORM\OneToMany(targetEntity=ResetPasswordRequest::class, mappedBy="user", orphanRemoval=true, cascade={"remove"}, fetch="EAGER")
@@ -152,7 +152,7 @@ class User implements UserInterface, \Serializable
         $this->gardens = new ArrayCollection();
         $this->messageExchanges = new ArrayCollection();
         $this->conversationExchanges = new ArrayCollection();
-        $this->conversationCamperExchanges = new ArrayCollection();
+        $this->conversationCamperBivouacs = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->profilNights = new ArrayCollection();
     }
@@ -433,28 +433,28 @@ class User implements UserInterface, \Serializable
     /**
      * @return Collection|ConversationExchange[]
      */
-    public function getConversationCamperExchanges(): Collection
+    public function getConversationCamperBivouacs(): Collection
     {
-        return $this->conversationCamperExchanges;
+        return $this->conversationCamperBivouacs;
     }
 
-    public function addConversationCamperExchange(ConversationExchange $conversationCamperExchange): self
+    public function addConversationCamperBivouac(ConversationExchange $conversationCamperBivouac): self
     {
-        if (!$this->conversationCamperExchanges->contains($conversationCamperExchange)) {
-            $this->conversationCamperExchanges[] = $conversationCamperExchange;
-            $conversationCamperExchange->setCamper($this);
+        if (!$this->conversationCamperBivouacs->contains($conversationCamperBivouac)) {
+            $this->conversationCamperBivouacs[] = $conversationCamperBivouac;
+            $conversationCamperBivouac->setCamper($this);
         }
 
         return $this;
     }
 
-    public function removeConversationCamperExchange(ConversationExchange $conversationCamperExchange): self
+    public function removeConversationCamperBivouac(ConversationExchange $conversationCamperBivouac): self
     {
-        if ($this->conversationCamperExchanges->contains($conversationCamperExchange)) {
-            $this->conversationCamperExchanges->removeElement($conversationCamperExchange);
+        if ($this->conversationCamperBivouacs->contains($conversationCamperBivouac)) {
+            $this->conversationCamperBivouacs->removeElement($conversationCamperBivouac);
             // set the owning side to null (unless already changed)
-            if ($conversationCamperExchange->getCamper() === $this) {
-                $conversationCamperExchange->setCamper(null);
+            if ($conversationCamperBivouac->getCamper() === $this) {
+                $conversationCamperBivouac->setCamper(null);
             }
         }
 

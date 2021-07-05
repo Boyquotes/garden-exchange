@@ -2,10 +2,15 @@
     <a href="{{ path('admin_garden_show', {id: garden.id}) }}" class="btn btn-sm btn-warning">
         <i class="fa fa-eye" aria-hidden="true"></i> {{ 'action.show'|trans }}
     </a>
-    <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}"" class="btn btn-sm btn-success">{{ 'see.profile'|trans }} ( {{ garden.user.fullname }} )</a>
-    <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">
-        <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
-    </a>
+    {% if app.user == garden.user %}
+        <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}"" class="btn btn-sm btn-success">{{ 'my.profile'|trans }}</a>
+        <a href="{{ path('admin_garden_edit', {id: garden.id}) }}" class="btn btn-sm btn-primary">
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit'|trans }}
+        </a>
+    {% else %}
+        <a href="{{ path('user_profile_info', {profileId:garden.user.profile.id}) }}"" class="btn btn-sm btn-success">{{ 'see.profile'|trans }} ( {{ garden.user.fullname }} )</a>
+    {% endif %}
+
     {% if garden.enabled %}
         <a href="javascript:void(0);" data-id="{{ garden.id }}" data-action="{{ path('put_offline_garden', {id: garden.id}) }}" data-post data-element="garden" data-classes="btn-danger|btn-success" data-token="{{ csrf_token('publish' ~ garden.id )}}" class="btn btn-sm btn-danger garden{{garden.id}}">
             <i class="fa fa-times" aria-hidden="true"></i> {{ 'action.offline_garden'|trans }}
@@ -20,16 +25,18 @@
                 <i class="fa fa-times" aria-hidden="true"></i> {{ 'garden_incomplete'|trans }}
             </a>
             <div>{{ 'garden.incomplete.because'|trans }}</div>
-            {% if garden.description|length < 50 %}
-                <div class="helperPublish">{{ 'nb.char.description.mandatory.for.publication'|trans }}</div>
-            {% endif %}
-            {% if garden.latCity is null %}
-                <div class="helperPublish">{{ 'garden.not.geolocalised.for.publication'|trans }}</div>
-            {% endif %}
-            {% if app.user.isVerified == false %}
-                <div class="helperPublish">{{ 'profil.not.verified.for.publication'|trans }}</div>
-            {% endif %}
+            <ul>
+                {% if garden.description|length < 50 %}
+                    <li class="helperPublish">{{ 'nb.char.description.mandatory.for.publication'|trans }}</li>
+                {% endif %}
+                {% if garden.latCity is null %}
+                    <li class="helperPublish">{{ 'garden.not.geolocalised.for.publication'|trans }}</li>
+                {% endif %}
+                {% if app.user.isVerified == false %}
+                    <li class="helperPublish">{{ 'profil.not.verified.for.publication'|trans }}</li>
+                {% endif %}
+            </ul>
         {% endif %}
     {% endif %}
-    <a href="#" id="deleteGardenModal" class="btn btn-sm btn-danger" data-action="{{ path('admin_garden_delete_modal', {id: garden.id})}}">Supprimer</a>
+    <a href="#" id="deleteGardenModal" class="btn btn-sm btn-danger" data-action="{{ path('admin_garden_delete_modal', {id: garden.id})}}">{{ 'delete.garden'|trans }}</a>
 </div>

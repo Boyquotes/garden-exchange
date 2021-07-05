@@ -1,4 +1,4 @@
-#~ App\Entity\ConversationExchange:
+#~ App\Entity\ConversationBivouac:
     #~ properties:
         #~ host:
             #~ - Blank: ~

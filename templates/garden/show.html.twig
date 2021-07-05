@@ -27,7 +27,7 @@
         {% else %}
             <div class='contact-show d-flex'>
                 <a href="{{ path('conversation_exchange_new', {'userId': garden.user.id, 'gardenId':garden.id}) }}" class="btn btn-lg btn-success">
-                    <div><i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }} {{ garden.user.firstname }}</div>
+                    <div><i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.bivouacr'|trans }} {{ garden.user.firstname }}</div>
                 </a>
             </div>
         {% endif %}
@@ -48,7 +48,7 @@
         {% else %}
             <div class='contact-show'>
                 <a href="{{ path('conversation_exchange_new', {'userId': garden.user.id, 'gardenId':garden.id}) }}" class="btn btn-lg btn-success">
-                    <div><i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.exchanger'|trans }} {{ garden.user.firstname }}</div>
+                    <div><i class="fa fa-comments" aria-hidden="true"></i> {{ 'contact.garden.bivouacr'|trans }} {{ garden.user.firstname }}</div>
                 </a>
             </div>
         {% endif %}

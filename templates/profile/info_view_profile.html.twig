@@ -13,7 +13,7 @@
     {% endif %}
     
     <div class="d-flex">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="profile-view-photo-name d-flex">
                 {% if profile.profileImage is not null %}
                     <div class="img-profile-view">
@@ -33,43 +33,43 @@
                 {% endif %}
             </div>
             
-            <div class="contact-verified d-flex">
+            <div class="contact-verified d-flex jc-space-between">
                 <div class="btn btn-lg btn-warning">
                     <div>{% if ( profile.emailVerified or profile.phoneVerified or profile.identityVerified) is not empty%}<span>{{ 'verified.member'|trans }}{% else %}{{ 'new.member'|trans }}{% endif %} :</span></div>
                     <div>{% if profile.emailVerified %}{{ 'verified.email.member'|trans }}{% else %}{{ 'not.verified.email.member'|trans }}{% endif %}</div>
                     <div>{% if profile.phoneVerified %}{{ 'verified.phone.member'|trans }}{% else %}{{ 'not.verified.phone.member'|trans }}{% endif %}</div>
                     <div>{% if profile.identityVerified %}{{ 'verified.identity.member'|trans }}{% else %}{{ 'not.verified.identity.member'|trans }}{% endif %}</div>
                 </div>
+                {% if profile.description != '' %}
+                    <div class="profile-view-description">
+                        <h2>{{ 'Description'|trans }} :</h2>
+                        {{ profile.description }}
+                    </div>
+                {% endif %}
+                
+                {% if profile.campingTypes|length > 0 %}
+                    <div class="campingTypes-garden-listing">
+                        <h2>Campe en :</h2>
+                        {% for campingType in profile.campingTypes %}
+                            <div class="campingType_choice campingType_selected">
+                                <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </div>
         </div>
-        
-        <div class="col-md-6">
-            {% if profile.description != '' %}
-                <h2>{{ 'Description'|trans }} :</h2>
-                <div class="profile-view-description">
-                    {{ profile.description }}
-                </div>
-            {% endif %}
-            
-            {% if profile.campingTypes|length > 0 %}
-                <h2>Campe en :</h2>
-                <div class="campingTypes-garden-listing">
-                    {% for campingType in profile.campingTypes %}
-                        <div class="campingType_choice campingType_selected">
-                            <img src="{{ asset('/uploads/campingTypes/'~campingType.picto) }}" alt='{{ campingType.name }}' />
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            
+    </div>
+    
+    <div class="d-flex">
+        <div class="col-md-12">
             {% if profile.user.gardens|length > 0 %}
                 {% if app.user == profile.user %}
                     <h2>{% if profile.user.gardens|length == 1 %}Votre annonce{% else %}Vos annonces{% endif%} :</h2>
                 {% else %}
                     <h2>{% if profile.user.gardens|length == 1 %}Son annonce{% else %}Ses annonces{% endif%} :</h2>
                 {% endif %}
-                <div class="profile-garden-listing">
-                    <div class="col-md-12 d-flex">
+                <div class="profile-garden-listing d-flex">
                     {% for garden in profile.user.gardens %}
                         {% if garden.enabled %}
                                 {{ include('garden/_garden_result.html.twig') }}
@@ -81,7 +81,6 @@
                             {% endif %}
                         {% endif %}
                     {% endfor %}
-                    </div>
                 </div>
             {% endif %}
         </div>

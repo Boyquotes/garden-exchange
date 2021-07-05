@@ -188,6 +188,24 @@ $(document).ready( function(){
     $('#submit-edit-garden').on('click', function () {
         event.preventDefault();
         var count = 0;
+        var countPostcode = 0;
+        var countCity = 0;
+        console.log('countPostcode');
+        console.log(countPostcode);
+        if($('#garden_postcode').val() != ''){
+            countPostcode++;
+        }
+        if(countPostcode == 0){
+            $('.warning-postcode').show();
+            window.scrollTo(100,0);
+        }
+        if($('#garden_city').val() != ''){
+            countCity++;
+        }
+        if(countCity == 0){
+            $('.warning-city').show();
+            window.scrollTo(100,0);
+        }
         $('#main').find('.campingType_choice').each( function(){
             if($(this).hasClass('campingType_selected')){
                 count++;

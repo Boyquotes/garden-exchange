@@ -8815,8 +8815,14 @@ hr {
   cursor: auto;
 }
 
+.navbar-default .navbar-nav > li > a.notAlink {
+  color: #FFF;
+  background: #303434;
+}
+
 .navbar-default .navbar-nav > li > a.notAlink:hover {
-  background: #FFF;
+  color: #FFF;
+  background: #303434;
 }
 
 /* Lato (normal, regular) */
@@ -8942,6 +8948,10 @@ header .locales a:hover small {
   color: inherit;
 }
 
+.container {
+  max-width: none;
+}
+
 .body-container {
   flex: 1;
   /* needed to prevent pages with a very small height and browsers not supporting flex */
@@ -8949,7 +8959,7 @@ header .locales a:hover small {
 }
 
 .body-container #main h1, .body-container #main h2 {
-  margin-top: 0;
+  margin-top: 3vh;
 }
 
 #sidebar .section {
@@ -9351,6 +9361,9 @@ header ul.nav li:hover {
 
 .add-garden {
   background-color: #027b68;
+  border-width: 3px;
+  border-radius: 10px;
+  border: none;
 }
 
 header ul.nav li.add-garden:hover {
@@ -9408,12 +9421,13 @@ header ul.nav li.add-garden:hover {
 
 .navbar-default .navbar-nav > li.add-garden > a {
   color: #FFF;
-  border: 1px solid #027b68;
 }
 
 .navbar-default .navbar-nav > li.add-garden > a:hover {
   color: #027b68;
   border: 1px solid #027b68;
+  border-width: 1px;
+  border-radius: 10px;
 }
 
 form[name='simple_search'] {
@@ -9484,6 +9498,11 @@ body#admin_post_show .post-tags .label-default i {
 .ui-menu-item-wrapper, .ui-menu .ui-state-focus, .ui-menu .ui-state-active {
   margin: 0;
   line-height: 2em;
+}
+
+.liste-errors {
+  width: 50%;
+  margin: 0 auto;
 }
 
 /* Photos   ------------------------------------------------------------------------- */
@@ -9652,8 +9671,7 @@ a.index-content-conversation {
 }
 
 .profile-view-description {
-  width: 80%;
-  margin: 4em auto;
+  width: 60%;
 }
 
 .contact-verified .btn {
@@ -9663,6 +9681,12 @@ a.index-content-conversation {
 .contact-verified .btn-warning:hover {
   background: #F39C12;
   border-color: #F39C12;
+}
+
+.profile-garden-listing {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 /* Homepage   ------------------------------------------------------------------------- */
@@ -9709,7 +9733,7 @@ a.index-content-conversation {
 }
 
 .homepage-intro {
-  padding: .5em 0em;
+  padding: 1.5em 0em;
   font-size: 1.5em;
 }
 
@@ -10198,12 +10222,26 @@ p, ul, ol {
 
 /* NOTIFICATION   ------------------------------------------------------------------------- */
 .notification {
-  width: 100%;
+  width: 80%;
   background: #59F;
   color: #FFF;
   padding: 2rem;
+  margin: 2rem;
   font-size: 2rem;
   font-weight: bold;
+}
+
+.notification p {
+  margin: 1rem;
+}
+
+/* VOS ANNONCES   ------------------------------------------------------------------------- */
+.carte-listings-no-annonce {
+  padding: 2rem;
+}
+
+.go-result {
+  padding: 2rem;
 }
 
 /* Responsive   ------------------------------------------------------------------------- */
@@ -10257,7 +10295,7 @@ p, ul, ol {
     height: 270px;
   }
   .homepage-intro, .homepage-photos {
-    padding: 1em 0 0 0;
+    padding: 1.5em 0 0 0;
   }
   #register .well, #login .well {
     flex-grow: 1;

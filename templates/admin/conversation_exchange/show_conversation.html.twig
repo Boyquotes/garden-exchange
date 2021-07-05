@@ -70,7 +70,7 @@
         </div>
 
         <div>
-            <a href="javascript:void(0);" data-id="{{ conversation_exchange.id }}" data-action="{{ path('garden_exchange_accepted', {conversationExchangeId: conversation_exchange.id})}}" data-post data-token="{{ csrf_token('acceptedExchange' ~ conversation_exchange.id )}}" data-element="conversationExchange" class="btn btn-sm btn-primary">Accepter le bivouac</a>
+            <a href="javascript:void(0);" data-id="{{ conversation_exchange.id }}" data-action="{{ path('garden_bivouac_accepted', {conversationExchangeId: conversation_exchange.id})}}" data-post data-token="{{ csrf_token('acceptedBivouac' ~ conversation_exchange.id )}}" data-element="conversationExchange" class="btn btn-sm btn-primary">Accepter le bivouac</a>
         </div>
 
     {% else %}

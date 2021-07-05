@@ -245,7 +245,7 @@ class GardenAdminController extends AbstractController
             
             $email = $user->getEmail();
             $emailNewGarden = (new TemplatedEmail())
-                ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
+                ->from(new Address('share@gardenbivouac.org', 'Garden Bivouac'))
                 ->to($email)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
@@ -333,7 +333,7 @@ class GardenAdminController extends AbstractController
 
             $email = $user->getEmail();
             $emailPublishGarden = (new TemplatedEmail())
-                ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
+                ->from(new Address('share@gardenbivouac.org', 'Garden Bivouac'))
                 ->to($email)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')

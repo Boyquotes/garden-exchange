@@ -18,7 +18,6 @@ class Nigth
     public function addProfilNight($user, $nbNigth, $type = null, $status = null)
     {
         //~ recup profil
-        dump($user->getProfilNights());
         $profilNight = new ProfilNight;
         $profilNight->setUser($user);
         $profilNight->setType($type);

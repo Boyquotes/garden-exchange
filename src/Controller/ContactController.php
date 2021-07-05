@@ -72,7 +72,7 @@ class ContactController extends AbstractController
             $token = $request->request->get('contact')['_token'];
 
             //~ AntiBots
-            if($_SERVER['ANTI_SPAM']){
+            if($_SERVER['ANTI_SPAM'] == true){
                 $referer = $request->get('_target_path');
                 $checkReferer = $antibots->checkReferer($referer);
                 $time = $request->get('_checkT');
@@ -91,8 +91,8 @@ class ContactController extends AbstractController
 
             if($_SERVER['SEND_LOG_SPAM'] || ($checkReferer == false || $checkTime == false) ){
                 $emailLogAdmin = (new TemplatedEmail())
-                    ->from(new Address('share@garden-exchange.org', 'Garden Exchange Tech Mail'))
-                    ->to(new Address('tech@garden-exchange.org', 'Garden Exchange Tech Mail'))
+                    ->from(new Address('share@gardenbivouac.org', 'Garden Bivouac Tech Mail'))
+                    ->to(new Address('tech@gardenbivouac.org', 'Garden Bivouac Tech Mail'))
                     //->cc('cc@example.com')
                     //->replyTo('fabien@example.com')
                     //->priority(Email::PRIORITY_HIGH)
@@ -130,8 +130,8 @@ class ContactController extends AbstractController
                 
                 // envoi du message
                 $emailNewContact = (new TemplatedEmail())
-                    ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
-                    ->to('share@garden-exchange.org')
+                    ->from(new Address('share@gardenbivouac.org', 'Garden Bivouac'))
+                    ->to('share@gardenbivouac.org')
                     //~ ->cc($email)
                     //->bcc('bcc@example.com')
                     //->replyTo('fabien@example.com')

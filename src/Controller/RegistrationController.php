@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Utils\AntiBots;
+use App\Utils\Nigth;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -35,7 +36,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger, AntiBots $antibots): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, MailerInterface $mailer, TranslatorInterface $translator, LoggerInterface $logger, AntiBots $antibots, Nigth $nigth): Response
     {
         $checkTime = true;
         $user = new User();
@@ -51,7 +52,7 @@ class RegistrationController extends AbstractController
                 $referer = $request->get('_target_path');
                 
                 //~ AntiBots
-                if($_SERVER['ANTI_SPAM']){
+                if($_SERVER['ANTI_SPAM'] == true){
                     $checkReferer = $antibots->checkReferer($referer);
 
                     if($time <= $_SERVER['TIME_NOT_BOT']){
@@ -70,8 +71,8 @@ class RegistrationController extends AbstractController
                 
                 if($_SERVER['SEND_LOG_SPAM'] || ($checkReferer == false || $checkTime == false) ){
                     $emailLogAdmin = (new TemplatedEmail())
-                        ->from(new Address('share@garden-exchange.org', 'Garden Exchange Tech Mail'))
-                        ->to(new Address('tech@garden-exchange.org', 'Garden Exchange Tech Mail'))
+                        ->from(new Address('share@gardenbivouac.org', 'Garden Bivouac Tech Mail'))
+                        ->to(new Address('tech@gardenbivouac.org', 'Garden Bivouac Tech Mail'))
                         //->cc('cc@example.com')
                         //->replyTo('fabien@example.com')
                         //->priority(Email::PRIORITY_HIGH)
@@ -123,10 +124,10 @@ class RegistrationController extends AbstractController
                 $this->get('security.token_storage')->setToken($token);
 
                 $emailRegistration = (new TemplatedEmail())
-                    ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
+                    ->from(new Address('share@gardenbivouac.org', 'Garden Bivouac'))
                     ->to($email)
                     //->cc('cc@example.com')
-                    ->bcc('share@garden-exchange.org')
+                    ->bcc('share@gardenbivouac.org')
                     //->replyTo('fabien@example.com')
                     //->priority(Email::PRIORITY_HIGH)
                     ->subject($translator->trans('email.inscription'))
@@ -149,26 +150,30 @@ class RegistrationController extends AbstractController
                 // generate a signed url and email it to the user
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
-                        ->from(new Address('verify@garden-exchange.org', 'Garden Exchange'))
+                        ->from(new Address('verify@gardenbivouac.org', 'Garden Bivouac'))
                         ->to($user->getEmail())
-                        ->bcc('share@garden-exchange.org')
+                        ->bcc('share@gardenbivouac.org')
                         ->subject($translator->trans('mail.confirm.subject'))
                         ->htmlTemplate('registration/confirmation_email.html.twig')
                 );
 
             }
+            
+            $nigth->addProfilNight($user, '1', 'newCamper', 'available');
+            
             return $this->redirectToRoute('admin_index');
         }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        else{
+            return $this->render('registration/register.html.twig', [
+                'registrationForm' => $form->createView(),
+            ]);
+        }
     }
 
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(Request $request, Nigth $nigth): Response
     {
         if(empty($this->getUser())){
             $request->headers->set('referer', $request->getUri());
@@ -176,15 +181,17 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('security_login', array( '_target_path' => $referer) );
         }
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
+        
+        $user = $this->getUser();
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($request, $user);
+            $nigth->addProfilNight($user, '1', 'mail_ok', 'available');
+            // @TODO Change the redirect on success and handle or remove the flash message in your templates
+            $this->addFlash('success', 'mail.verification.email.user');
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
         }
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'mail.verification.email.user');
 
         return $this->redirectToRoute('admin_index');
     }
@@ -198,9 +205,9 @@ class RegistrationController extends AbstractController
         // generate a signed url and email it to the user
         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
             (new TemplatedEmail())
-                ->from(new Address('verify@garden-exchange.org', 'Garden Exchange'))
+                ->from(new Address('verify@gardenbivouac.org', 'Garden Bivouac'))
                 ->to($user->getEmail())
-                ->bcc('share@garden-exchange.org')
+                ->bcc('share@gardenbivouac.org')
                 ->subject($translator->trans('mail.confirm.subject'))
                 ->htmlTemplate('registration/confirmation_email.html.twig')
         );

@@ -15,6 +15,27 @@
 
 <div class="row d-flex jc-center">
     <div class="col-md-6 txt-center">
+    
+        <div class="liste-errors">
+            {% if not form.vars.valid %}
+                <ul class="alert alert-danger">
+                    {# on affiche en premier les erreurs globales (cas classiques) #}
+                    {% for error in form.vars.errors %}
+                        <li>{{error.message}}</li>
+                    {% endfor %}
+                    {# ainsi que les erreurs concernant chaque champs #}
+                    {% for child in form.children %}
+                        {# si le champ à des erreur #}
+                        {% if child.vars.errors is defined %}
+                            {% for error in child.vars.errors %}
+                                <li>"{{child.vars.label|trans}}" : {{error.message}} </li> {# on ajoute le label du champ devant l'erreur pour plus de précisions. #}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
         <h4>{{ form_label(form.campingTypes) }}</h4>
         <div class="form-group has-error error-campingTypes">
             <span class="help-block">

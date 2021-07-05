@@ -77,7 +77,7 @@ class ConversationExchangeController extends AbstractController
 
             $email = $user->getEmail();
             $emailNewConversation = (new TemplatedEmail())
-                ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
+                ->from(new Address('share@gardenexchange.org', 'Garden Exchange'))
                 ->to($email)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
@@ -132,7 +132,7 @@ class ConversationExchangeController extends AbstractController
             }
 
             $emailNewMessage = (new TemplatedEmail())
-                ->from(new Address('share@garden-exchange.org', 'Garden Exchange'))
+                ->from(new Address('share@gardenexchange.org', 'Garden Exchange'))
                 ->to($email)
                 //->cc('cc@example.com')
                 //->bcc('bcc@example.com')
@@ -202,7 +202,7 @@ class ConversationExchangeController extends AbstractController
     public function deleteGardenImage(Request $request, ConversationExchange $conversationExchange){
         $token = $request->request->get('_token');
 
-        if($this->isCsrfTokenValid('acceptedExchange'.$conversationExchange->getId(), $token)){
+        if($this->isCsrfTokenValid('acceptedBivouac'.$conversationExchange->getId(), $token)){
             $conversationExchange->setExchanged('1');
             $em = $this->getDoctrine()->getManager();
             $em->flush();

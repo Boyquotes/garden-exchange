@@ -3,10 +3,6 @@
 {% block body_id 'results' %}
 
 {% block body %}
-    {% if app.request.get('noModal') is null %}
-        {{ include('includes/modals/search/search_join_modal.html.twig') }}
-    {% endif %}
-    
     <div class="row">
         <div class="carte-listings col-md-6 is-hidden-desktop">
             {{ include('maps/_map_gardens_listing_mobile.html.twig' , { 'allGardens': allGardens }, with_context = false) }}

@@ -49,7 +49,7 @@ DirectoryIndex index.php
     RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
 
     RewriteCond %{SERVER_PORT} 80
-    RewriteRule ^(.*)$ https://garden-exchange.org/$1 [R,L]
+    RewriteRule ^(.*)$ https://gardenbivouac.org/$1 [R,L]
 
     # If the requested filename exists, simply serve it.
     # We only want to let Apache serve files and not directories.

@@ -357,11 +357,11 @@
 
             <trans-unit id="rss.title">
                 <source>rss.title</source>
-                <target>Blog de Garden Exchange</target>
+                <target>Blog de Garden Bivouac</target>
             </trans-unit>
             <trans-unit id="rss.description">
                 <source>rss.description</source>
-                <target>Derniers articles publiés sur le blog de Garden Exchange</target>
+                <target>Derniers articles publiés sur le blog de Garden Bivouac</target>
             </trans-unit>
 
             <trans-unit id="paginator.previous">
@@ -391,19 +391,19 @@
             </trans-unit>
             <trans-unit id="nom.site">
                 <source>nom.site</source>
-                <target>Garden Exchange</target>
+                <target>Garden Bivouac</target>
             </trans-unit>
             <trans-unit id="facebook.community">
                 <source>facebook.community</source>
-                <target>Garden Exchange - Communauté Facebook</target>
+                <target>Garden Bivouac - Communauté Facebook</target>
             </trans-unit>
             <trans-unit id="instagram.community">
                 <source>instagram.community</source>
-                <target>Garden Exchange - Communauté Instagram</target>
+                <target>Garden Bivouac - Communauté Instagram</target>
             </trans-unit>
             <trans-unit id="twitter.community">
                 <source>twitter.community</source>
-                <target>Garden Exchange - Communauté Twitter</target>
+                <target>Garden Bivouac - Communauté Twitter</target>
             </trans-unit>
             <trans-unit id="label.lastname">
                 <source>label.lastname</source>
@@ -485,9 +485,9 @@
                 <source>menu.garden_list</source>
                 <target>Vos jardins</target>
             </trans-unit>
-            <trans-unit id="title.night">
-                <source>title.night</source>
-                <target>nuitée(s) disponible</target>
+            <trans-unit id="title.nights">
+                <source>title.nights</source>
+                <target>{count, plural, =0 {Aucune nuitée disponible} one {nuitée disponible.} other {# nuitées disponibles}}</target>
             </trans-unit>
             <trans-unit id="title.garden_list">
                 <source>title.garden_list</source>
@@ -605,8 +605,8 @@
                 <source>see.profile</source>
                 <target>Voir son profil</target>
             </trans-unit>
-            <trans-unit id="contact.garden.exchanger">
-                <source>contact.garden.exchanger</source>
+            <trans-unit id="contact.garden.bivouacr">
+                <source>contact.garden.bivouacr</source>
                 <target>Contacter</target>
             </trans-unit>
             <trans-unit id="user.contact">
@@ -679,7 +679,7 @@
             </trans-unit>
             <trans-unit id="help.garden_description">
                 <source>help.garden_description</source>
-                <target><![CDATA[Décrivez votre terrain (accès, sol, vue, matériels ou commodités à proximité...) et ce qui l'entoure (forêt, lac, champs, zone residentielle...)]]></target>
+                <target><![CDATA[Décrivez votre terrain (accès, sol, vue, matériels ou commodités à proximité...) et ce qui l'entoure (forêt, lac, champs, zone résidentielle...)]]></target>
             </trans-unit>
             <trans-unit id="help.garden_area">
                 <source>help.garden_area</source>
@@ -736,7 +736,7 @@
             </trans-unit>
             <trans-unit id="no.conversations">
                 <source>no.conversations</source>
-                <target>Vous n'avez pas encore eu d'échange avec la communauté.</target>
+                <target>Vous n'avez pas encore eu d'échange avec un membre de la communauté.</target>
             </trans-unit>
             <trans-unit id="title.conversations.list">
                 <source>title.conversations.list</source>
@@ -772,7 +772,7 @@
             </trans-unit>
             <trans-unit id="see.all.garden">
                 <source>see.all.garden</source>
-                <target>Chercher un jardin</target>
+                <target>Cherchez un jardin</target>
             </trans-unit>
             <trans-unit id="garden.new.another.one">
                 <source>garden.new.another.one</source>
@@ -797,7 +797,7 @@
             
             <trans-unit id="email.inscription">
                 <source>email.inscription</source>
-                <target>Vous faites maintenant parti de la communauté Garden Exchange.</target>
+                <target>Vous faites maintenant parti de la communauté Garden Bivouac.</target>
             </trans-unit>
             <trans-unit id="email.welcome">
                 <source>email.welcome</source>
@@ -805,7 +805,7 @@
             </trans-unit>
             <trans-unit id="email.welcome.community">
                 <source>email.welcome.community</source>
-                <target>dans la communauté Garden Exchange </target>
+                <target>dans la communauté Garden Bivouac </target>
             </trans-unit>
             <trans-unit id="email.welcome.next.step">
                 <source>email.welcome.next.step</source>
@@ -825,11 +825,11 @@
             </trans-unit>
             <trans-unit id="email.new.mail.notif">
                 <source>email.new.mail.notif</source>
-                <target>, il y a du nouveau sur Garden Exchange</target>
+                <target>, il y a du nouveau sur Garden Bivouac</target>
             </trans-unit>
             <trans-unit id="email.new.mail.notif.admin">
                 <source>email.new.mail.notif.admin</source>
-                <target>, il y a du nouveau sur Garden Exchange</target>
+                <target>, il y a du nouveau sur Garden Bivouac</target>
             </trans-unit>
             <trans-unit id="email.you.signed">
                 <source>email.you.signed</source>
@@ -1058,6 +1058,18 @@
             <trans-unit id="camper.all.delete">
                 <source>camper.all.delete</source>
                 <target>Supprimer le compte et ces annonces</target>
+            </trans-unit>
+            <trans-unit id="label.terms.error">
+                <source>label.terms.error</source>
+                <target>Vous devez accepter les conditions générales d'utilisation pour continuer</target>
+            </trans-unit>
+            <trans-unit id="my.profile">
+                <source>my.profile</source>
+                <target>Mon profil</target>
+            </trans-unit>
+            <trans-unit id="delete.garden">
+                <source>delete.garden</source>
+                <target>Supprimer cette annonce</target>
             </trans-unit>
         </body>
     </file>
